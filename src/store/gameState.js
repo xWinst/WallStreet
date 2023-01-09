@@ -1,5 +1,4 @@
 import { makeAutoObservable } from 'mobx';
-import Player from 'store/player';
 
 class Game {
     currentPrice = [100, 100, 100, 100];

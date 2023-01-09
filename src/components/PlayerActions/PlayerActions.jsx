@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { observer } from 'mobx-react-lite';
 import { Button, Modal } from 'components';
 import game from 'store';
 import s from './PlayerActions.module.css';
@@ -220,4 +221,4 @@ const PlayerActions = () => {
     );
 };
 
-export default PlayerActions;
+export default observer(PlayerActions);

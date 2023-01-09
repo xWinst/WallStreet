@@ -18,8 +18,8 @@
 
 .count {
     width: 80px;
-    color: var(--main-color);
-    background-color: black;
+    /* color: var(--main-color); */
+    background-color: var(--main-color);
 }
 
 .money {

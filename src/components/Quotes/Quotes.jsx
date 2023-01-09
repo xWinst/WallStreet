@@ -1,5 +1,7 @@
-import s from './Quotes.module.css';
+import { observer } from 'mobx-react-lite';
 import game from 'store';
+import s from './Quotes.module.css';
+
 const colors = ['blue', 'red', 'green', 'yellow'];
 
 const getPrices = () => {
@@ -43,4 +45,4 @@ const Quotes = () => {
     );
 };
 
-export default Quotes;
+export default observer(Quotes);
