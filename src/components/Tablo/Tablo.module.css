@@ -1,0 +1,104 @@
+.tablo {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100rem;
+    height: 45rem;
+    gap: 0.4rem;
+    margin: 20px;
+    padding: 20px;
+    background-color: #343c3e;
+    border-radius: 30px;
+}
+
+.info {
+    display: flex;
+    gap: 0.4rem;
+}
+
+.cell {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background-color: #ffffff;
+}
+
+.cell::after {
+    content: '';
+    position: absolute;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background-color: #88888899;
+    z-index: 100;
+}
+
+.activeCell {
+    composes: cell;
+    scale: 1.3;
+    background-color: orange;
+    font-weight: 700;
+}
+
+.activeCell::after {
+    content: '';
+    position: absolute;
+    width: 2rem;
+    height: 2rem;
+    background-image: url('../../images/target2.svg');
+    background-size: cover;
+    animation: spinner 10s linear infinite;
+    z-index: -1;
+    color: red;
+}
+
+.future {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background-color: orange;
+    scale: 1.35;
+}
+
+@keyframes spinner {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* .cell:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  transform: translateX(25px);
+  width: 8px;
+  height: 1px;
+  background-color: #000000;
+} */
+
+.price {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    /* padding: 5px; */
+    font-size: 0.7rem;
+    border: 1px solid #888800;
+    border-radius: 50%;
+
+    /* animation: none; */
+}
+
+/* @keyframes antiSpinner {
+  to {
+    transform: rotate(-360deg);
+  }
+} */

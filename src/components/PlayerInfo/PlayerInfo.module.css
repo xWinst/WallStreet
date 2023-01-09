@@ -1,0 +1,52 @@
+.info {
+    font-size: 15px;
+    font-weight: 700;
+    color: #eeeeee;
+}
+
+.sharesList {
+    margin-top: 8px;
+    font-size: 9px;
+    border: 1px solid #eeeeee;
+}
+
+.shares {
+    display: flex;
+    /* text-shadow: #fc0 1px 0 10px; */
+}
+
+.name,
+.count,
+.cost {
+    padding: 4px;
+    border: 1px solid #eeeeee;
+}
+
+.name {
+    width: 65px;
+}
+
+.count {
+    width: 50px;
+    text-align: center;
+}
+
+.cost {
+    width: 66px;
+    text-align: end;
+}
+
+.capital {
+    margin-top: 15px;
+    padding-top: 7px;
+    border-top: 1px solid;
+}
+
+.total {
+    display: block;
+    margin: 8px;
+    font-size: 22px;
+    color: orange;
+    text-align: center;
+    text-shadow: #fc0 1px 0 10px;
+}

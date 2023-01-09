@@ -1,0 +1,24 @@
+.button {
+    width: 80px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 10px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    background-color: blue;
+    color: yellow;
+    border: 1 solid yellow;
+    border-radius: 6px;
+    cursor: pointer;
+
+    transition: background-color 300ms ease, color 300ms ease;
+}
+
+.button:hover,
+.button:focus {
+    color: white;
+    background-color: rgb(0, 0, 82);
+}
