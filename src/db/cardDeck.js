@@ -27,4 +27,4 @@ class cardDecks {
     }
 }
 
-export default new cardDecks();
+export default cardDecks;

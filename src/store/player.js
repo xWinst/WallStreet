@@ -1,27 +1,33 @@
 import { makeAutoObservable } from 'mobx';
-import cardDeck from 'db/cardDeck';
+// import cardDeck from 'db/cardDeck';
+import cardDecks from 'db/cardDeck';
 // const colors = ['blue', 'red', 'green', 'yellow'];
+
+const bothDecks = new cardDecks();
 
 const dealCards = (typeDeck, count) => {
     const result = [];
-    const deck = cardDeck[typeDeck];
-    const offset = typeDeck === 'bigDeck' ? 100 : 0;
+    const deck = bothDecks[typeDeck];
+    // console.log('cardDeck[typeDeck]: ', cardDeck['bigDeck']);
+    // const offset = typeDeck === 'bigDeck' ? 100 : 0;
     for (let i = 0; i < count; i++) {
-        const rnd = Math.floor(Math.random() * deck.length) + offset;
-        result.push(deck[rnd]);
+        const rnd = Math.floor(Math.random() * deck.length);
+        // console.log('rnd: ', rnd);
+        result.push(deck[rnd].id);
         deck.splice(rnd, 1);
     }
+    // console.log('result: ', result);
+
     return result;
 };
 
 class Player {
     name;
     money = 0;
-    // #shares = [];
-    // bigDeck = dealCards('bigDeck', 4);
-    // smallDeck = dealCards('smallDeck', 6);
-    bigDeck = [100, 101, 102, 110];
-    smallDeck = [0, 1, 5, 10, 11, 20];
+    bigDeck;
+    smallDeck;
+    // bigDeck = [100, 101, 102, 110];
+    // smallDeck = [0, 1, 5, 10, 11, 20];
 
     frezenShares = [0, 0, 0, 0];
     freeShares = [1, 1, 1, 1];
@@ -29,6 +35,8 @@ class Player {
     constructor(name) {
         makeAutoObservable(this);
         this.name = name;
+        this.bigDeck = dealCards('bigDeck', 4);
+        this.smallDeck = dealCards('smallDeck', 6);
     }
 
     get shares() {

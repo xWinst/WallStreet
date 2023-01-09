@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Card, Modal, Button } from 'components';
-import cardDeck from 'db/cardDeck';
-// import Player from 'store/player';
+import cardDecks from 'db/cardDeck';
 import s from './PlayerCards.module.css';
-
 import game from 'store';
 
+const bothDecks = new cardDecks();
+
 const PlayerCards = () => {
+    // console.log('Player Deck: ', cardDecks);
     // const item = useRef();
     const [error, setError] = useState(false);
     const { currentCard, setCurrentCard } = game;
@@ -16,7 +17,7 @@ const PlayerCards = () => {
     const activeCard = idx => {
         // console.log('idx: ', idx);
         const card =
-            idx > 99 ? cardDeck.bigDeck[idx % 100] : cardDeck.smallDeck[idx];
+            idx > 99 ? bothDecks.bigDeck[idx % 100] : bothDecks.smallDeck[idx];
         setCurrentCard(card);
         return;
     };
@@ -47,7 +48,7 @@ const PlayerCards = () => {
                     .filter(card => card !== currentCard?.id)
                     .map(id => (
                         <li key={id} onClick={chooseCard} data-id={id}>
-                            <Card card={cardDeck.bigDeck[id % 100]} />
+                            <Card card={bothDecks.bigDeck[id % 100]} />
                         </li>
                     ))}
             </ul>
@@ -56,7 +57,7 @@ const PlayerCards = () => {
                     .filter(card => card !== currentCard?.id)
                     .map(id => (
                         <li key={id} onClick={chooseCard} data-id={id}>
-                            <Card card={cardDeck.smallDeck[id]} />
+                            <Card card={bothDecks.smallDeck[id]} />
                         </li>
                     ))}
             </ul>
