@@ -15,23 +15,23 @@ const gameSlice = createSlice({
 
     reducers: {
         setPlayers: (state, action) => {
-            console.log('action addPlaer: ', action.payload);
+            // console.log('action addPlaer: ', action.payload);
             state.players = action.payload;
         },
         setCurrentCard: (state, action) => {
-            console.log('action: setCurrentCard', action);
+            // console.log('action: setCurrentCard', action);
             state.currentCard = action.payload;
         },
         setCurrentPrice: (state, action) => {
-            console.log('action: setCurrentPrice', action);
+            // console.log('action: setCurrentPrice', action);
             state.currentPrice = action.payload;
         },
         setFuturePrice: (state, action) => {
-            console.log('action: setFuturePrice', action);
+            // console.log('action: setFuturePrice', action);
             state.futurePrice = action.payload;
         },
         setGameState: (state, action) => {
-            console.log('action: setGameState', action);
+            // console.log('action: setGameState', action);
             state.gameState = action.payload;
         },
         nextTurn: (state, action) => {
@@ -40,7 +40,7 @@ const gameSlice = createSlice({
         },
         updatePlayer: (state, actions) => {
             const { index, props } = actions.payload;
-            console.log('actions.payload: ', actions.payload);
+            // console.log('actions.payload: ', actions.payload);
             state.players[index] = { ...state.players[index], ...props };
         },
     },

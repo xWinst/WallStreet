@@ -88,7 +88,7 @@ const App = () => {
 
     const closeCard = () => {
         dispatch(setCurrentPrice([...futurePrice]));
-        console.log('currentCard: ', currentCard);
+        // console.log('currentCard: ', currentCard);
         // removeCard(currentCard, player);
 
         // const { prop, value } = removeCard(currentCard.id, player);
