@@ -1,35 +1,42 @@
 import { useState, useEffect } from 'react';
-import { observer } from 'mobx-react-lite';
+import { useSelector, useDispatch } from 'react-redux';
 import { Button, Modal } from 'components';
-import game from 'store';
+import { updatePlayer } from 'state/gameReducer';
+import { sellShares, buyShares, getShares } from 'helpers/playerUpdates';
 import s from './PlayerActions.module.css';
 
 const companyNames = ['Cиние', 'Красные', 'Зеленые', 'Желтые'];
 const colors = ['blue', 'red', 'green', 'yellow'];
-const player = game.players[0];
 
 const PlayerActions = () => {
-    const price = game.currentPrice;
-    const { money, shares, freeShares } = player;
+    const price = useSelector(state => state.game.currentPrice);
+    const player = useSelector(state => state.game.players[0]);
+    const turn = useSelector(state => state.game.turn);
+    const gameState = useSelector(state => state.game.gameState);
     const [showBuy, setShowBuy] = useState(false);
     const [showSell, setShowSell] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [sales, setSales] = useState(['', '', '', '']);
     const [purchases, setPurchases] = useState(['', '', '', '']);
-    const [reserve, setReserve] = useState(money);
+    const [reserve, setReserve] = useState(player.money);
 
+    const dispatch = useDispatch();
+
+    const shares = getShares(player);
+
+    // const [showState, setShowState] = useState(false);
     useEffect(() => {
         setReserve(
-            money -
+            player.money -
                 purchases.reduce(
                     (total, count, idx) => total + count * price[idx],
                     0
                 )
         );
-    }, [purchases, money]);
+    }, [purchases, player, price]);
 
     const openSell = () => {
-        if (game.turn === 10) {
+        if (turn === 10) {
             setShowModal(true);
             return;
         }
@@ -38,7 +45,7 @@ const PlayerActions = () => {
     };
 
     const openBuy = () => {
-        if (game.turn === 10) {
+        if (turn === 10) {
             setShowModal(true);
             return;
         }
@@ -51,27 +58,41 @@ const PlayerActions = () => {
         setShowBuy(false);
         setSales(['', '', '', '']);
         setPurchases(['', '', '', '']);
-        setReserve(money);
+        setReserve(player.money);
     };
 
     const submit = () => {
-        player.addMoney(
-            sales.reduce((total, count, idx) => total + count * price[idx], 0)
+        // player.addMoney(
+        //     sales.reduce((total, count, idx) => total + count * price[idx], 0)
+        // ); ///////
+        dispatch(
+            updatePlayer({
+                index: 0,
+                props: sellShares(sales, price, player),
+            })
         );
-        player.sellShares(sales);
+        // player.sellShares(sales); ///////////////////////
         setShowSell(false);
         setSales(['', '', '', '']);
+        // setShowState(true);
     };
 
     const submitBuy = () => {
-        player.addMoney(
-            purchases.reduce(
-                (total, count, idx) => total - count * price[idx],
-                0
-            )
+        // player.addMoney(
+        //     purchases.reduce(
+        //         (total, count, idx) => total - count * price[idx],
+        //         0
+        //     )
+        // ); /////////////////////
+
+        dispatch(
+            updatePlayer({
+                index: 0,
+                props: buyShares(purchases, price, player),
+            })
         );
 
-        player.buyShares(purchases);
+        // player.buyShares(purchases); ///////////////////////
 
         setShowBuy(false);
         setPurchases(['', '', '', '']);
@@ -82,7 +103,7 @@ const PlayerActions = () => {
         if (!Number(value) && value) return;
         let count = Number(value);
         const limit =
-            game.gameState === 'before' ? shares[name] : freeShares[name];
+            gameState === 'before' ? shares[name] : player.freeShares[name];
         if (count > limit) count = limit;
 
         setSales(prev => {
@@ -97,7 +118,7 @@ const PlayerActions = () => {
         const reservedPurchases = purchases.filter((_, i) => i !== Number(idx));
         // console.log('reservedPurchases: ', reservedPurchases);
         return (
-            money -
+            player.money -
             reservedPurchases.reduce(
                 (total, count, idx) => total + count * price[idx],
                 0
@@ -125,6 +146,7 @@ const PlayerActions = () => {
 
     const ok = () => {
         setShowModal(false);
+        // setShowState(false);
     };
 
     return (
@@ -178,9 +200,9 @@ const PlayerActions = () => {
                                             className={s.count}
                                             name={idx}
                                             placeholder={
-                                                game.gameState === 'before'
+                                                gameState === 'before'
                                                     ? `max  ${count}`
-                                                    : `max  ${freeShares[idx]}`
+                                                    : `max  ${player.freeShares[idx]}`
                                             }
                                             value={sales[idx]}
                                             onChange={onChangeSell}
@@ -217,8 +239,17 @@ const PlayerActions = () => {
                     </div>
                 </Modal>
             )}
+
+            {/* {showState && (
+                <Modal onClose={ok}>
+                    <div className="box">
+                        <p>{player.money}</p>
+                        <Button text="ok" onClick={ok} />
+                    </div>
+                </Modal>
+            )} */}
         </div>
     );
 };
 
-export default observer(PlayerActions);
+export default PlayerActions;

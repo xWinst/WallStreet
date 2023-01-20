@@ -1,4 +1,6 @@
+import { useSelector } from 'react-redux';
 import s from './Tablo.module.css';
+// import game from 'store';
 
 const getPrices = () => {
     const result = [];
@@ -20,7 +22,10 @@ html.style.fontSize = size / 33 + 'px';
 
 // window.maximize()
 
-const Tablo = ({ price, futurePrice }) => {
+const Tablo = () => {
+    // const { currentPrice, futurePrice } = game;
+    const price = useSelector(state => state.game.currentPrice);
+    const futurePrice = useSelector(state => state.game.futurePrice);
     return (
         <ul className={s.tablo}>
             {colors.map((color, index) => (
@@ -39,8 +44,8 @@ const Tablo = ({ price, futurePrice }) => {
                                 style={{
                                     left: `${
                                         Math.cos(
-                                            ((1.5 * Math.PI) / 2) *
-                                                ((300 - cost) / 240)
+                                            ((1.5 * Math.PI) / 2.0) *
+                                                ((330 - cost) / 240)
                                         ) *
                                             (size - (index * size) / 11.5) +
                                         size
@@ -48,11 +53,10 @@ const Tablo = ({ price, futurePrice }) => {
                                     top: `${
                                         size -
                                         Math.sin(
-                                            ((1.5 * Math.PI) / 2) *
-                                                ((300 - cost) / 240)
+                                            ((1.5 * Math.PI) / 2.0) *
+                                                ((330 - cost) / 240)
                                         ) *
-                                            (size - (index * size) / 11.5) +
-                                        20
+                                            (size - (index * size) / 11.5)
                                     }px`,
                                     //   top: `${index * 50}px`,
                                 }}

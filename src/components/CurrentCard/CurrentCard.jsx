@@ -1,17 +1,32 @@
 import { Button, Card } from 'components';
 import { useState, useEffect } from 'react';
-import { observer } from 'mobx-react-lite';
-import game from 'store';
+import { useSelector, useDispatch } from 'react-redux';
+import { setFuturePrice, updatePlayer } from 'state/gameReducer';
+import { getShares } from 'helpers/playerUpdates';
 import s from './CurrentCard.module.css';
 
 const colors = ['blue', 'red', 'green', 'yellow'];
-const player = game.players[0];
+
+const getColors = card => {
+    let colorUp;
+    let colorDown;
+    if (card.isBoostCard) {
+        colorUp = [card.color];
+        colorDown = [0, 1, 2, 3].filter(idx => idx !== card.color);
+    } else {
+        colorUp = [0, 1, 2, 3].filter(idx => idx !== card.color);
+        colorDown = [card.color];
+    }
+
+    return { colorUp, colorDown };
+};
 
 const CurrentCard = ({ cancel, closeCard }) => {
-    const { shares } = player;
-    const price = game.currentPrice;
-    const card = game.currentCard;
-    const { futurePrice, setFuturePrice } = game;
+    const player = useSelector(state => state.game.players[0]);
+    const shares = getShares(player);
+    const price = useSelector(state => state.game.currentPrice);
+    const card = useSelector(state => state.game.currentCard);
+    const futurePrice = useSelector(state => state.game.futurePrice);
 
     const [secondColor, setSecondColor] = useState();
     const [thirdColor, setThirdColor] = useState();
@@ -20,8 +35,10 @@ const CurrentCard = ({ cancel, closeCard }) => {
     const [fine, setFine] = useState([0, 0, 0, 0]);
     const [compensation, setCompensation] = useState([0, 0, 0, 0]);
 
+    const dispatch = useDispatch();
+
     const { isBoostCard, color: mainColor } = card;
-    const { colorUp, colorDown } = card.getColors();
+    const { colorUp, colorDown } = getColors(card);
 
     useEffect(() => {
         setThirdColor(colorDown[1]);
@@ -95,7 +112,7 @@ const CurrentCard = ({ cancel, closeCard }) => {
         setBonus(bonus);
         setFine(fine);
         setCompensation(compensation);
-        setFuturePrice(finalPrice);
+        dispatch(setFuturePrice(finalPrice));
 
         return finalPrice;
     };
@@ -105,7 +122,17 @@ const CurrentCard = ({ cancel, closeCard }) => {
         for (let i = 0; i < bonus.length; i++) {
             total += (bonus[i] + compensation[i]) * shares[i];
         }
-        player.addMoney(total);
+        // player.addMoney(total); ////////
+        // addMoney(total, player);
+        // player.money += total;
+        // console.log('player: ', player);
+
+        dispatch(
+            updatePlayer({
+                index: 0,
+                props: { money: player.money + total },
+            })
+        );
         closeCard();
     };
 
@@ -280,4 +307,4 @@ const CurrentCard = ({ cancel, closeCard }) => {
     );
 };
 
-export default observer(CurrentCard);
+export default CurrentCard;

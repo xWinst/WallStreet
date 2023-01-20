@@ -1,5 +1,6 @@
-import { observer } from 'mobx-react-lite';
-import game from 'store';
+// import { observer } from 'mobx-react-lite';
+// import game from 'store';
+import { useSelector } from 'react-redux';
 import s from './Quotes.module.css';
 
 const colors = ['blue', 'red', 'green', 'yellow'];
@@ -13,7 +14,8 @@ const getPrices = () => {
 const prices = getPrices();
 
 const Quotes = () => {
-    const { currentPrice, futurePrice } = game;
+    const currentPrice = useSelector(state => state.game.currentPrice);
+    const futurePrice = useSelector(state => state.game.futurePrice);
     const getClass = (index, cost) => {
         if (currentPrice[index] === cost) return s.current;
         if (futurePrice[index] === cost) return s.future;
@@ -45,4 +47,4 @@ const Quotes = () => {
     );
 };
 
-export default observer(Quotes);
+export default Quotes;

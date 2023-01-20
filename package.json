@@ -5,11 +5,11 @@
   "homepage": "https://xwinst.github.io/",
   "dependencies": {
     "@mobx-devtools/tools": "^0.0.4",
-    "mobx": "^6.7.0",
-    "mobx-react-lite": "^3.4.0",
+    "@reduxjs/toolkit": "^1.9.1",
     "modern-normalize": "^1.1.0",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
+    "react-redux": "^8.0.5",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.3"
   },

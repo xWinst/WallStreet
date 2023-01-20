@@ -7,8 +7,11 @@
     gap: 0.4rem;
     margin: 20px;
     padding: 20px;
-    background-color: #343c3e;
+    /* background-color: #343c3e; */
     border-radius: 30px;
+    /* background-image: url('../Icon/images.jpg'); */
+    /* background-repeat: no-repeat; */
+    /* background-size: 800px 400px; */
 }
 
 .info {

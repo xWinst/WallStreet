@@ -1,17 +1,19 @@
-import { observer } from 'mobx-react-lite';
-import game from 'store';
+import { useSelector } from 'react-redux';
+import { getShares } from 'helpers/playerUpdates';
 import s from './PlayerInfo.module.css';
 
 const companyNames = ['Cиние', 'Красные', 'Зеленые', 'Желтые'];
 const colors = ['blue', 'red', 'green', 'yellow'];
 
-const PlayerInfo = () => {
-    const price = game.currentPrice;
-    const player = game.players[0];
-    const { money, shares } = player;
+const PlayerInfo = ({ player }) => {
+    const price = useSelector(state => state.game.currentPrice);
+    const turn = useSelector(state => state.game.turn);
+    const gameState = useSelector(state => state.game.gameState);
+    const shares = getShares(player);
+
     return (
         <div className={s.info}>
-            <p>Наличман: {money}</p>
+            <p>Наличман: {player.money}</p>
             <p>Акции:</p>
             <ul className={s.sharesList}>
                 <li className={s.shares}>
@@ -38,17 +40,17 @@ const PlayerInfo = () => {
                     {shares.reduce(
                         (total, count, idx) => (total += count * price[idx]),
                         0
-                    ) + money}{' '}
+                    ) + player.money}{' '}
                     бабла
                 </span>
             </p>
 
             <p style={{ textAlign: 'center' }}>
-                Ход № {game.turn},&nbsp;
-                {game.gameState === 'before' ? '1-й этап' : '3-й этап'}
+                Ход № {turn},&nbsp;
+                {gameState === 'before' ? '1-й этап' : '3-й этап'}
             </p>
         </div>
     );
 };
 
-export default observer(PlayerInfo);
+export default PlayerInfo;

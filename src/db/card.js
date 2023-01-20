@@ -27,19 +27,19 @@ class Card {
     //     }
     //     return price;
     // };
-    getColors = () => {
-        let colorUp;
-        let colorDown;
-        if (this.isBoostCard) {
-            colorUp = [this.color];
-            colorDown = [0, 1, 2, 3].filter(idx => idx !== this.color);
-        } else {
-            colorUp = [0, 1, 2, 3].filter(idx => idx !== this.color);
-            colorDown = [this.color];
-        }
+    // getColors = () => {
+    //     let colorUp;
+    //     let colorDown;
+    //     if (this.isBoostCard) {
+    //         colorUp = [this.color];
+    //         colorDown = [0, 1, 2, 3].filter(idx => idx !== this.color);
+    //     } else {
+    //         colorUp = [0, 1, 2, 3].filter(idx => idx !== this.color);
+    //         colorDown = [this.color];
+    //     }
 
-        return { colorUp, colorDown };
-    };
+    //     return { colorUp, colorDown };
+    // };
 }
 
 export default Card;

@@ -1,5 +1,3 @@
-import { makeAutoObservable } from 'mobx';
-// import cardDeck from 'db/cardDeck';
 import cardDecks from 'db/cardDeck';
 // const colors = ['blue', 'red', 'green', 'yellow'];
 
@@ -8,15 +6,11 @@ const bothDecks = new cardDecks();
 const dealCards = (typeDeck, count) => {
     const result = [];
     const deck = bothDecks[typeDeck];
-    // console.log('cardDeck[typeDeck]: ', cardDeck['bigDeck']);
-    // const offset = typeDeck === 'bigDeck' ? 100 : 0;
     for (let i = 0; i < count; i++) {
         const rnd = Math.floor(Math.random() * deck.length);
-        // console.log('rnd: ', rnd);
         result.push(deck[rnd].id);
         deck.splice(rnd, 1);
     }
-    // console.log('result: ', result);
 
     return result;
 };
@@ -33,7 +27,6 @@ class Player {
     freeShares = [1, 1, 1, 1];
 
     constructor(name) {
-        makeAutoObservable(this);
         this.name = name;
         this.bigDeck = dealCards('bigDeck', 4);
         this.smallDeck = dealCards('smallDeck', 6);
@@ -48,7 +41,6 @@ class Player {
     }
 
     removeCard = ({ id }) => {
-        // console.log('id: ', id);
         if (id > 99) this.bigDeck = this.bigDeck.filter(card => card !== id);
         else this.smallDeck = this.smallDeck.filter(card => card !== id);
     };

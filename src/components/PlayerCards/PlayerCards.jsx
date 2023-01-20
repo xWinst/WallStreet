@@ -1,9 +1,11 @@
 import { useState } from 'react';
-import { observer } from 'mobx-react-lite';
+import { useSelector, useDispatch } from 'react-redux';
+// import { observer } from 'mobx-react-lite';
 import { Card, Modal, Button } from 'components';
+import { setCurrentCard } from 'state/gameReducer';
 import cardDecks from 'db/cardDeck';
 import s from './PlayerCards.module.css';
-import game from 'store';
+// import game from 'store';
 
 const bothDecks = new cardDecks();
 
@@ -11,19 +13,22 @@ const PlayerCards = () => {
     // console.log('Player Deck: ', cardDecks);
     // const item = useRef();
     const [error, setError] = useState(false);
-    const { currentCard, setCurrentCard } = game;
-    const player = game.players[0];
+    const currentCard = useSelector(state => state.game.currentCard);
+    const player = useSelector(state => state.game.players[0]);
+    const gameState = useSelector(state => state.game.gameState);
+
+    const dispatch = useDispatch();
 
     const activeCard = idx => {
         // console.log('idx: ', idx);
         const card =
             idx > 99 ? bothDecks.bigDeck[idx % 100] : bothDecks.smallDeck[idx];
-        setCurrentCard(card);
+        dispatch(setCurrentCard(card));
         return;
     };
 
     const chooseCard = e => {
-        if (game.gameState === 'after') {
+        if (gameState === 'after') {
             setError(true);
             return;
         }
@@ -74,4 +79,4 @@ const PlayerCards = () => {
     );
 };
 
-export default observer(PlayerCards);
+export default PlayerCards;

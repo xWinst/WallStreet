@@ -33,6 +33,6 @@
         transform: scale(0.2);
     }
     100% {
-        transform: translateY(-400px);
+        transform: translateY(-100px);
     }
 }
