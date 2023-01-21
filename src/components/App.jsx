@@ -12,7 +12,7 @@ import {
 } from 'components';
 
 import { useInner } from 'hooks/useInner';
-// import Player from 'state/Player';
+
 import {
     setPlayers,
     setCurrentCard,
@@ -50,7 +50,7 @@ const player1 = {
     smallDeck: dealCards('smallDeck', 6),
 
     frezenShares: [0, 0, 0, 0],
-    freeShares: [1, 1, 1, 1],
+    freeShares: [1, 1, 100, 100],
 };
 const ai = { name: 'Idiot', money: 0 };
 //=======================================================================================
@@ -62,19 +62,13 @@ const App = () => {
     const gameState = useSelector(state => state.game.gameState);
     const player = useSelector(state => state.game.players[0]);
 
-    // const [player, setIsReady] = useState(false);
-
     const dispatch = useDispatch();
     const [error, setError] = useState(false);
     // const [aiMove, setAiMove] = useState(false);
     const { width } = useInner();
 
     useEffect(() => {
-        if (!player) {
-            // console.log('player: ', player1);
-            dispatch(setPlayers([player1, ai]));
-            // setIsReady(true);
-        }
+        if (!player) dispatch(setPlayers([player1, ai]));
     }, [dispatch, player]);
 
     const cancel = () => {
@@ -88,18 +82,12 @@ const App = () => {
 
     const closeCard = () => {
         dispatch(setCurrentPrice([...futurePrice]));
-        // console.log('currentCard: ', currentCard);
-        // removeCard(currentCard, player);
-
-        // const { prop, value } = removeCard(currentCard.id, player);
-        // dispatch(updatePlayer({ index: 0, prop, value }));
         dispatch(
             updatePlayer({
                 index: 0,
                 props: removeCard(currentCard.id, player),
             })
         );
-        // player.removeCard(currentCard); /////////////////////
         dispatch(setCurrentCard(null));
         dispatch(setGameState('after'));
     };
@@ -109,19 +97,23 @@ const App = () => {
             setError(true);
             return;
         }
-        // player.shareMerger(); ////////////////////////
 
         dispatch(updatePlayer({ index: 0, props: shareMerger(player) }));
-
-        // setAiMove(true);
         dispatch(nextTurn());
     };
+
+    console.log(
+        '1rem = ',
+        getComputedStyle(document.documentElement, '').fontSize,
+        'px'
+    );
+    console.log('1rem = ', document.documentElement.style, 'px');
 
     return (
         player && (
             <div className="container" style={{ height: window.innerHeight }}>
                 <div className="info">
-                    {width < 600 ? <Quotes /> : <Tablo />}
+                    {width < 768 ? <Quotes /> : <Tablo />}
                     <div className="box">
                         <PlayerInfo player={player} />
                         <PlayerActions />

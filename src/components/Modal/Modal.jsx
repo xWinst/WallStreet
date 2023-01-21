@@ -26,6 +26,8 @@ const Modal = ({ onClose, children }) => {
     }, []);
 
     const addListener = e => {
+        // console.log('e: ', e.target);
+        if (e.target.nodeName === 'INPUT') return;
         const point = e.targetTouches ? e.targetTouches[0] : null;
         x.current = point?.clientX;
         y.current = point?.clientY;
@@ -66,7 +68,7 @@ const Modal = ({ onClose, children }) => {
 
     const onClick = event => {
         // console.log('event.target: ', event.target);
-        if (event.target === event.currentTarget) onClose();
+        // if (event.target === event.currentTarget) onClose();
     };
 
     return createPortal(

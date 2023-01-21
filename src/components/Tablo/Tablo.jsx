@@ -17,8 +17,8 @@ const getIndex = i => {
 };
 
 const size = window.innerHeight * 0.7;
-const html = document.documentElement;
-html.style.fontSize = size / 33 + 'px';
+// const html = document.documentElement;
+// document.documentElement.style.fontSize = size / 33 + 'px';
 
 // window.maximize()
 

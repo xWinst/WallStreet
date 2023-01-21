@@ -1,5 +1,3 @@
-// import { observer } from 'mobx-react-lite';
-// import game from 'store';
 import { useSelector } from 'react-redux';
 import s from './Quotes.module.css';
 

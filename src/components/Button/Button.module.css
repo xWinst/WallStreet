@@ -1,12 +1,11 @@
 .button {
-    width: 80px;
-    height: 30px;
+    width: 8rem;
+    height: 3rem;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
-    font-size: 10px;
-    letter-spacing: 0.02em;
+    font-size: 1rem;
     text-transform: uppercase;
     background-color: blue;
     color: yellow;

@@ -7,14 +7,16 @@ export const useInner = () => {
     const handleResize = () => {
         setWidth(window.innerWidth);
         // setHeight(window.innerHeight);
-        // console.log('resize :)');
+        document.documentElement.style.fontSize =
+            Math.floor(Math.sqrt(window.innerWidth) / 2) + 'px';
     };
 
     useEffect(() => {
+        document.documentElement.style.fontSize =
+            Math.floor(Math.sqrt(window.innerWidth) / 2) + 'px';
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    // return { width, height };
     return { width };
 };

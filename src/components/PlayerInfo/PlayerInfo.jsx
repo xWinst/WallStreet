@@ -11,6 +11,8 @@ const PlayerInfo = ({ player }) => {
     const gameState = useSelector(state => state.game.gameState);
     const shares = getShares(player);
 
+    // alert(player.money);
+
     return (
         <div className={s.info}>
             <p>Наличман: {player.money}</p>

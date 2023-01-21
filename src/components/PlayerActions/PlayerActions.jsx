@@ -16,8 +16,8 @@ const PlayerActions = () => {
     const [showBuy, setShowBuy] = useState(false);
     const [showSell, setShowSell] = useState(false);
     const [showModal, setShowModal] = useState(false);
-    const [sales, setSales] = useState(['', '', '', '']);
-    const [purchases, setPurchases] = useState(['', '', '', '']);
+    const [sales, setSales] = useState([0, 0, 0, 0]);
+    const [purchases, setPurchases] = useState([0, 0, 0, 0]);
     const [reserve, setReserve] = useState(player.money);
 
     const dispatch = useDispatch();
@@ -56,61 +56,68 @@ const PlayerActions = () => {
     const cancel = () => {
         setShowSell(false);
         setShowBuy(false);
-        setSales(['', '', '', '']);
-        setPurchases(['', '', '', '']);
+        setSales([0, 0, 0, 0]);
+        setPurchases([0, 0, 0, 0]);
         setReserve(player.money);
     };
 
     const submit = () => {
-        // player.addMoney(
-        //     sales.reduce((total, count, idx) => total + count * price[idx], 0)
-        // ); ///////
         dispatch(
             updatePlayer({
                 index: 0,
                 props: sellShares(sales, price, player),
             })
         );
-        // player.sellShares(sales); ///////////////////////
         setShowSell(false);
-        setSales(['', '', '', '']);
-        // setShowState(true);
+        setSales([0, 0, 0, 0]);
     };
 
     const submitBuy = () => {
-        // player.addMoney(
-        //     purchases.reduce(
-        //         (total, count, idx) => total - count * price[idx],
-        //         0
-        //     )
-        // ); /////////////////////
-
         dispatch(
             updatePlayer({
                 index: 0,
                 props: buyShares(purchases, price, player),
             })
         );
-
-        // player.buyShares(purchases); ///////////////////////
-
         setShowBuy(false);
-        setPurchases(['', '', '', '']);
+        setPurchases([0, 0, 0, 0]);
     };
 
     const onChangeSell = e => {
         const { name, value } = e.target;
-        if (!Number(value) && value) return;
-        let count = Number(value);
-        const limit =
-            gameState === 'before' ? shares[name] : player.freeShares[name];
-        if (count > limit) count = limit;
+        updateSales(name, value);
+    };
 
+    const updateSales = (name, value) => {
         setSales(prev => {
             const result = [...prev];
-            result[name] = count;
+            result[name] = Number(value);
             return result;
         });
+    };
+
+    const updatePurchases = (name, value) => {
+        setPurchases(prev => {
+            const result = [...prev];
+            result[name] = Number(value);
+            return result;
+        });
+    };
+
+    const changeSales = (name, value) => {
+        let result = sales[name] + value;
+        if (result < 0) result = 0;
+        if (result > getSalesMax(name)) result = getSalesMax(name);
+        updateSales(name, result);
+    };
+
+    const changePurchases = (name, value) => {
+        const max = Math.floor(getReserve(name) / price[name]);
+        console.log('max: ', max);
+        let result = purchases[name] + value;
+        if (result < 0) result = 0;
+        if (result > max) result = max;
+        updatePurchases(name, result);
     };
 
     const getReserve = idx => {
@@ -128,9 +135,10 @@ const PlayerActions = () => {
 
     const onChangeBuy = e => {
         const { name, value } = e.target;
+        // console.log('e.target: ', e.target);
         if (!Number(value) && value) return;
         const reserve = getReserve(name);
-        // console.log('reserve: ', reserve);
+        console.log('reserve: ', reserve);
 
         let count = Number(value);
         if (count > Math.floor(reserve / price[name]))
@@ -149,6 +157,12 @@ const PlayerActions = () => {
         // setShowState(false);
     };
 
+    const getSalesMax = idx => {
+        if (gameState === 'before') return shares[idx];
+        else return player.freeShares[idx];
+    };
+
+    // console.log('sales: ', sales);
     return (
         <div className={s.container}>
             <Button text="Продать" onClick={openSell} />
@@ -156,6 +170,7 @@ const PlayerActions = () => {
             {showBuy && (
                 <Modal onClose={cancel}>
                     <ul className={s.list}>
+                        <li className={s.title}>Покупка</li>
                         {companyNames.map((name, idx) => (
                             <li key={name} className={s.item}>
                                 <p
@@ -164,15 +179,57 @@ const PlayerActions = () => {
                                 >
                                     {companyNames[idx]}
                                 </p>
+                                <Button
+                                    text="Min"
+                                    onClick={() => {
+                                        updatePurchases(idx, 0);
+                                    }}
+                                    style={{ width: 30 }}
+                                />
+                                <Button
+                                    text="-"
+                                    onClick={() => {
+                                        changePurchases(idx, -1);
+                                    }}
+                                    style={{ width: 25 }}
+                                />
                                 <input
                                     className={s.count}
                                     name={idx}
-                                    placeholder={`max ${Math.floor(
-                                        reserve / price[idx]
+                                    type="range"
+                                    min="0"
+                                    max={`${Math.floor(
+                                        getReserve(idx) / price[idx]
                                     )}`}
                                     value={purchases[idx]}
                                     onChange={onChangeBuy}
                                 />
+                                <Button
+                                    text="+"
+                                    onClick={() => {
+                                        changePurchases(idx, 1);
+                                    }}
+                                    style={{ width: 25 }}
+                                />
+                                <Button
+                                    text="Max"
+                                    onClick={() => {
+                                        updatePurchases(
+                                            idx,
+                                            Math.floor(
+                                                getReserve(idx) / price[idx]
+                                            )
+                                        );
+                                    }}
+                                    style={{ width: 30 }}
+                                />
+                                {purchases[idx] > 0 && (
+                                    <span> Покупаем {purchases[idx]} шт.</span>
+                                )}
+                                <span>
+                                    (Max:
+                                    {Math.floor(getReserve(idx) / price[idx])})
+                                </span>
                             </li>
                         ))}
                     </ul>
@@ -186,6 +243,7 @@ const PlayerActions = () => {
             {showSell && (
                 <Modal onClose={cancel}>
                     <ul className={s.list}>
+                        <li className={s.title}>Продажа</li>
                         {shares.map(
                             (count, idx) =>
                                 count > 0 && (
@@ -195,21 +253,57 @@ const PlayerActions = () => {
                                             style={{ color: colors[idx] }}
                                         >
                                             {companyNames[idx]}
+                                            <span className={s.stock}>
+                                                &nbsp; (max:
+                                                {getSalesMax(idx)})
+                                            </span>
                                         </p>
+                                        <Button
+                                            text="Min"
+                                            onClick={() => {
+                                                updateSales(idx, 0);
+                                            }}
+                                            style={{ width: '3rem' }}
+                                        />
+                                        <Button
+                                            text="-"
+                                            onClick={() => {
+                                                changeSales(idx, -1);
+                                            }}
+                                            style={{ width: '2.5rem' }}
+                                        />
+
                                         <input
                                             className={s.count}
                                             name={idx}
-                                            placeholder={
-                                                gameState === 'before'
-                                                    ? `max  ${count}`
-                                                    : `max  ${player.freeShares[idx]}`
-                                            }
+                                            type="range"
+                                            min="0"
+                                            max={getSalesMax(idx)}
                                             value={sales[idx]}
                                             onChange={onChangeSell}
                                         />
-                                        {sales[idx] && (
+                                        <Button
+                                            text="+"
+                                            onClick={() => {
+                                                changeSales(idx, 1);
+                                            }}
+                                            style={{ width: '2.5rem' }}
+                                        />
+                                        <Button
+                                            text="Max"
+                                            onClick={() => {
+                                                updateSales(
+                                                    idx,
+                                                    getSalesMax(idx)
+                                                );
+                                            }}
+                                            style={{ width: '3rem' }}
+                                        />
+                                        {sales[idx] > 0 && (
                                             <p className={s.money}>
-                                                {sales[idx] * price[idx]} бабла
+                                                {sales[idx]} шт. х {price[idx]}$
+                                                =&nbsp;
+                                                {sales[idx] * price[idx]}
                                             </p>
                                         )}
                                     </li>

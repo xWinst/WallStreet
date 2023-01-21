@@ -28,7 +28,7 @@
 body {
     margin: 0;
     font-family: 'Roboto', sans-serif;
-    font-size: 12px;
+    font-size: 1rem;
     line-height: 1.17;
     letter-spacing: 0.04em;
     color: var(--main-color);
@@ -89,8 +89,11 @@ input[type='number'] {
 }
 
 .container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     width: 100vw;
-    /* height: 100vh; */
+    height: 100vh;
     padding: 12px;
     background-color: #343c3e;
     scroll-behavior: none;
@@ -98,6 +101,7 @@ input[type='number'] {
 
 .info {
     display: flex;
+    justify-content: space-between;
     gap: 20px;
 }
 
