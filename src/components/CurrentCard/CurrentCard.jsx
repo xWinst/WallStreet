@@ -2,30 +2,19 @@ import { Button, Card } from 'components';
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setFuturePrice, updatePlayer } from 'state/gameReducer';
-import { getShares } from 'helpers/playerUpdates';
+import cardDecks from 'db/cardDeck';
+import { player1 } from 'components/App';
 import s from './CurrentCard.module.css';
 
 const colors = ['blue', 'red', 'green', 'yellow'];
 
-const getColors = card => {
-    let colorUp;
-    let colorDown;
-    if (card.isBoostCard) {
-        colorUp = [card.color];
-        colorDown = [0, 1, 2, 3].filter(idx => idx !== card.color);
-    } else {
-        colorUp = [0, 1, 2, 3].filter(idx => idx !== card.color);
-        colorDown = [card.color];
-    }
-
-    return { colorUp, colorDown };
-};
+const bothDecks = new cardDecks();
 
 const CurrentCard = ({ cancel, closeCard }) => {
     const player = useSelector(state => state.game.players[0]);
-    const shares = getShares(player);
+    const { shares } = player1;
     const price = useSelector(state => state.game.currentPrice);
-    const card = useSelector(state => state.game.currentCard);
+    const cardId = useSelector(state => state.game.currentCard);
     const futurePrice = useSelector(state => state.game.futurePrice);
 
     const [secondColor, setSecondColor] = useState();
@@ -37,8 +26,13 @@ const CurrentCard = ({ cancel, closeCard }) => {
 
     const dispatch = useDispatch();
 
+    const card =
+        cardId > 99
+            ? bothDecks.bigDeck[cardId % 100]
+            : bothDecks.smallDeck[cardId];
+
     const { isBoostCard, color: mainColor } = card;
-    const { colorUp, colorDown } = getColors(card);
+    const { colorUp, colorDown } = card.getColors();
 
     useEffect(() => {
         setThirdColor(colorDown[1]);
@@ -52,46 +46,7 @@ const CurrentCard = ({ cancel, closeCard }) => {
     }, [card]);
 
     const showCard = (secondColor, thirdColor) => {
-        const activePrice = [...price];
-
-        if (card.type === 'doubble') {
-            activePrice[card.color] *= isBoostCard ? 2 : 0.5;
-            activePrice[secondColor] *= isBoostCard ? 0.5 : 2;
-        } else if (card.type === '100') {
-            activePrice[card.color] += 100;
-            activePrice[secondColor] -= 10;
-            activePrice[thirdColor] -= 20;
-            activePrice[
-                colorDown.filter(
-                    color => color !== secondColor && color !== thirdColor
-                )
-            ] -= 30;
-        } else {
-            const value = Number.parseInt(card.type);
-            activePrice[card.color] += isBoostCard ? value : value - 90;
-            activePrice[secondColor] += isBoostCard ? value - 90 : value;
-        }
-        // console.table('activePrice: AFTER', activePrice);
-
-        normalize(activePrice);
-    };
-
-    const chooseColor = color => {
-        if (color === mainColor) return;
-        setSecondColor(color);
-        const thirdColor = colorDown.filter(idx => idx !== color)[0];
-        setThirdColor(thirdColor);
-        showCard(color, thirdColor);
-    };
-
-    const chooseThirdColor = color => {
-        if (color === mainColor) return;
-        setThirdColor(color);
-        showCard(secondColor, color);
-    };
-
-    const normalize = activePrice => {
-        // console.log('activePrice: ', ...activePrice);
+        const activePrice = card.activate(price, secondColor, thirdColor);
         const finalPrice = [];
         const bonus = [0, 0, 0, 0];
         const fine = [0, 0, 0, 0];
@@ -113,8 +68,20 @@ const CurrentCard = ({ cancel, closeCard }) => {
         setFine(fine);
         setCompensation(compensation);
         dispatch(setFuturePrice(finalPrice));
+    };
 
-        return finalPrice;
+    const chooseColor = color => {
+        if (color === mainColor) return;
+        setSecondColor(color);
+        const thirdColor = colorDown.filter(idx => idx !== color)[0];
+        setThirdColor(thirdColor);
+        showCard(color, thirdColor);
+    };
+
+    const chooseThirdColor = color => {
+        if (color === mainColor) return;
+        setThirdColor(color);
+        showCard(secondColor, color);
     };
 
     const activateCard = () => {
@@ -122,15 +89,12 @@ const CurrentCard = ({ cancel, closeCard }) => {
         for (let i = 0; i < bonus.length; i++) {
             total += (bonus[i] + compensation[i]) * shares[i];
         }
-        // player.addMoney(total); ////////
-        // addMoney(total, player);
-        // player.money += total;
-        // console.log('player: ', player);
+        player1.money += total;
 
         dispatch(
             updatePlayer({
-                index: 0,
-                props: { money: player.money + total },
+                index: player1.index,
+                money: player.money + total,
             })
         );
         closeCard();
@@ -141,14 +105,6 @@ const CurrentCard = ({ cancel, closeCard }) => {
             color => color !== secondColor && color !== thirdColor
         )[0];
     };
-
-    // console.log('bonus: ', bonus);
-    // console.log('fine: ', fine);
-    // console.log('compensation: ', compensation);
-    // console.log('mainColor: ', mainColor);
-    // console.log('secondColor: ', secondColor);
-    // console.log('fine[secondColor]: ', fine[secondColor]);
-    // console.log('fine[mainColor]: ', fine[mainColor]);
 
     return (
         <div className={s.container}>

@@ -15,29 +15,11 @@ class cardDecks {
             for (const type of cardTypes) {
                 if (type === '100') {
                     for (let j = 0; j < 3; j++) {
-                        // result.push(new Card(i, true, type, id++));
-                        result.push({
-                            color: i,
-                            isBoostCard: true,
-                            type,
-                            id: id++,
-                        });
+                        result.push(new Card(i, true, type, id++));
                     }
                 } else {
-                    // result.push(new Card(i, true, type, id++));
-                    // result.push(new Card(i, false, type, id++));
-                    result.push({
-                        color: i,
-                        isBoostCard: true,
-                        type,
-                        id: id++,
-                    });
-                    result.push({
-                        color: i,
-                        isBoostCard: false,
-                        type,
-                        id: id++,
-                    });
+                    result.push(new Card(i, true, type, id++));
+                    result.push(new Card(i, false, type, id++));
                 }
             }
         }

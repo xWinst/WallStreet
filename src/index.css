@@ -94,7 +94,7 @@ input[type='number'] {
     justify-content: space-between;
     width: 100vw;
     height: 100vh;
-    padding: 12px;
+    padding: 20px;
     background-color: #343c3e;
     scroll-behavior: none;
 }
@@ -120,18 +120,17 @@ input[type='number'] {
 } */
 
 @media screen and (min-width: 768px) {
-    .main {
-        max-width: var(--tablet);
-        /* padding: 0 32px; */
+    .container {
+        padding: 12px;
     }
 }
 
-@media screen and (min-width: 1280px) {
+/* @media screen and (min-width: 1280px) {
     .main {
         max-width: var(--desktop);
         padding: 0 16px;
     }
-}
+} */
 
 /* bigDeck */
 

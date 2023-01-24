@@ -1,12 +1,12 @@
 .info {
-    font-size: 15px;
+    font-size: 1.35rem;
     font-weight: 700;
     color: #eeeeee;
 }
 
 .sharesList {
     margin-top: 8px;
-    font-size: 9px;
+    font-size: 0.85rem;
     border: 1px solid #eeeeee;
 }
 
@@ -23,16 +23,16 @@
 }
 
 .name {
-    width: 65px;
+    width: 5rem;
 }
 
 .count {
-    width: 50px;
+    width: 4.5rem;
     text-align: center;
 }
 
 .cost {
-    width: 66px;
+    width: 5.5rem;
     text-align: end;
 }
 
@@ -49,4 +49,8 @@
     color: orange;
     text-align: center;
     text-shadow: #fc0 1px 0 10px;
+}
+
+.player {
+    color: orange;
 }

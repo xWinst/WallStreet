@@ -39,9 +39,10 @@ const gameSlice = createSlice({
             state.gameState = 'before';
         },
         updatePlayer: (state, actions) => {
-            const { index, props } = actions.payload;
+            const { index, ...rest } = actions.payload;
+            console.log('updatePlayer: ', rest);
             // console.log('actions.payload: ', actions.payload);
-            state.players[index] = { ...state.players[index], ...props };
+            state.players[index] = { ...state.players[index], ...rest };
         },
     },
 });

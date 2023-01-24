@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button, Modal } from 'components';
 import { updatePlayer } from 'state/gameReducer';
-import { sellShares, buyShares, getShares } from 'helpers/playerUpdates';
+import { player1 } from 'components/App';
 import s from './PlayerActions.module.css';
 
 const companyNames = ['Cиние', 'Красные', 'Зеленые', 'Желтые'];
@@ -18,22 +18,10 @@ const PlayerActions = () => {
     const [showModal, setShowModal] = useState(false);
     const [sales, setSales] = useState([0, 0, 0, 0]);
     const [purchases, setPurchases] = useState([0, 0, 0, 0]);
-    const [reserve, setReserve] = useState(player.money);
 
     const dispatch = useDispatch();
 
-    const shares = getShares(player);
-
-    // const [showState, setShowState] = useState(false);
-    useEffect(() => {
-        setReserve(
-            player.money -
-                purchases.reduce(
-                    (total, count, idx) => total + count * price[idx],
-                    0
-                )
-        );
-    }, [purchases, player, price]);
+    const { shares } = player1;
 
     const openSell = () => {
         if (turn === 10) {
@@ -58,27 +46,16 @@ const PlayerActions = () => {
         setShowBuy(false);
         setSales([0, 0, 0, 0]);
         setPurchases([0, 0, 0, 0]);
-        setReserve(player.money);
     };
 
     const submit = () => {
-        dispatch(
-            updatePlayer({
-                index: 0,
-                props: sellShares(sales, price, player),
-            })
-        );
+        dispatch(updatePlayer(player1.sellShares(sales, price)));
         setShowSell(false);
         setSales([0, 0, 0, 0]);
     };
 
     const submitBuy = () => {
-        dispatch(
-            updatePlayer({
-                index: 0,
-                props: buyShares(purchases, price, player),
-            })
-        );
+        dispatch(updatePlayer(player1.buyShares(purchases, price)));
         setShowBuy(false);
         setPurchases([0, 0, 0, 0]);
     };
@@ -113,7 +90,6 @@ const PlayerActions = () => {
 
     const changePurchases = (name, value) => {
         const max = Math.floor(getReserve(name) / price[name]);
-        console.log('max: ', max);
         let result = purchases[name] + value;
         if (result < 0) result = 0;
         if (result > max) result = max;
@@ -121,29 +97,23 @@ const PlayerActions = () => {
     };
 
     const getReserve = idx => {
-        // console.log('idx: ', idx);
-        const reservedPurchases = purchases.filter((_, i) => i !== Number(idx));
-        // console.log('reservedPurchases: ', reservedPurchases);
+        const reservedPurchases = purchases
+            .map((count, i) => count * price[i])
+            .filter((_, i) => i !== Number(idx));
         return (
             player.money -
-            reservedPurchases.reduce(
-                (total, count, idx) => total + count * price[idx],
-                0
-            )
+            reservedPurchases.reduce((total, count, idx) => total + count, 0)
         );
     };
 
     const onChangeBuy = e => {
         const { name, value } = e.target;
-        // console.log('e.target: ', e.target);
         if (!Number(value) && value) return;
         const reserve = getReserve(name);
-        console.log('reserve: ', reserve);
-
-        let count = Number(value);
-        if (count > Math.floor(reserve / price[name]))
-            count = Math.floor(reserve / price[name]);
-        if (count === 0) count = '';
+        const count = Math.max(
+            Number(value),
+            Math.floor(reserve / price[name])
+        );
 
         setPurchases(prev => {
             const result = [...prev];
@@ -152,17 +122,13 @@ const PlayerActions = () => {
         });
     };
 
-    const ok = () => {
-        setShowModal(false);
-        // setShowState(false);
-    };
+    const ok = () => setShowModal(false);
 
     const getSalesMax = idx => {
         if (gameState === 'before') return shares[idx];
-        else return player.freeShares[idx];
+        else return player1.freeShares[idx];
     };
 
-    // console.log('sales: ', sales);
     return (
         <div className={s.container}>
             <Button text="Продать" onClick={openSell} />
@@ -184,14 +150,14 @@ const PlayerActions = () => {
                                     onClick={() => {
                                         updatePurchases(idx, 0);
                                     }}
-                                    style={{ width: 30 }}
+                                    style={{ width: '3rem' }}
                                 />
                                 <Button
                                     text="-"
                                     onClick={() => {
                                         changePurchases(idx, -1);
                                     }}
-                                    style={{ width: 25 }}
+                                    style={{ width: '2.5rem' }}
                                 />
                                 <input
                                     className={s.count}
@@ -209,7 +175,7 @@ const PlayerActions = () => {
                                     onClick={() => {
                                         changePurchases(idx, 1);
                                     }}
-                                    style={{ width: 25 }}
+                                    style={{ width: '2.5rem' }}
                                 />
                                 <Button
                                     text="Max"
@@ -221,15 +187,22 @@ const PlayerActions = () => {
                                             )
                                         );
                                     }}
-                                    style={{ width: 30 }}
+                                    style={{ width: '3rem' }}
                                 />
-                                {purchases[idx] > 0 && (
-                                    <span> Покупаем {purchases[idx]} шт.</span>
-                                )}
-                                <span>
-                                    (Max:
-                                    {Math.floor(getReserve(idx) / price[idx])})
-                                </span>
+                                <p className={s.purchases}>
+                                    {purchases[idx] > 0 && (
+                                        <span>
+                                            Покупаем {purchases[idx]} шт.
+                                        </span>
+                                    )}
+                                    <span>
+                                        (Max:
+                                        {Math.floor(
+                                            getReserve(idx) / price[idx]
+                                        )}
+                                        )
+                                    </span>
+                                </p>
                             </li>
                         ))}
                     </ul>
@@ -254,8 +227,7 @@ const PlayerActions = () => {
                                         >
                                             {companyNames[idx]}
                                             <span className={s.stock}>
-                                                &nbsp; (max:
-                                                {getSalesMax(idx)})
+                                                ({getSalesMax(idx)} шт.)
                                             </span>
                                         </p>
                                         <Button
@@ -328,7 +300,7 @@ const PlayerActions = () => {
             {showModal && (
                 <Modal onClose={ok}>
                     <div className="box">
-                        <p>Операции с банком на последне ходу запрещены!</p>
+                        <p>Операции с банком на последнем ходу запрещены!</p>
                         <Button text="ok" onClick={ok} />
                     </div>
                 </Modal>

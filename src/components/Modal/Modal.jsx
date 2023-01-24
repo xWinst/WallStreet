@@ -4,7 +4,7 @@ import s from './Modal.module.css';
 
 const modalRoot = document.querySelector('#modal-root');
 
-const Modal = ({ onClose, children }) => {
+const Modal = ({ onClose, style = {}, children }) => {
     const modal = useRef();
     const x = useRef();
     const y = useRef();
@@ -73,7 +73,7 @@ const Modal = ({ onClose, children }) => {
 
     return createPortal(
         <div className={s.overlay} onClick={onClick}>
-            <div className={s.modal} ref={modal}>
+            <div className={s.modal} ref={modal} style={style}>
                 {children}
             </div>
         </div>,

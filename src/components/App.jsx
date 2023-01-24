@@ -22,38 +22,11 @@ import {
     nextTurn,
     updatePlayer,
 } from 'state/gameReducer';
-//=====================================================
-import cardDecks from 'db/cardDeck';
-import { removeCard, shareMerger } from 'helpers/playerUpdates';
-// const colors = ['blue', 'red', 'green', 'yellow'];
 
-const bothDecks = new cardDecks();
+import Player from 'state/Player';
 
-const dealCards = (typeDeck, count) => {
-    const result = [];
-    const deck = bothDecks[typeDeck];
-    for (let i = 0; i < count; i++) {
-        const rnd = Math.floor(Math.random() * deck.length);
-        result.push(deck[rnd].id);
-        deck.splice(rnd, 1);
-    }
-
-    return result;
-};
-
-// const player = new Player('Anonymus');
-// const ai = new Player('Idiot');
-const player1 = {
-    name: 'Anonymus',
-    money: 0,
-    bigDeck: dealCards('bigDeck', 4),
-    smallDeck: dealCards('smallDeck', 6),
-
-    frezenShares: [0, 0, 0, 0],
-    freeShares: [1, 1, 100, 100],
-};
-const ai = { name: 'Idiot', money: 0 };
-//=======================================================================================
+export const player1 = new Player('Anonymus');
+export const ai = new Player('Idiot');
 
 const App = () => {
     const currentPrice = useSelector(state => state.game.currentPrice);
@@ -68,7 +41,7 @@ const App = () => {
     const { width } = useInner();
 
     useEffect(() => {
-        if (!player) dispatch(setPlayers([player1, ai]));
+        if (!player) dispatch(setPlayers([player1.copy, ai.copy]));
     }, [dispatch, player]);
 
     const cancel = () => {
@@ -82,12 +55,7 @@ const App = () => {
 
     const closeCard = () => {
         dispatch(setCurrentPrice([...futurePrice]));
-        dispatch(
-            updatePlayer({
-                index: 0,
-                props: removeCard(currentCard.id, player),
-            })
-        );
+        dispatch(updatePlayer(player1.removeCard(currentCard)));
         dispatch(setCurrentCard(null));
         dispatch(setGameState('after'));
     };
@@ -97,38 +65,30 @@ const App = () => {
             setError(true);
             return;
         }
-
-        dispatch(updatePlayer({ index: 0, props: shareMerger(player) }));
+        player1.shareMerger();
         dispatch(nextTurn());
     };
 
-    console.log(
-        '1rem = ',
-        getComputedStyle(document.documentElement, '').fontSize,
-        'px'
-    );
-    console.log('1rem = ', document.documentElement.style, 'px');
-
     return (
         player && (
-            <div className="container" style={{ height: window.innerHeight }}>
+            <div className="container">
                 <div className="info">
                     {width < 768 ? <Quotes /> : <Tablo />}
                     <div className="box">
-                        <PlayerInfo player={player} />
+                        <PlayerInfo player={player1} />
                         <PlayerActions />
                         <Button text="Конец хода" onClick={endTurn} />
                     </div>
                 </div>
                 <PlayerCards />
-                {currentCard && (
-                    <Modal onClose={cancel}>
+                {currentCard !== null && (
+                    <Modal onClose={cancel} style={{ maxWidth: 400 }}>
                         <CurrentCard cancel={cancel} closeCard={closeCard} />
                     </Modal>
                 )}
 
                 {error && (
-                    <Modal onClose={ok}>
+                    <Modal onClose={ok} style={{ maxWidth: 400 }}>
                         <div className="box">
                             <p>Сначала нужно показать карточку</p>
                             <Button text="ok" onClick={ok} />

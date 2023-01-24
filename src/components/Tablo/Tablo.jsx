@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
+import { useInner } from 'hooks/useInner';
 import s from './Tablo.module.css';
-// import game from 'store';
 
 const getPrices = () => {
     const result = [];
@@ -16,16 +16,40 @@ const getIndex = i => {
     return 3;
 };
 
-const size = window.innerHeight * 0.7;
-// const html = document.documentElement;
-// document.documentElement.style.fontSize = size / 33 + 'px';
-
 // window.maximize()
 
 const Tablo = () => {
-    // const { currentPrice, futurePrice } = game;
     const price = useSelector(state => state.game.currentPrice);
     const futurePrice = useSelector(state => state.game.futurePrice);
+    const { width } = useInner();
+    const size = width / 2.5;
+    // console.log('size: ', size);
+
+    const getCloudColor = (idx, cost) => {
+        if (
+            futurePrice[idx] === 0 ||
+            (cost > price[idx] && cost > futurePrice[idx]) ||
+            (cost < price[idx] && cost < futurePrice[idx])
+        ) {
+            return '#777777cc';
+        }
+        if (cost === price[idx] || cost === futurePrice[idx])
+            return 'transparent';
+
+        const range = futurePrice[idx] - price[idx];
+
+        const alpha = Math.round(
+            ((futurePrice[idx] - cost) * 204) / range
+        ).toString(16);
+        // console.log('alf', ((futurePrice[idx] - cost + 10) * 169) / range);
+        return '#777777' + alpha;
+    };
+
+    console.log('204', Number(204).toString(16));
+    console.log('10', Number(10).toString(16));
+    console.log('100', Number(100).toString(16));
+    console.log('20', Number(20).toString(16));
+
     return (
         <ul className={s.tablo}>
             {colors.map((color, index) => (
@@ -58,16 +82,13 @@ const Tablo = () => {
                                         ) *
                                             (size - (index * size) / 11.5)
                                     }px`,
-                                    //   top: `${index * 50}px`,
+                                    '--clouding': getCloudColor(index, cost),
+                                    '--alpha': getCloudColor(index, cost),
                                 }}
                             >
                                 <div
                                     className={s.price}
                                     style={{
-                                        // background:
-                                        //   price === currentPrice[index]
-                                        //     ? `${color}`
-                                        //     : `${colors[index]}`,
                                         background: `${color}`,
                                         color: `${colors[getIndex(index)]}`,
                                     }}

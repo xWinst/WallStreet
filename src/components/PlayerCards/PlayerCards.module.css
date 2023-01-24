@@ -9,3 +9,44 @@
 .smallDeck {
     display: flex;
 }
+
+.chosenCard {
+    animation: choosingCard 0.3s ease;
+}
+
+.chosenCard > div {
+    transform-origin: center;
+    animation: rotation 0.3s linear;
+}
+
+@media screen and (min-width: 768px) {
+    .decks {
+        position: absolute;
+        bottom: 20px;
+        left: 13rem;
+    }
+}
+
+@keyframes choosingCard {
+    100% {
+        transform: translateY(-500px);
+    }
+}
+
+@keyframes rotation {
+    0% {
+        transform: perspective(400px) rotateX(0deg);
+    }
+
+    100% {
+        transform: perspective(400px) rotateX(90deg);
+    }
+}
+
+@media screen and (min-width: 768px) {
+    @keyframes choosingCard {
+        100% {
+            transform: translateY(-200px);
+        }
+    }
+}

@@ -1,5 +1,4 @@
 import { useSelector } from 'react-redux';
-import { getShares } from 'helpers/playerUpdates';
 import s from './PlayerInfo.module.css';
 
 const companyNames = ['Cиние', 'Красные', 'Зеленые', 'Желтые'];
@@ -9,9 +8,7 @@ const PlayerInfo = ({ player }) => {
     const price = useSelector(state => state.game.currentPrice);
     const turn = useSelector(state => state.game.turn);
     const gameState = useSelector(state => state.game.gameState);
-    const shares = getShares(player);
-
-    // alert(player.money);
+    const { shares } = player;
 
     return (
         <div className={s.info}>
@@ -35,7 +32,7 @@ const PlayerInfo = ({ player }) => {
                     </li>
                 ))}
             </ul>
-            <p className={s.capital}>
+            {/* <p className={s.capital}>
                 Всего капиталу:
                 <br />
                 <span className={s.total}>
@@ -45,10 +42,12 @@ const PlayerInfo = ({ player }) => {
                     ) + player.money}{' '}
                     бабла
                 </span>
-            </p>
+            </p> */}
 
             <p style={{ textAlign: 'center' }}>
-                Ход № {turn},&nbsp;
+                Ходит&nbsp;
+                <span className={s.player}>{player.name}</span>
+                <br /> Ход № {turn},&nbsp;
                 {gameState === 'before' ? '1-й этап' : '3-й этап'}
             </p>
         </div>

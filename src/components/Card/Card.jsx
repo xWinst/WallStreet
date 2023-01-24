@@ -8,7 +8,6 @@ const getDownVolume = volume => {
 };
 
 const Card = ({ card }) => {
-    // console.log('card: ', card.id);
     const colorUp = card.isBoostCard ? colors[card.color] : 'white';
     const colorDown = card.isBoostCard ? 'white' : colors[card.color];
 

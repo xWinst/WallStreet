@@ -12,12 +12,32 @@ const getPrices = () => {
 const prices = getPrices();
 
 const Quotes = () => {
-    const currentPrice = useSelector(state => state.game.currentPrice);
+    const price = useSelector(state => state.game.currentPrice);
     const futurePrice = useSelector(state => state.game.futurePrice);
     const getClass = (index, cost) => {
-        if (currentPrice[index] === cost) return s.current;
+        if (price[index] === cost) return s.current;
         if (futurePrice[index] === cost) return s.future;
         return s.muted;
+    };
+
+    const getCloudColor = (idx, cost) => {
+        if (
+            futurePrice[idx] === 0 ||
+            (cost > price[idx] && cost > futurePrice[idx]) ||
+            (cost < price[idx] && cost < futurePrice[idx])
+        ) {
+            return '#aaaaaacc';
+        }
+        if (cost === price[idx] || cost === futurePrice[idx])
+            return 'transparent';
+
+        const range = futurePrice[idx] - price[idx];
+
+        const alpha = Math.round(
+            ((futurePrice[idx] - cost) * 204) / range
+        ).toString(16);
+
+        return '#aaaaaa' + alpha;
     };
 
     return (
@@ -32,6 +52,10 @@ const Quotes = () => {
                                     style={{
                                         backgroundColor: color,
                                         color: index % 2 ? 'blue' : 'yellow',
+                                        '--clouding': getCloudColor(
+                                            index,
+                                            cost
+                                        ),
                                     }}
                                 >
                                     {cost}

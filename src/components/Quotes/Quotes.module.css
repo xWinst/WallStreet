@@ -11,10 +11,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 3.3rem;
-    height: 1.65rem;
+    width: 3.5rem;
+    height: 1.8rem;
     margin-top: 2px;
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: 700;
     /* border: 1px solid black; */
 
@@ -36,18 +36,18 @@
 .muted::after {
     content: '';
     position: absolute;
-    width: 3.3rem;
-    height: 1.65rem;
-    background-color: #cccccccc;
+    width: 3.5rem;
+    height: 1.8rem;
+    background-color: var(--clouding);
 }
 
-.future::after {
+/* .future::after {
     content: '';
     position: absolute;
     width: 30px;
     height: 15px;
     background-color: #cccccc66;
-}
+} */
 
 @keyframes marching-ants {
     0% {

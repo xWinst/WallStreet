@@ -1,17 +1,13 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-// import { observer } from 'mobx-react-lite';
 import { Card, Modal, Button } from 'components';
 import { setCurrentCard } from 'state/gameReducer';
 import cardDecks from 'db/cardDeck';
 import s from './PlayerCards.module.css';
-// import game from 'store';
 
 const bothDecks = new cardDecks();
 
 const PlayerCards = () => {
-    // console.log('Player Deck: ', cardDecks);
-    // const item = useRef();
     const [error, setError] = useState(false);
     const currentCard = useSelector(state => state.game.currentCard);
     const player = useSelector(state => state.game.players[0]);
@@ -20,10 +16,7 @@ const PlayerCards = () => {
     const dispatch = useDispatch();
 
     const activeCard = idx => {
-        // console.log('idx: ', idx);
-        const card =
-            idx > 99 ? bothDecks.bigDeck[idx % 100] : bothDecks.smallDeck[idx];
-        dispatch(setCurrentCard(card));
+        dispatch(setCurrentCard(idx));
         return;
     };
 
@@ -33,24 +26,17 @@ const PlayerCards = () => {
             return;
         }
         const id = Number.parseInt(e.currentTarget.dataset.id);
-        // item.current.className = 'cancelCard';
-        // item.current = e.currentTarget;
-        // e.currentTarget.className = 'selectedCard';
-        activeCard(id);
-        // setTimeout(() => activeCard(id), 500);
+        e.currentTarget.className = s.chosenCard;
+        setTimeout(() => activeCard(id), 300);
     };
-    // console.log('player.bigDeck: ', player.bigDeck);
-    // console.log('currentCard: ', currentCard);
 
-    const ok = () => {
-        setError(false);
-    };
+    const ok = () => setError(false);
 
     return (
         <div className={s.decks}>
             <ul className={s.bigDeck}>
                 {player.bigDeck
-                    .filter(card => card !== currentCard?.id)
+                    .filter(card => card !== currentCard)
                     .map(id => (
                         <li key={id} onClick={chooseCard} data-id={id}>
                             <Card card={bothDecks.bigDeck[id % 100]} />
@@ -59,7 +45,7 @@ const PlayerCards = () => {
             </ul>
             <ul className={s.smallDeck}>
                 {player.smallDeck
-                    .filter(card => card !== currentCard?.id)
+                    .filter(card => card !== currentCard)
                     .map(id => (
                         <li key={id} onClick={chooseCard} data-id={id}>
                             <Card card={bothDecks.smallDeck[id]} />
