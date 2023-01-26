@@ -4,11 +4,13 @@
 :root {
     --main-color: #eeeeee;
     --second-color: #222222;
-    /* --accent-color: #ff751d;
+    --accent-color: #ffa000;
+    --bg-color: #343c3e;
+    --additional-color: #580000;
+    /* 
     --avatar-bg-color: #f5f6fa;
     --separate-line-color: #e0e5eb;
     --input-bg-color: #f6f7fb;
-    --bg-color: #ffffff;
     --bg-secondary-color: #f2f5fc;
     --bg-link-color: #f5f6fb;
     --text-color-three: #a6abb9;
@@ -86,30 +88,6 @@ input[type='number'] {
     clip: rect(0 0 0 0);
     clip-path: inset(50%);
     margin: -1px;
-}
-
-.container {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    width: 100vw;
-    height: 100vh;
-    padding: 20px;
-    background-color: #343c3e;
-    scroll-behavior: none;
-}
-
-.info {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-}
-
-.box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
 }
 
 /* .main {

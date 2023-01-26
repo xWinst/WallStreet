@@ -9,7 +9,7 @@ const Button = ({ icon, text, onClick, type = 'button', style = {} }) => {
             onClick={onClick}
             style={style}
         >
-            {icon && <Icon width="18" height="18" href={icon} />}
+            {icon && <Icon w="18" h="18" icon={icon} />}
             {text}
         </button>
     );

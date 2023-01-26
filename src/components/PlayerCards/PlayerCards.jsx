@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Card, Modal, Button } from 'components';
 import { setCurrentCard } from 'state/gameReducer';
-import cardDecks from 'db/cardDeck';
+// import { CardDecks } from 'model';
 import s from './PlayerCards.module.css';
 
-const bothDecks = new cardDecks();
+// const bothDecks = new CardDecks();
 
 const PlayerCards = () => {
     const [error, setError] = useState(false);
@@ -17,7 +17,6 @@ const PlayerCards = () => {
 
     const activeCard = idx => {
         dispatch(setCurrentCard(idx));
-        return;
     };
 
     const chooseCard = e => {
@@ -39,7 +38,7 @@ const PlayerCards = () => {
                     .filter(card => card !== currentCard)
                     .map(id => (
                         <li key={id} onClick={chooseCard} data-id={id}>
-                            <Card card={bothDecks.bigDeck[id % 100]} />
+                            <Card cardId={id} />
                         </li>
                     ))}
             </ul>
@@ -48,7 +47,7 @@ const PlayerCards = () => {
                     .filter(card => card !== currentCard)
                     .map(id => (
                         <li key={id} onClick={chooseCard} data-id={id}>
-                            <Card card={bothDecks.smallDeck[id]} />
+                            <Card cardId={id} />
                         </li>
                     ))}
             </ul>

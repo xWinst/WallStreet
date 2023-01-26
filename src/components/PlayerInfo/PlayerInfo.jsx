@@ -1,14 +1,14 @@
 import { useSelector } from 'react-redux';
+import { game } from 'model';
 import s from './PlayerInfo.module.css';
 
-const companyNames = ['Cиние', 'Красные', 'Зеленые', 'Желтые'];
-const colors = ['blue', 'red', 'green', 'yellow'];
-
-const PlayerInfo = ({ player }) => {
+const PlayerInfo = ({ playerId }) => {
+    // console.log('playerId: ', playerId);
     const price = useSelector(state => state.game.currentPrice);
     const turn = useSelector(state => state.game.turn);
     const gameState = useSelector(state => state.game.gameState);
-    const { shares } = player;
+    const player = useSelector(state => state.game.players[playerId]);
+    const { shares } = game.players[playerId];
 
     return (
         <div className={s.info}>
@@ -24,8 +24,11 @@ const PlayerInfo = ({ player }) => {
                 </li>
                 {shares.map((count, idx) => (
                     <li key={idx} className={s.shares}>
-                        <p className={s.name} style={{ color: colors[idx] }}>
-                            {companyNames[idx]}
+                        <p
+                            className={s.name}
+                            style={{ color: game.companyColors[idx] }}
+                        >
+                            {game.companyNames[idx]}
                         </p>
                         <p className={s.count}>{shares[idx]}</p>
                         <p className={s.cost}>{price[idx] * shares[idx]}</p>

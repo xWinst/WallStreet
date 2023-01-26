@@ -1,9 +1,5 @@
-import cardDecks from 'db/cardDeck';
-// const colors = ['blue', 'red', 'green', 'yellow'];
-
-const bothDecks = new cardDecks();
-
-const dealCards = (typeDeck, count) => {
+const dealCards = (bothDecks, typeDeck, count) => {
+    // console.log('bothDecks: ', bothDecks);
     const result = [];
     const deck = bothDecks[typeDeck];
     for (let i = 0; i < count; i++) {
@@ -11,8 +7,6 @@ const dealCards = (typeDeck, count) => {
         result.push(deck[rnd].id);
         deck.splice(rnd, 1);
     }
-
-    console.log('bothDecks: ', bothDecks);
     return result;
 };
 
@@ -29,10 +23,12 @@ class Player {
     frezenShares = [0, 0, 0, 0];
     freeShares = [1, 1, 1, 1];
 
-    constructor(name) {
-        this.name = name;
-        this.bigDeck = dealCards('bigDeck', 4);
-        this.smallDeck = dealCards('smallDeck', 6);
+    constructor(name, decks) {
+        if (name) {
+            this.name = name;
+            this.bigDeck = dealCards(decks, 'bigDeck', 4);
+            this.smallDeck = dealCards(decks, 'smallDeck', 6);
+        }
         this.index = Player.count;
         Player.count++;
     }
@@ -56,6 +52,15 @@ class Player {
             // freeShares: this.freeShares,
         };
     }
+
+    loadState = player => {
+        this.name = player.name;
+        this.money = player.money;
+        this.bigDeck = player.bigDeck;
+        this.smallDeck = player.smallDeck;
+        this.frezenShares = player.frezenShares;
+        this.freeShares = player.freeShares;
+    };
 
     removeCard = id => {
         // console.log('id: ', id);

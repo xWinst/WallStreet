@@ -1,13 +1,16 @@
+import { game } from 'model';
 import s from './Card.module.css';
 
-const colors = ['blue', 'red', 'green', 'yellow'];
+const colors = game.companyColors;
+const bothDecks = game.bothDecks;
 
 const getDownVolume = volume => {
     const number = Number.parseInt(volume);
     return 90 - number;
 };
 
-const Card = ({ card }) => {
+const Card = ({ cardId }) => {
+    const card = bothDecks.smallDeck[cardId] || bothDecks.bigDeck[cardId % 100];
     const colorUp = card.isBoostCard ? colors[card.color] : 'white';
     const colorDown = card.isBoostCard ? 'white' : colors[card.color];
 

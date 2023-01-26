@@ -1,0 +1,54 @@
+.center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container {
+    composes: center;
+    flex-direction: column;
+    min-height: 100vh;
+    background-image: url('../../images/ws-bg.jpg');
+    background-position: center;
+}
+
+.box {
+    composes: center;
+    width: 100%;
+    padding: 16px;
+    flex-direction: column;
+    gap: 30px;
+    background-color: #44444488;
+}
+
+.title {
+    font-size: 60px;
+    font-weight: 700;
+    font-family: 'BookmanOldStyle', serif;
+    text-align: center;
+    color: #0a310a;
+    text-shadow: #5eff00 0 0 2px;
+}
+
+.form {
+    composes: center;
+    gap: 10px;
+    font-size: 18px;
+    font-weight: 700;
+    color: #0003cc;
+}
+
+.name {
+    width: 100px;
+}
+
+.welcome {
+    font-size: 22px;
+    font-weight: 700;
+    color: #0003cc;
+    text-shadow: #5eff00 0 0 5px;
+}
+
+.player {
+    color: #00061d;
+}

@@ -5,8 +5,8 @@ const initialState = {
     futurePrice: [0, 0, 0, 0],
     currentCard: null,
     players: [],
-    gameState: 'before',
     turn: 1,
+    stage: 'before',
 };
 
 const gameSlice = createSlice({
@@ -15,7 +15,7 @@ const gameSlice = createSlice({
 
     reducers: {
         setPlayers: (state, action) => {
-            // console.log('action addPlaer: ', action.payload);
+            console.log('action addPlaer: ', action.payload);
             state.players = action.payload;
         },
         setCurrentCard: (state, action) => {
@@ -23,20 +23,20 @@ const gameSlice = createSlice({
             state.currentCard = action.payload;
         },
         setCurrentPrice: (state, action) => {
-            // console.log('action: setCurrentPrice', action);
+            console.log('action: setCurrentPrice', action);
             state.currentPrice = action.payload;
         },
         setFuturePrice: (state, action) => {
             // console.log('action: setFuturePrice', action);
             state.futurePrice = action.payload;
         },
-        setGameState: (state, action) => {
+        setStage: (state, action) => {
             // console.log('action: setGameState', action);
-            state.gameState = action.payload;
+            state.stage = action.payload;
         },
         nextTurn: (state, action) => {
             state.turn++;
-            state.gameState = 'before';
+            state.stage = 'before';
         },
         updatePlayer: (state, actions) => {
             const { index, ...rest } = actions.payload;
@@ -44,6 +44,11 @@ const gameSlice = createSlice({
             // console.log('actions.payload: ', actions.payload);
             state.players[index] = { ...state.players[index], ...rest };
         },
+
+        setState: (state, action) => {
+            return { ...state, ...action.payload };
+        },
+        reset: () => initialState,
     },
 });
 
@@ -52,9 +57,11 @@ export const {
     setCurrentCard,
     setCurrentPrice,
     setFuturePrice,
-    setGameState,
+    setStage,
     nextTurn,
     updatePlayer,
+    reset,
+    setState,
 } = gameSlice.actions;
 
 export default gameSlice.reducer;

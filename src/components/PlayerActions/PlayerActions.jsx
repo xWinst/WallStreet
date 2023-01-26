@@ -2,15 +2,14 @@ import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button, Modal } from 'components';
 import { updatePlayer } from 'state/gameReducer';
-import { player1 } from 'components/App';
+import { game } from 'model';
 import s from './PlayerActions.module.css';
 
-const companyNames = ['Cиние', 'Красные', 'Зеленые', 'Желтые'];
-const colors = ['blue', 'red', 'green', 'yellow'];
-
 const PlayerActions = () => {
+    const companyNames = game.companyNames;
+    const colors = game.companyColors;
+
     const price = useSelector(state => state.game.currentPrice);
-    const player = useSelector(state => state.game.players[0]);
     const turn = useSelector(state => state.game.turn);
     const gameState = useSelector(state => state.game.gameState);
     const [showBuy, setShowBuy] = useState(false);
@@ -20,8 +19,8 @@ const PlayerActions = () => {
     const [purchases, setPurchases] = useState([0, 0, 0, 0]);
 
     const dispatch = useDispatch();
-
-    const { shares } = player1;
+    const player = game.players[0];
+    const { shares } = player;
 
     const openSell = () => {
         if (turn === 10) {
@@ -49,13 +48,13 @@ const PlayerActions = () => {
     };
 
     const submit = () => {
-        dispatch(updatePlayer(player1.sellShares(sales, price)));
+        dispatch(updatePlayer(player.sellShares(sales, price)));
         setShowSell(false);
         setSales([0, 0, 0, 0]);
     };
 
     const submitBuy = () => {
-        dispatch(updatePlayer(player1.buyShares(purchases, price)));
+        dispatch(updatePlayer(player.buyShares(purchases, price)));
         setShowBuy(false);
         setPurchases([0, 0, 0, 0]);
     };
@@ -126,7 +125,7 @@ const PlayerActions = () => {
 
     const getSalesMax = idx => {
         if (gameState === 'before') return shares[idx];
-        else return player1.freeShares[idx];
+        else return player.freeShares[idx];
     };
 
     return (

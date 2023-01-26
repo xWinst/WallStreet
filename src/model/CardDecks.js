@@ -1,17 +1,18 @@
-import Card from './card';
-const colors = ['blue', 'red', 'green', 'yellow'];
+import Card from './Card';
+
 const bigCardTypes = ['doubble', '100'];
 const smallCardTypes = ['30', '40', '50', '60'];
 
-class cardDecks {
-    constructor() {
+class CardDecks {
+    constructor(colors) {
+        this.colors = colors;
         this.bigDeck = this.getDeck(bigCardTypes, 100);
         this.smallDeck = this.getDeck(smallCardTypes);
     }
 
     getDeck(cardTypes, id = 0) {
         const result = [];
-        for (let i = 0; i < colors.length; i++) {
+        for (let i = 0; i < this.colors.length; i++) {
             for (const type of cardTypes) {
                 if (type === '100') {
                     for (let j = 0; j < 3; j++) {
@@ -27,4 +28,4 @@ class cardDecks {
     }
 }
 
-export default cardDecks;
+export default CardDecks;

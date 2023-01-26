@@ -2,4 +2,17 @@
     <symbol id="close" fill="blue" viewBox="0 0 14 14">
         <path d="M1 1 12 12M1 13 13 1" stroke-width="2"/>
     </symbol>
+    <symbol id="exit" viewBox="0 0 36 30">
+        <rect fill="#96cc7f" height="30" width="36" x="2" y="2"/>
+        <path fill="#c0e0b2" d="M2,2V27.546A22.825,22.825,0,0,0,6.5,28C19.876,28,30.741,16.4,30.988,2Z"/>
+        <polygon fill="#a8b0bc" points="13 21 22 21 22 18 27 23 22 28 22 25 13 25 13 21"/>
+        <polyline fill="none" stroke-linejoin="round" stroke-width="1" stroke="black" points="13 6 8 6 8 14 13 14"/>
+        <line fill="none" stroke-linejoin="round" stroke-width="1" stroke="black" x1="8" x2="12" y1="10" y2="10"/>
+        <path fill="none" stroke-linejoin="round" stroke-width="1" stroke="black" d="M16,15h0a6.608,6.608,0,0,1,1.109-3.664l1.782-2.672A6.608,6.608,0,0,0,20,5h0"/>
+        <path fill="none" stroke-linejoin="round" stroke-width="1" stroke="black" d="M20,15h0a6.608,6.608,0,0,0-1.109-3.664L17.109,8.664A6.608,6.608,0,0,1,16,5h0"/>
+        <line fill="none" stroke-linejoin="round" stroke-width="1" stroke="black" x1="24" x2="24" y1="5" y2="15"/>
+        <line fill="none" stroke-linejoin="round" stroke-width="1" stroke="black" x1="27" x2="33" y1="6" y2="6"/>
+        <line fill="none" stroke-linejoin="round" stroke-width="1" stroke="black" x1="30" x2="30" y1="6" y2="15"/>
+        <polygon fill="none" stroke-linejoin="round" stroke-width="1" stroke="black" points="13 21 22 21 22 18 27 23 22 28 22 25 13 25 13 21"/>
+    </symbol>
 </svg>

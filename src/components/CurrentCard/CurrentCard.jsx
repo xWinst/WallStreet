@@ -2,17 +2,10 @@ import { Button, Card } from 'components';
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setFuturePrice, updatePlayer } from 'state/gameReducer';
-import cardDecks from 'db/cardDeck';
-import { player1 } from 'components/App';
+import { game } from 'model';
 import s from './CurrentCard.module.css';
 
-const colors = ['blue', 'red', 'green', 'yellow'];
-
-const bothDecks = new cardDecks();
-
 const CurrentCard = ({ cancel, closeCard }) => {
-    const player = useSelector(state => state.game.players[0]);
-    const { shares } = player1;
     const price = useSelector(state => state.game.currentPrice);
     const cardId = useSelector(state => state.game.currentCard);
     const futurePrice = useSelector(state => state.game.futurePrice);
@@ -24,12 +17,17 @@ const CurrentCard = ({ cancel, closeCard }) => {
     const [fine, setFine] = useState([0, 0, 0, 0]);
     const [compensation, setCompensation] = useState([0, 0, 0, 0]);
 
+    const colors = game.companyColors;
+    const player = game.players[0];
+    const { shares } = player;
+    const bothDecks = game.bothDecks;
+
     const dispatch = useDispatch();
 
-    const card =
-        cardId > 99
-            ? bothDecks.bigDeck[cardId % 100]
-            : bothDecks.smallDeck[cardId];
+    const card = bothDecks.smallDeck[cardId] || bothDecks.bigDeck[cardId % 100];
+    // cardId > 99
+    //     ? bothDecks.bigDeck[cardId % 100]
+    //     : bothDecks.smallDeck[cardId];
 
     const { isBoostCard, color: mainColor } = card;
     const { colorUp, colorDown } = card.getColors();
@@ -43,7 +41,7 @@ const CurrentCard = ({ cancel, closeCard }) => {
             setSecondColor(colorUp[0]);
             showCard(colorUp[0], colorDown[1]);
         }
-    }, [card]);
+    }, [cardId]);
 
     const showCard = (secondColor, thirdColor) => {
         const activePrice = card.activate(price, secondColor, thirdColor);
@@ -89,14 +87,10 @@ const CurrentCard = ({ cancel, closeCard }) => {
         for (let i = 0; i < bonus.length; i++) {
             total += (bonus[i] + compensation[i]) * shares[i];
         }
-        player1.money += total;
+        player.money += total;
+        const { index, money } = player;
 
-        dispatch(
-            updatePlayer({
-                index: player1.index,
-                money: player.money + total,
-            })
-        );
+        dispatch(updatePlayer({ index, money }));
         closeCard();
     };
 
@@ -108,7 +102,7 @@ const CurrentCard = ({ cancel, closeCard }) => {
 
     return (
         <div className={s.container}>
-            <Card card={card} />
+            <Card cardId={card.id} />
             <div className={s.info}>
                 <div className={s.thumb}>
                     <span>Повышаем:</span>
