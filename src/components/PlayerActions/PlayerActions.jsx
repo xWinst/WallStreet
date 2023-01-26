@@ -107,18 +107,7 @@ const PlayerActions = () => {
 
     const onChangeBuy = e => {
         const { name, value } = e.target;
-        if (!Number(value) && value) return;
-        const reserve = getReserve(name);
-        const count = Math.max(
-            Number(value),
-            Math.floor(reserve / price[name])
-        );
-
-        setPurchases(prev => {
-            const result = [...prev];
-            result[name] = count;
-            return result;
-        });
+        updatePurchases(name, value);
     };
 
     const ok = () => setShowModal(false);

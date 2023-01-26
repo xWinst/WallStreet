@@ -86,8 +86,6 @@ const Game = () => {
         navigate('/');
     };
 
-    // console.log('game: ', game);
-    // console.log('player: ', player);
     return (
         player && (
             <div className={s.container}>
