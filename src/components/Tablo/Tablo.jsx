@@ -1,6 +1,7 @@
 import { useSelector } from 'react-redux';
 import { useInner } from 'hooks/useInner';
-import { game } from 'model';
+// import { game } from 'model';
+import { companyColors } from 'db';
 import s from './Tablo.module.css';
 
 const getPricesArray = width => {
@@ -9,18 +10,18 @@ const getPricesArray = width => {
     if (width < 768) result.reverse();
     return result;
 };
-const colors = game.companyColors;
+const colors = companyColors;
 // const bgColors = ['#4444aa', '#aa4444', '#448844', '#aaaa44'];
 // const prices = getPrices();
 const scale = (Math.PI * 1.5) / 2 / 240;
 
 const getIndex = i => {
-    if (i % 2) return 0;
-    return 3;
+    if (i === 1 || i === 2) return 0;
+    return 2;
 };
 
 const Tablo = () => {
-    const price = useSelector(state => state.game.currentPrice);
+    const price = useSelector(state => state.game.price);
     const futurePrice = useSelector(state => state.game.futurePrice);
 
     const { width } = useInner();

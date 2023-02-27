@@ -1,0 +1,42 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.prop {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.box {
+    display: flex;
+}
+
+.value {
+    width: 30px;
+    font-size: 16px;
+    padding: 2px 4px;
+    text-align: center;
+    background-color: var(--btn-color);
+    border: 1px solid var(--third-color);
+    border-radius: 4px;
+}
+
+.btnBox {
+    display: flex;
+    margin-top: 60px;
+}
+
+.btnStart {
+    padding: 8px 12px;
+    font-size: 14px;
+    background-color: #100764;
+}
+
+@media screen and (min-width: 768px) {
+    .btnStart {
+        margin-top: 10px;
+    }
+}

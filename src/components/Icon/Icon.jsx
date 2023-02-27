@@ -1,8 +1,8 @@
 import icons from 'images/icons.svg';
 
-const Icon = ({ icon, cn, onClick, w, h }) => {
+const Icon = ({ icon, cn, onClick, w, h = w, s }) => {
     return (
-        <svg className={cn} onClick={onClick} width={w} height={h}>
+        <svg className={cn} onClick={onClick} width={w} height={h} style={s}>
             <use href={`${icons}#${icon}`} />
         </svg>
     );

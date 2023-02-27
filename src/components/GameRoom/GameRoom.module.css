@@ -1,0 +1,24 @@
+.item {
+    padding: 6px 10px;
+    font-size: 15px;
+    background-color: var(--btn-color);
+    border: 1px solid var(--third-color);
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px var(--third2-color);
+}
+
+.btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.gameName {
+    color: var(--accent-color);
+}
+
+.players {
+    margin: 20px 0;
+    font-size: 12px;
+}

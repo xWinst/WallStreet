@@ -19,8 +19,8 @@ class CardDecks {
                         result.push(new Card(i, true, type, id++));
                     }
                 } else {
-                    result.push(new Card(i, true, type, id++));
                     result.push(new Card(i, false, type, id++));
+                    result.push(new Card(i, true, type, id++));
                 }
             }
         }

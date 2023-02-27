@@ -1,0 +1,31 @@
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 16px;
+    flex-direction: column;
+    gap: 30px;
+    background-color: #44444488;
+}
+
+.title {
+    font-size: 60px;
+    font-weight: 700;
+    font-family: 'BookmanOldStyle', serif;
+    text-align: center;
+    color: #0a310a;
+    text-shadow: #5eff00 0 0 2px;
+}
+
+.btn {
+    width: 180px;
+    padding: 8px 12px;
+    font-size: 16px;
+}
+
+@media screen and (min-width: 768px) {
+    .container {
+        gap: 16px;
+    }
+}

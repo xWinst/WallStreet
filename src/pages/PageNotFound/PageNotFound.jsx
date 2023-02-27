@@ -13,7 +13,7 @@ const PageNotFound = () => {
     };
 
     return (
-        <div className={s.container}>
+        <div className="container">
             <div className={s.background}>
                 <h2 className={s.title}>404 Сторінка не знайдена</h2>
                 <div className={s.img}></div>

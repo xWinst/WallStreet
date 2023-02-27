@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { createPortal } from 'react-dom';
 import s from './Modal.module.css';
 
@@ -9,71 +9,54 @@ const Modal = ({ onClose, style = {}, children }) => {
     const x = useRef();
     const y = useRef();
 
-    useEffect(() => {
-        window.addEventListener('keydown', closeModal);
-        modal.current.addEventListener('mousedown', addListener);
-        modal.current.addEventListener('touchstart', addListener);
-        document.addEventListener('mouseup', removeListener);
-        document.addEventListener('touchend', removeListener);
+    const dragModal = (clientX, clientY) => {
+        const left = modal.current.getBoundingClientRect().left;
+        const top = modal.current.getBoundingClientRect().top;
+        modal.current.style.left = `${left + clientX - x.current}px`;
+        modal.current.style.top = `${top + clientY - y.current}px`;
+        x.current = clientX;
+        y.current = clientY;
+    };
 
-        return () => {
-            window.removeEventListener('keydown', closeModal);
-            // modal.current.removeEventListener('mousedown', addListener);
-            // modal.current.removeEventListener('touchstart', addListener);
-            document.removeEventListener('mouseup', removeListener);
-            document.removeEventListener('touchend', removeListener);
-        };
-    }, []);
+    const onTouchDrag = e => {
+        e.preventDefault();
+        const { clientX, clientY } = e.targetTouches[0];
+        dragModal(clientX, clientY);
+    };
+
+    const onDrag = e => {
+        const { clientX, clientY } = e;
+        dragModal(clientX, clientY);
+    };
 
     const addListener = e => {
-        // console.log('e: ', e.target);
-        if (e.target.nodeName === 'INPUT') return;
-        const point = e.targetTouches ? e.targetTouches[0] : null;
-        x.current = point?.clientX;
-        y.current = point?.clientY;
-
-        modal.current.addEventListener('mousemove', onDrag);
+        console.log('ADD');
+        x.current = e.clientX;
+        y.current = e.clientY;
+        document.addEventListener('mousemove', onDrag);
         modal.current.addEventListener('touchmove', onTouchDrag);
     };
 
-    const removeListener = () => {
-        modal.current.removeEventListener('mousemove', onDrag);
+    const removeListener = e => {
+        console.log('REMOVE');
+        document.removeEventListener('mousemove', onDrag);
         modal.current.removeEventListener('touchmove', onTouchDrag);
     };
 
-    const onTouchDrag = ({ targetTouches }) => {
-        const { clientX, clientY } = targetTouches[0];
-        const dragX = clientX - x.current;
-        const dragY = clientY - y.current;
-        x.current = clientX;
-        y.current = clientY;
-        const getStyle = window.getComputedStyle(modal.current);
-        const leftVal = parseInt(getStyle.left);
-        const topVal = parseInt(getStyle.top);
-        modal.current.style.left = `${leftVal + dragX}px`;
-        modal.current.style.top = `${topVal + dragY}px`;
-    };
-
-    const onDrag = ({ movementX, movementY }) => {
-        const getStyle = window.getComputedStyle(modal.current);
-        const leftVal = parseInt(getStyle.left);
-        const topVal = parseInt(getStyle.top);
-        modal.current.style.left = `${leftVal + movementX}px`;
-        modal.current.style.top = `${topVal + movementY}px`;
-    };
-
-    const closeModal = event => {
-        if (event.code === 'Escape') onClose();
-    };
-
     const onClick = event => {
-        // console.log('event.target: ', event.target);
         // if (event.target === event.currentTarget) onClose();
     };
 
     return createPortal(
         <div className={s.overlay} onClick={onClick}>
-            <div className={s.modal} ref={modal} style={style}>
+            <div
+                className={s.modal}
+                ref={modal}
+                style={style}
+                onPointerDown={addListener}
+                onMouseUp={removeListener}
+                onTouchEnd={removeListener}
+            >
                 {children}
             </div>
         </div>,

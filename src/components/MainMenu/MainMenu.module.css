@@ -1,0 +1,51 @@
+.container {
+    min-height: 100vh;
+    padding: 16px 10px;
+    background-image: var(--bg-gradient);
+}
+
+.nav {
+    width: 100%;
+    display: flex;
+    margin-top: 20px;
+}
+
+.navLink {
+    width: 50%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    background: transparent;
+    text-transform: uppercase;
+    /* text-decoration: none; */
+    /* cursor: pointer; */
+    border-bottom: 1px solid var(--third-color);
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+
+    transition: background-color 300ms ease, color 300ms ease;
+}
+
+.navLink:hover {
+    color: var(--third-color);
+    background-color: var(--btn-color);
+}
+
+.active {
+    composes: navLink;
+    color: var(--third-color);
+    background: transparent;
+    border: 1px solid var(--third-color);
+    border-bottom: none;
+}
+
+/* .active:hover,
+.active:focus {
+    color: var(--bg-color);
+    background-color: var(--accent-color);
+} */
+
+@media screen and (min-width: 768px) {
+}

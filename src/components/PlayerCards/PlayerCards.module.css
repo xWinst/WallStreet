@@ -1,7 +1,7 @@
 .decks {
     display: flex;
     flex-direction: column;
-    margin-top: 20px;
+    margin-top: 12px;
     gap: 10px;
 }
 
@@ -21,15 +21,15 @@
 
 @media screen and (min-width: 768px) {
     .decks {
-        position: absolute;
-        bottom: 20px;
-        left: 13rem;
+        /* position: absolute;
+        bottom: 10px; */
+        margin-left: 170px;
     }
 }
 
 @keyframes choosingCard {
     100% {
-        transform: translateY(-500px);
+        transform: translateY(calc(200px - 100vh));
     }
 }
 
@@ -42,11 +42,11 @@
         transform: perspective(400px) rotateX(90deg);
     }
 }
-
+/* 
 @media screen and (min-width: 768px) {
     @keyframes choosingCard {
         100% {
             transform: translateY(-200px);
         }
     }
-}
+} */

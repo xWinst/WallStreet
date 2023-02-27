@@ -1,6 +1,6 @@
-.container {
+/* .container {
     padding: 20px 30px;
-}
+} */
 
 .background {
     padding: 20px 20px;
@@ -36,9 +36,9 @@
 }
 
 @media screen and (min-width: 768px) {
-    .container {
+    /* .container {
         padding: 0 120px;
-    }
+    } */
     .background {
         box-shadow: 0px 10px 60px rgba(170, 178, 197, 0.2);
     }
@@ -51,11 +51,11 @@
     }
 }
 
-@media screen and (min-width: 1280px) {
+/* @media screen and (min-width: 1280px) {
     .container {
         padding: 0 320px;
     }
     .background {
         padding: 30px 20px;
     }
-}
+} */

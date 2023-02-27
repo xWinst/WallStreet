@@ -7,13 +7,13 @@ export const useInner = () => {
     const handleResize = () => {
         setWidth(window.innerWidth);
         // setHeight(window.innerHeight);
-        document.documentElement.style.fontSize =
-            Math.floor(Math.sqrt(window.innerWidth) / 2) + 'px';
+        // document.documentElement.style.fontSize =
+        //     Math.floor(Math.sqrt(window.innerWidth) / 2) + 'px';
     };
 
     useEffect(() => {
-        document.documentElement.style.fontSize =
-            Math.floor(Math.sqrt(window.innerWidth) / 2) + 'px';
+        // document.documentElement.style.fontSize =
+        //     Math.floor(Math.sqrt(window.innerWidth) / 2) + 'px';
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);

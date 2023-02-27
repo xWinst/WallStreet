@@ -1,38 +1,65 @@
 .info {
-    font-size: 1.35rem;
-    font-weight: 700;
-    color: #eeeeee;
+    padding: 6px 10px;
+    font-size: 15px;
+    background-color: var(--btn-color);
+    border: 1px solid var(--third-color);
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px var(--third2-color);
+}
+
+.btn {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    width: 151px;
+}
+
+.money {
+    display: flex;
+    font-size: 20px;
+    align-items: center;
+    gap: 10px;
 }
 
 .sharesList {
-    margin-top: 8px;
-    font-size: 0.85rem;
-    border: 1px solid #eeeeee;
+    margin: 8px 0;
+    font-size: 9px;
+    border: 1px solid var(--main-color);
 }
 
 .shares {
     display: flex;
-    /* text-shadow: #fc0 1px 0 10px; */
+    align-items: center;
+}
+
+.shares:not(:last-child) {
+    border-bottom: 1px solid var(--main-color);
 }
 
 .name,
 .count,
 .cost {
     padding: 4px;
-    border: 1px solid #eeeeee;
-}
-
-.name {
-    width: 5rem;
 }
 
 .count {
-    width: 4.5rem;
+    border-left: 1px solid var(--main-color);
+    border-right: 1px solid var(--main-color);
+}
+
+.name {
+    width: 50px;
+    text-shadow: 0px 0px 1px #4969f8;
+}
+
+.count {
+    width: 40px;
     text-align: center;
 }
 
 .cost {
-    width: 5.5rem;
+    width: 66px;
     text-align: end;
 }
 
@@ -42,15 +69,26 @@
     border-top: 1px solid;
 }
 
-.total {
+/* .total {
     display: block;
     margin: 8px;
     font-size: 22px;
-    color: orange;
+    color: var(--accent-color);
     text-align: center;
     text-shadow: #fc0 1px 0 10px;
-}
+} */
 
 .player {
-    color: orange;
+    color: var(--accent-color);
+}
+
+.flexBox {
+    display: flex;
+    font-size: 12px;
+    justify-content: space-around;
+    /* gap: 6px; */
+}
+
+.flexBox span {
+    font-size: 18px;
 }

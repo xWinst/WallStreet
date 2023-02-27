@@ -11,6 +11,7 @@ const getDownVolume = volume => {
 
 const Card = ({ cardId }) => {
     const card = bothDecks.smallDeck[cardId] || bothDecks.bigDeck[cardId % 100];
+    // console.log('bigDeck: ', bothDecks);
     const colorUp = card.isBoostCard ? colors[card.color] : 'white';
     const colorDown = card.isBoostCard ? 'white' : colors[card.color];
 
@@ -18,8 +19,8 @@ const Card = ({ cardId }) => {
         <div
             className={
                 card.type === 'doubble' || card.type === '100'
-                    ? s.bigCard
-                    : s.card
+                    ? s.card
+                    : s.smallCard
             }
         >
             <div className={s.up} style={{ background: colorUp }}>
@@ -30,7 +31,7 @@ const Card = ({ cardId }) => {
                     : `+${card.type}`}
             </div>
             <div
-                className={card.type === '100' ? s.down : s.up}
+                className={card.type === '100' ? s.down100 : s.down}
                 style={{ background: colorDown }}
             >
                 {card.type === 'doubble' ? (

@@ -1,12 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    currentPrice: [100, 100, 100, 100],
+    price: [100, 100, 100, 100],
     futurePrice: [0, 0, 0, 0],
-    currentCard: null,
+    // currentCard: null,
+    numberPlayers: 2,
     players: [],
+    currentPlayerIdx: 0,
     turn: 1,
     stage: 'before',
+    player: 'Anonymus',
+    id: null,
 };
 
 const gameSlice = createSlice({
@@ -19,7 +23,7 @@ const gameSlice = createSlice({
             state.players = action.payload;
         },
         setCurrentCard: (state, action) => {
-            // console.log('action: setCurrentCard', action);
+            console.log('action: setCurrentCard', action);
             state.currentCard = action.payload;
         },
         setCurrentPrice: (state, action) => {
@@ -30,23 +34,32 @@ const gameSlice = createSlice({
             // console.log('action: setFuturePrice', action);
             state.futurePrice = action.payload;
         },
-        setStage: (state, action) => {
-            // console.log('action: setGameState', action);
-            state.stage = action.payload;
-        },
+        // setStage: (state, action) => {
+        //     // console.log('action: setGameState', action);
+        //     state.stage = action.payload;
+        // },
         nextTurn: (state, action) => {
             state.turn++;
             state.stage = 'before';
         },
-        updatePlayer: (state, actions) => {
-            const { index, ...rest } = actions.payload;
+
+        updatePlayer: (state, action) => {
+            const { index = state.currentPlayerIdx, ...rest } = action.payload;
             console.log('updatePlayer: ', rest);
             // console.log('actions.payload: ', actions.payload);
             state.players[index] = { ...state.players[index], ...rest };
         },
 
+        nextPlayer: (state, action) => {
+            state.currentPlayerIdx = action.payload;
+        },
+
         setState: (state, action) => {
             return { ...state, ...action.payload };
+        },
+
+        setGameId: (state, action) => {
+            state.id = action.payload;
         },
         reset: () => initialState,
     },
@@ -57,11 +70,12 @@ export const {
     setCurrentCard,
     setCurrentPrice,
     setFuturePrice,
-    setStage,
+    // setStage,
     nextTurn,
     updatePlayer,
     reset,
     setState,
+    setGameId,
 } = gameSlice.actions;
 
 export default gameSlice.reducer;

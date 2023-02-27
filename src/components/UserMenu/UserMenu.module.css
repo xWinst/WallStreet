@@ -1,0 +1,47 @@
+.container {
+    /* display: flex; */
+    padding: 16px;
+    border: 1px solid var(--third-color);
+    border-top: none;
+}
+
+.gameRoomsBox {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.message {
+    text-align: center;
+}
+
+.menu {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 30px;
+    margin-top: 30px;
+    /* background-color: #44444488; */
+}
+
+.title {
+    font-size: 60px;
+    font-weight: 700;
+    font-family: 'BookmanOldStyle', serif;
+    text-align: center;
+    color: #0a310a;
+    text-shadow: #5eff00 0 0 2px;
+}
+
+.btn {
+    width: 120px;
+    /* padding: 8px 12px;
+    font-size: 16px; */
+}
+
+@media screen and (min-width: 768px) {
+    .container {
+        gap: 16px;
+    }
+}

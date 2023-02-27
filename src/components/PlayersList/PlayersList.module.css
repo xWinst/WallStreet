@@ -1,0 +1,49 @@
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.slot {
+    width: 160px;
+    padding: 5px;
+    text-align: center;
+    border: 2px ridge var(--third-color);
+    border-radius: 6px;
+}
+
+.flexBox {
+    display: flex;
+    align-items: center;
+    /* justify-content: center; */
+}
+
+.player {
+    composes: flexBox;
+    gap: 10px;
+    padding: 5px 10px;
+    border: 2px ridge var(--third-color);
+    border-radius: 6px;
+}
+
+.btn {
+    composes: player;
+    /* justify-content: center; */
+    margin-left: 10px;
+    background-color: #0f1d1f;
+    cursor: pointer;
+    transition: background-color 300ms ease;
+}
+
+.btn:hover {
+    background-color: var(--third2-color);
+}
+
+.icon {
+    cursor: pointer;
+}
+
+.btn:active,
+.icon:active {
+    scale: 0.85;
+}
