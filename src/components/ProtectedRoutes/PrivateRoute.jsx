@@ -5,11 +5,12 @@ import { exitGameRoom } from 'state/gameOperation';
 
 const PrivateRoute = () => {
     const isLoggedIn = useSelector(state => state.user.isLoggedIn);
+    const status = useSelector(state => state.game.status);
     const { pathname } = useLocation();
 
     useEffect(() => {
-        if (pathname !== '/createGame') exitGameRoom();
-    }, [pathname]);
+        if (pathname !== '/createGame' && status === 'creating') exitGameRoom();
+    }, [pathname, status]);
 
     return isLoggedIn ? <Outlet /> : <Navigate to="/" />;
 };

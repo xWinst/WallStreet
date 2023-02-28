@@ -10,6 +10,7 @@ const initialState = {
     turn: 1,
     stage: 'before',
     player: 'Anonymus',
+    status: 'creating',
     id: null,
 };
 

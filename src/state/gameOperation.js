@@ -2,7 +2,7 @@ import io from 'socket.io-client';
 // import axios from 'axios';
 import { store } from 'state/store';
 import { setGameRooms } from './appReducer';
-import { setState, setGameId } from './gameReducer';
+import { setState, setGameId, setPlayers } from './gameReducer';
 
 const { REACT_APP_WS_URL } = process.env;
 let socket = null;
@@ -20,15 +20,12 @@ export const connectServer = () => {
     // console.log('Сокет подписан на события: ', events);
 
     socket.on('connect', () => {
-        console.log('Connect! Socket.id = ', socket.id);
-        // const events = [...Object.keys(socket._callbacks)];
+        console.log('Connect! Socket.id = ', socket.id); ////////////////
         loadGameRooms();
-        // console.log('events: ', events);
     });
 
     socket.on('disconnect', () => {
         console.log('disconnecting :(((');
-        // socket.removeAllListeners();
     });
 
     socket.on('reconnect', () => {
@@ -47,21 +44,26 @@ export const connectServer = () => {
 };
 
 export const loadGameRooms = () => {
-    // console.log(' loadGameRooms socket= ', socket);
     if (!socket) return;
     socket.on('updateGameRooms', gameRooms => {
         console.log('updateGameRooms');
         store.dispatch(setGameRooms(gameRooms));
+        const gameId = store.getState().game.id;
+        if (gameId) {
+            const game = gameRooms.find(room => room._id === gameId);
+            delete game._id;
+            store.dispatch(setState(game));
+        }
     });
 };
 
 export const exitGameRoom = () => {
     if (socket) {
         console.log('exitGameRoom  id= ', socket.id);
-        const { name, avatar } = store.getState().user;
+        const name = store.getState().user.name;
         const gameId = store.getState().game.id;
-        socket.emit('exitGameRoom', { gameId, name, avatar });
-        socket.off('joinGame');
+        socket.emit('exitGameRoom', { gameId, name });
+        // socket.off('joinGame');
 
         store.dispatch(setGameId(null));
     }
@@ -69,7 +71,7 @@ export const exitGameRoom = () => {
 
 export const createGameRoom = () => {
     const { name, avatar } = store.getState().user;
-    socket.on('joinGame', createGame);
+    // socket.on('joinGame', createGame);
     socket.emit('createGame', { name, avatar });
 };
 
