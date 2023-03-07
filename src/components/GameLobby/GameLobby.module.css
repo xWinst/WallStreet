@@ -1,0 +1,36 @@
+/* Данній файл НЕ НУЖОН!!!!!!!!!!!!!!!*/
+
+.container {
+    min-width: 100vw;
+    min-height: 100vh;
+    padding: 16px 10px;
+    background-image: var(--bg-gradient);
+}
+
+.title {
+    margin: 20px 0 40px;
+    padding: 6px 0;
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+    text-align: center;
+    color: var(--third-color);
+    background-image: radial-gradient(
+        circle at center,
+        #15956a8a 30%,
+        #4470614a 75%
+    );
+}
+
+.goBack {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.prop {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}

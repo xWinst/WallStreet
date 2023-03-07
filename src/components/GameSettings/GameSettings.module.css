@@ -1,4 +1,4 @@
-.container {
+.settings {
     display: flex;
     flex-direction: column;
     gap: 6px;
@@ -24,19 +24,16 @@
     border-radius: 4px;
 }
 
-.btnBox {
-    display: flex;
+.btn {
     margin-top: 60px;
-}
-
-.btnStart {
+    margin-left: 210px;
     padding: 8px 12px;
     font-size: 14px;
     background-color: #100764;
 }
 
 @media screen and (min-width: 768px) {
-    .btnStart {
+    .btn {
         margin-top: 10px;
     }
 }

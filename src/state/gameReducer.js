@@ -3,14 +3,10 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
     price: [100, 100, 100, 100],
     futurePrice: [0, 0, 0, 0],
-    // currentCard: null,
-    numberPlayers: 2,
     players: [],
-    currentPlayerIdx: 0,
+    currentPlayer: null,
     turn: 1,
     stage: 'before',
-    player: 'Anonymus',
-    status: 'creating',
     id: null,
 };
 
@@ -23,16 +19,16 @@ const gameSlice = createSlice({
             console.log('action addPlaer: ', action.payload);
             state.players = action.payload;
         },
-        setCurrentCard: (state, action) => {
-            console.log('action: setCurrentCard', action);
-            state.currentCard = action.payload;
+        setCurrentPlayer: (state, action) => {
+            console.log('action: setCurrentPlayerIdx', action);
+            state.currentPlayer = action.payload;
         },
         setCurrentPrice: (state, action) => {
             console.log('action: setCurrentPrice', action);
             state.currentPrice = action.payload;
         },
         setFuturePrice: (state, action) => {
-            // console.log('action: setFuturePrice', action);
+            console.log('action: setFuturePrice', action);
             state.futurePrice = action.payload;
         },
         // setStage: (state, action) => {
@@ -68,7 +64,6 @@ const gameSlice = createSlice({
 
 export const {
     setPlayers,
-    setCurrentCard,
     setCurrentPrice,
     setFuturePrice,
     // setStage,
@@ -77,6 +72,7 @@ export const {
     reset,
     setState,
     setGameId,
+    setCurrentPlayer,
 } = gameSlice.actions;
 
 export default gameSlice.reducer;

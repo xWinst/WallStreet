@@ -13,9 +13,20 @@ const appSlice = createSlice({
             console.log('action setGameRooms: ', action.payload);
             state.gameRooms = action.payload;
         },
+
+        setCurrentPlayer: (state, action) => {
+            console.log('action setCurrentPlayer: ', action.payload);
+            const { gameId, player } = action.payload;
+            const index = state.gameRooms.findIndex(
+                room => room._id === gameId
+            );
+            console.log('gameId: ', gameId);
+            console.log('index: ', index);
+            state.gameRooms[index].currentPlayer = player;
+        },
     },
 });
 
-export const { setGameRooms } = appSlice.actions;
+export const { setGameRooms, setCurrentPlayer } = appSlice.actions;
 
 export default appSlice.reducer;

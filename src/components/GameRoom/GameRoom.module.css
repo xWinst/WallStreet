@@ -15,10 +15,30 @@
 }
 
 .gameName {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     color: var(--accent-color);
 }
 
 .players {
     margin: 20px 0;
     font-size: 12px;
+}
+
+.modal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 16px;
+    gap: 16px;
+}
+
+.password {
+    font-size: 14px;
+    padding: 8px 0px;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid var(--third-color);
+    color: var(--main-color);
 }

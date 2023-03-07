@@ -1,15 +1,15 @@
-import { useEffect } from 'react';
+// import { useEffect } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 import { UserInfo } from 'components';
 import s from './MainMenu.module.css';
-import { connectServer } from 'state/gameOperation';
+// import { connectServer } from 'state/gameOperation';
 
 const getActive = ({ isActive }) => (isActive ? s.active : s.navLink);
 
 const MainMenu = () => {
-    useEffect(() => {
-        connectServer();
-    }, []);
+    // useEffect(() => {
+    //     connectServer();
+    // }, []);
     const setSetting = () => {};
 
     return (

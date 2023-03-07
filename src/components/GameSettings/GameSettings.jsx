@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+// import { useNavigate } from 'react-router-dom';
 import { Select, Slider, Button } from 'components';
-import { setState } from 'state/gameReducer';
-import { createGame } from 'db';
-import s from './GameSettings.module.css';
+// import { setState } from 'state/gameReducer';
+// import { createGame } from 'db';
 import { findPlayers } from 'state/gameOperation';
+import s from './GameSettings.module.css';
 
 // const getArray = (start, end) => {
 //     const array = [];
@@ -20,36 +20,26 @@ const GameSettings = () => {
     const [numberCompanies, setNumberCompanies] = useState(4);
     const [numberBigCards, setNumberBigCards] = useState(4);
     const [numberSmallCards, setNumberSmallCards] = useState(6);
-    const [status, setStatus] = useState('creating');
 
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
+    // const navigate = useNavigate();
+    // const dispatch = useDispatch();
 
-    const startGame = () => {
-        dispatch(
-            setState(
-                createGame({
-                    players,
-                    firstPlayerIdx,
-                    numberBigCards,
-                    numberSmallCards,
-                })
-            )
-        );
-        navigate('/game');
-    };
+    // const startGame = () => {
+    //     dispatch(
+    //         setState(
+    //             createGame({
+    //                 players,
+    //                 firstPlayerIdx,
+    //                 numberBigCards,
+    //                 numberSmallCards,
+    //             })
+    //         )
+    //     );
+    //     navigate('/game');
+    // };
 
-    const isReady = () => {
-        return players.length === numberPlayers;
-    };
-
-    const changeStatus = () => {
-        setStatus('waiting');
+    const create = () => {
         findPlayers();
-    };
-
-    const changeNumberPlayers = value => {
-        setNumberPlayers(value);
     };
 
     return (
@@ -61,12 +51,12 @@ const GameSettings = () => {
                     <Slider
                         min={2}
                         max={4}
-                        onChange={value => changeNumberPlayers(value)}
+                        onChange={value => setNumberPlayers(value)}
                         defaultValue={numberPlayers}
                     />
                 </div>
             </div>
-            <div className={s.prop}>
+            <div className={s.params}>
                 <p>Первым ходит игрок</p>
                 <Select
                     list={players.map(({ name }) => name)}
@@ -79,7 +69,7 @@ const GameSettings = () => {
                     name="playerTurn"
                 />
             </div>
-            <div className={s.prop}>
+            <div className={s.params}>
                 <p>Количество компаний</p>
                 <div className={s.box}>
                     <p className={s.value}>{numberCompanies}</p>
@@ -91,7 +81,7 @@ const GameSettings = () => {
                     />
                 </div>
             </div>
-            <div className={s.prop}>
+            <div className={s.params}>
                 <p>Количество "Широких" карт</p>
                 <div className={s.box}>
                     <p className={s.value}>{numberBigCards}</p>
@@ -103,7 +93,7 @@ const GameSettings = () => {
                     />
                 </div>
             </div>
-            <div className={s.prop}>
+            <div className={s.params}>
                 <p>Количество "Узких" карт</p>
                 <div className={s.box}>
                     <p className={s.value}>{numberSmallCards}</p>
@@ -115,24 +105,8 @@ const GameSettings = () => {
                     />
                 </div>
             </div>
-            <div className={s.btnBox}>
-                <Button text="удалить комнату" />
-                {status === 'creating' && (
-                    <Button
-                        text="нaйти игроков"
-                        cn={s.btnStart}
-                        onClick={changeStatus}
-                    />
-                )}
-                {status === 'waiting' && (
-                    <Button
-                        text="начать игру"
-                        disabled={isReady}
-                        cn={s.btnStart}
-                        onClick={startGame}
-                    />
-                )}
-            </div>
+
+            <Button text="создать" cn={s.btn} onClick={create} />
         </div>
     );
 };

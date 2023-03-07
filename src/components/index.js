@@ -28,3 +28,4 @@ export { default as CreateGame } from './CreateGame/CreateGame';
 export { default as MainMenu } from './MainMenu/MainMenu';
 export { default as GameRoom } from './GameRoom/GameRoom';
 export { default as UserInfo } from './UserInfo/UserInfo';
+export { default as GameLobby } from './GameLobby/GameLobby';

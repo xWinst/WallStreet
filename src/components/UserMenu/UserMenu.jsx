@@ -1,21 +1,18 @@
-import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Button, GameRoom } from 'components';
-import { createGameRoom } from 'state/gameOperation';
 import s from './UserMenu.module.css';
+// import { setPlayers } from 'state/gameReducer';
 
 const UserMenu = () => {
-    const gameId = useSelector(state => state.game.id);
     const gameRooms = useSelector(state => state.app.gameRooms);
+    const name = useSelector(state => state.user.name);
     const navigate = useNavigate();
-
-    useEffect(() => {
-        if (gameId) navigate(`/createGame`);
-    }, [gameId, navigate]);
+    // const dispatch = useDispatch();
 
     const createRoom = () => {
-        createGameRoom();
+        // dispatch(setPlayers([name, avatar]));
+        navigate(`/createGame`);
     };
 
     return (
@@ -23,7 +20,7 @@ const UserMenu = () => {
             {gameRooms.length > 0 ? (
                 <ul className={s.gameRoomsBox}>
                     {gameRooms.map(room => (
-                        <GameRoom key={room._id} room={room} />
+                        <GameRoom key={room._id} room={room} user={name} />
                     ))}
                 </ul>
             ) : (

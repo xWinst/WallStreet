@@ -5,20 +5,20 @@
 .select {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: space-between;
     gap: 10px;
-    width: 130px;
+    width: 168px;
     padding: 4px 8px;
     background-color: var(--btn-color);
-    border: 1px solid var(--third-color);
-    border-radius: 8px;
+    border: 2px solid var(--third-color);
+    border-radius: 6px;
     cursor: pointer;
 }
 
 .list {
     position: absolute;
     top: 30px;
-    width: 130px;
+    width: 168px;
     background-image: var(--bg-gradient);
     border: 1px solid var(--third-color);
     border-radius: 8px;

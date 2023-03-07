@@ -38,7 +38,7 @@ const Select = ({ list, onSelect, value, name }) => {
         <div className={s.container}>
             <div className={s.select} onClick={toggleState} name={name}>
                 {value}
-                <Icon icon="expand" w={20} />
+                <Icon icon={isExpanded ? 'collaps' : 'expand'} w={20} />
             </div>
             {isExpanded && (
                 <ul className={s.list}>
