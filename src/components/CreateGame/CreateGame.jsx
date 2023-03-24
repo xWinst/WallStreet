@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // import { useDispatch } from 'react-redux';
 import { Slider, Button, Icon } from 'components';
@@ -8,28 +8,34 @@ import s from './CreateGame.module.css';
 const CreateGame = () => {
     // const players = useSelector(state => state.game.players);
     // const [firstPlayer, setFirstPlayer] = useState(0);
-    const [numberPlayers, setNumberPlayers] = useState(2);
+    const [maxPlayers, setMaxPlayers] = useState(2);
     const [numberCompanies, setNumberCompanies] = useState(4);
     const [numberBigCards, setNumberBigCards] = useState(4);
     const [numberSmallCards, setNumberSmallCards] = useState(6);
     const [password, setPassword] = useState('');
-    const [gameId, setGameId] = useState(false);
+    // const [gameId, setGameId] = useState(false);
 
     const navigate = useNavigate();
     // const dispatch = useDispatch();
 
-    useEffect(() => {
-        if (gameId) navigate(`/game/${gameId}`);
-    }, [gameId, navigate]);
+    // useEffect(() => {
+    //     if (gameId) navigate(`/game/${gameId}`);
+    // }, [gameId, navigate]);
+
+    const toLobby = roomId => {
+        if (roomId) navigate(`/game/${roomId}`);
+    };
 
     const create = () => {
-        createGameRoom({
-            numberPlayers,
-            numberBigCards,
-            numberSmallCards,
-            password,
-            setGameId,
-        });
+        createGameRoom(
+            {
+                maxPlayers,
+                numberBigCards,
+                numberSmallCards,
+                password,
+            },
+            toLobby
+        );
     };
 
     return (
@@ -41,14 +47,14 @@ const CreateGame = () => {
             <h2 className={s.title}>Настроки</h2>
             <div className={s.settings}>
                 <div className={s.prop}>
-                    <p>Количество Игроков</p>
+                    <p>Максимум Игроков</p>
                     <div className={s.box}>
-                        <p className={s.value}>{numberPlayers}</p>
+                        <p className={s.value}>{maxPlayers}</p>
                         <Slider
                             min={2}
                             max={4}
-                            onChange={value => setNumberPlayers(value)}
-                            defaultValue={numberPlayers}
+                            onChange={value => setMaxPlayers(value)}
+                            defaultValue={maxPlayers}
                         />
                     </div>
                 </div>
@@ -70,7 +76,7 @@ const CreateGame = () => {
                         <p className={s.value}>{numberBigCards}</p>
                         <Slider
                             min={0}
-                            max={Math.floor(20 / numberPlayers)}
+                            max={Math.floor(20 / maxPlayers)}
                             onChange={value => setNumberBigCards(value)}
                             defaultValue={numberBigCards}
                         />
@@ -82,7 +88,7 @@ const CreateGame = () => {
                         <p className={s.value}>{numberSmallCards}</p>
                         <Slider
                             min={0}
-                            max={Math.floor(32 / numberPlayers)}
+                            max={Math.floor(32 / maxPlayers)}
                             onChange={value => setNumberSmallCards(value)}
                             defaultValue={numberSmallCards}
                         />
@@ -99,21 +105,6 @@ const CreateGame = () => {
                         />
                     </div>
                 </div>
-                {/* <div className={s.prop}>
-                        <p>Первым ходит игрок</p>
-                        <Select
-                            list={players.map(({ name }) => name)}
-                            onSelect={value =>
-                                setFirstPlayerIdx(
-                                    players.findIndex(
-                                        ({ name }) => name === value
-                                    )
-                                )
-                            }
-                            value={players[firstPlayerIdx]?.name}
-                            name="playerTurn"
-                        />
-                    </div> */}
 
                 <Button text="создать" cn={s.btn} onClick={create} />
                 <p style={{ fontSize: '12px' }}>

@@ -110,7 +110,8 @@ export const refresh = createAsyncThunk(
                 setToken(data.accessToken);
                 return data;
             } catch (error) {
-                return thunkAPI.rejectWithValue(error);
+                console.log('error: ', error);
+                return thunkAPI.rejectWithValue(error.message);
             }
         }
         const { name, avatar } = thunkAPI.getState().user;

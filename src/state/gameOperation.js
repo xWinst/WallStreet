@@ -1,11 +1,12 @@
 import io from 'socket.io-client';
 import { store } from 'state/store';
-import { setGameRooms } from './appReducer';
-import { setState, setGameId, setCurrentPlayer } from './gameReducer';
+import { setRooms, updateRoom } from './appReducer';
+import { setState, setGameId } from './gameReducer';
 // import { setCurrentPlayer } from './appReducer';
 
 const { REACT_APP_WS_URL } = process.env;
 let socket = null;
+// let count = 0;
 
 export const connectServer = () => {
     if (!socket)
@@ -16,7 +17,7 @@ export const connectServer = () => {
         });
 
     // const events = socket.eventNames();
-    // console.log('Сокет подписан на события: ', events);
+    // console.log('Сокет подписан на события: ', socket.eventNames());
 
     socket.on('connect', () => {
         console.log('Connect! Socket.id = ', socket.id); ////////////////
@@ -40,26 +41,17 @@ export const connectServer = () => {
         console.log('connect_error ? ');
         console.log('err: ', err);
     });
+
+    socket.on('updateRoom', room => {
+        console.log('a: updateRoom ', room);
+        store.dispatch(updateRoom(room));
+    });
 };
 
 export const loadGameRooms = () => {
-    socket.on('updateGameRooms', gameRooms => {
+    socket.on('updateGameRooms', rooms => {
         console.log('updateGameRooms');
-        store.dispatch(setGameRooms(gameRooms));
-        // const gameId = store.getState().game.id;
-        // if (gameId) {
-        //     const game = gameRooms.find(room => room._id === gameId);
-        //     if (game) {
-        //         store.dispatch(
-        //             setState({
-        //                 players: game.players,
-        //                 numberPlayers: game.numberPlayers,
-        //                 numberBigCards: game.numberBigCards,
-        //                 numberSmallCards: game.numberSmallCards,
-        //             })
-        //         );
-        //     } else store.dispatch(setGameId(null));
-        // }
+        store.dispatch(setRooms(rooms));
     });
 };
 
@@ -72,27 +64,16 @@ export const exitGameRoom = (gameId, isOwner) => {
     store.dispatch(setGameId(null));
 };
 
-export const createGameRoom = settings => {
+export const createGameRoom = (settings, toLobby) => {
     const { name, avatar } = store.getState().user;
-    socket.emit('createGame', { ...settings, name, avatar }, gameId => {
-        store.dispatch(setState({ id: gameId })); //???
-        settings.setGameId(gameId);
-    });
-    // socket.on('setFirstPlayer', player => {
-    //     store.dispatch(setCurrentPlayerIdx(player));
-    // });
+    socket.emit('createGame', { ...settings, name, avatar }, toLobby);
 };
 
-export const joinGameRoom = (gameId, password, response) => {
-    console.log('joinGameRoom', gameId);
+export const joinGameRoom = (gameId, password, joinRoom, isIncluded) => {
+    console.log('joinRoom', gameId);
     const { name, avatar } = store.getState().user;
-    store.dispatch(setGameId(gameId)); ///???
-    socket.emit('joinGameRoom', { gameId, password, name, avatar }, response);
-};
-
-export const findPlayers = () => {
-    const gameId = store.getState().game.id;
-    socket.emit('findPlayers', gameId);
+    const player = { name, avatar };
+    socket.emit('joinRoom', { gameId, password, player, isIncluded }, joinRoom);
 };
 
 export const setFirstPlayer = player => {
@@ -100,20 +81,32 @@ export const setFirstPlayer = player => {
     socket.emit('setFirstPlayer', player);
 };
 
-export const joinRoom = gameId => {
-    console.log('joinRoom', gameId);
-    socket.emit('joinRoom', gameId);
-    const { currentPlayer } = getRoom(gameId);
-    store.dispatch(setCurrentPlayer(currentPlayer));
+// export const joinRoom = (gameId, updateRoom) => {
+//     console.log('joinRoom', gameId);
+//     socket.emit('joinRoom', gameId, updateRoom);
+//     const { currentPlayer } = getRoom(gameId);
+//     store.dispatch(setCurrentPlayer(currentPlayer));
 
-    socket.on('setFirstPlayer', player => {
-        console.log('a: setFirstPlayer: ', player);
+//     socket.on('setFirstPlayer', player => {
+//         console.log('a: setFirstPlayer: ', player);
 
-        store.dispatch(setCurrentPlayer(player));
-    });
-};
+//         store.dispatch(setCurrentPlayer(player));
+//     });
 
-const getRoom = gameId => {
-    const rooms = store.getState().app.gameRooms;
-    return rooms.find(room => room._id === gameId);
+//     socket.on('updateGame', game => {
+//         console.log('a: updateGame: ', ++count);
+//         console.log('a: updateGame: ', game);
+
+//         store.dispatch(setState(game));
+//     });
+// };
+
+// const getRoom = gameId => {
+//     const rooms = store.getState().app.rooms;
+//     return rooms.find(room => room._id === gameId);
+// };
+
+export const startGame = gameId => {
+    console.log('startGame', gameId);
+    socket.emit('startGame', gameId);
 };

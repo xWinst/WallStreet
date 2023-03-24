@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    gameRooms: [],
+    rooms: [],
 };
 
 const appSlice = createSlice({
@@ -9,24 +9,20 @@ const appSlice = createSlice({
     initialState,
 
     reducers: {
-        setGameRooms: (state, action) => {
+        setRooms: (state, action) => {
             console.log('action setGameRooms: ', action.payload);
-            state.gameRooms = action.payload;
+            state.rooms = action.payload;
         },
 
-        setCurrentPlayer: (state, action) => {
-            console.log('action setCurrentPlayer: ', action.payload);
-            const { gameId, player } = action.payload;
-            const index = state.gameRooms.findIndex(
-                room => room._id === gameId
-            );
-            console.log('gameId: ', gameId);
-            console.log('index: ', index);
-            state.gameRooms[index].currentPlayer = player;
+        updateRoom: (state, action) => {
+            console.log('action updateRoom: ', action.payload);
+            const room = action.payload;
+            const index = state.rooms.findIndex(({ _id }) => _id === room._id);
+            state.rooms[index] = room;
         },
     },
 });
 
-export const { setGameRooms, setCurrentPlayer } = appSlice.actions;
+export const { setRooms, updateRoom } = appSlice.actions;
 
 export default appSlice.reducer;

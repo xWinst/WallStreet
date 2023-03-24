@@ -83,11 +83,7 @@ const userSlice = createSlice({
             .addCase(refresh.rejected, (state, action) => {
                 console.log('action: ', action);
                 state.isLoading = false;
-                message.error(
-                    'Ошибка входа',
-                    `${action.payload.response.data.message}`,
-                    'Ok'
-                );
+                message.error('Ошибка входа', `${action.payload}`, 'Ok');
             });
     },
 });

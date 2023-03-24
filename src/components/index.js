@@ -14,7 +14,6 @@ export { default as SharesList } from './SharesList/SharesList';
 
 export { default as PlayersList } from './PlayersList/PlayersList';
 export { default as NameEditForm } from './NameEditForm/NameEditForm';
-export { default as GameSettings } from './GameSettings/GameSettings';
 export { default as Select } from './Select/Select';
 export { default as Slider } from './Slider/Slider';
 export { default as ActiveCard } from './ActiveCard/ActiveCard';

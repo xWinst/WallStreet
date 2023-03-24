@@ -1,30 +1,26 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { UserInfo, Select } from 'components';
-import { setPlayers, setCurrentPlayer } from 'state/gameReducer';
+import { setPlayers } from 'state/gameReducer';
 import { getName } from 'db';
 import { ai } from 'images';
 import s from './PlayersList.module.css';
 import { setFirstPlayer } from 'state/gameOperation';
 
 const PlayersList = ({ room }) => {
-    const currentPlayer = useSelector(state => state.game.currentPlayer);
+    // const currentPlayer = useSelector(state => state.game.currentPlayer);
     const user = useSelector(state => state.user.name);
-    // const rooms = useSelector(state => state.app.gameRooms);
+    // const rooms = useSelector(state => state.app.rooms);
 
     const dispatch = useDispatch();
 
     // joinRoom(gameId);
 
-    const { players, owner, numberPlayers } = room;
+    const { players, owner, maxPlayers, currentPlayer } = room;
 
     const isOwner = user === owner;
 
     const changeFirstPlayer = value => {
-        dispatch(
-            // setCurrentPlayerIdx(players.findIndex(({ name }) => name === value))
-            setCurrentPlayer(value)
-        );
-        setFirstPlayer(value);
+        if (value !== currentPlayer) setFirstPlayer(value);
     };
 
     const addPlayer = () => {
@@ -55,16 +51,10 @@ const PlayersList = ({ room }) => {
     // };
     // console.log('players: ', players);
 
-    const x = Array(numberPlayers).map((_, i) => {
-        console.log('i= ', i);
-        return i;
-    });
-
-    console.log('x: ', x);
     return (
         <>
             <ul className={s.list}>
-                {Array(numberPlayers)
+                {Array(maxPlayers)
                     .fill(0)
                     .map((_, i) => (
                         <li key={i}>
@@ -89,23 +79,22 @@ const PlayersList = ({ room }) => {
                         </li>
                     ))}
             </ul>
-            {numberPlayers === players.length && (
-                <div className={s.params}>
-                    <p>Первый ход: </p>
-                    {isOwner ? (
-                        <Select
-                            list={players.map(({ name }) => name)}
-                            onSelect={changeFirstPlayer}
-                            // value={players[currentPlayerIdx].name}
-                            value={currentPlayer}
-                            name="playerTurn"
-                        />
-                    ) : (
-                        // <p>{players[currentPlayerIdx].name}</p>
-                        <p>{currentPlayer}</p>
-                    )}
-                </div>
-            )}
+
+            <div className={s.params}>
+                <p>Первый ход: </p>
+                {isOwner ? (
+                    <Select
+                        list={players.map(({ name }) => name)}
+                        onSelect={changeFirstPlayer}
+                        // value={players[currentPlayerIdx].name}
+                        value={currentPlayer}
+                        name="playerTurn"
+                    />
+                ) : (
+                    // <p>{players[currentPlayerIdx].name}</p>
+                    <p>{currentPlayer}</p>
+                )}
+            </div>
         </>
     );
 };

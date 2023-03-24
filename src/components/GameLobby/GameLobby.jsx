@@ -1,13 +1,14 @@
 import { useSelector } from 'react-redux';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { PlayersList, Icon, Button } from 'components';
-import { exitGameRoom, joinRoom } from 'state/gameOperation';
+import { exitGameRoom, startGame } from 'state/gameOperation';
+// import { updateRoom } from 'state/appReducer';
 import s from '../CreateGame/CreateGame.module.css';
 
 const GameLobby = () => {
     // const { id: gameId } = useSelector(state => state.game);
     const user = useSelector(state => state.user.name);
-    const rooms = useSelector(state => state.app.gameRooms);
+    const rooms = useSelector(state => state.app.rooms);
     const { gameId } = useParams();
 
     // console.log('bingo!!');
@@ -18,7 +19,7 @@ const GameLobby = () => {
     const navigate = useNavigate();
 
     if (!room) return <Navigate to="/main/newGame" />;
-    joinRoom(gameId);
+    // joinRoom(gameId, updateRoom);
 
     const { owner, numberBigCards, numberSmallCards } = room;
     const isOwner = user === owner;
@@ -28,8 +29,9 @@ const GameLobby = () => {
         navigate('/main/newGame');
     };
 
-    const startGame = () => {
+    const start = () => {
         console.log('start!');
+        startGame(gameId);
     };
 
     return (
@@ -59,9 +61,7 @@ const GameLobby = () => {
                     cn={s.btn}
                     onClick={exitGame}
                 />
-                {isOwner && (
-                    <Button text="Начать" cn={s.btn} onClick={startGame} />
-                )}
+                {isOwner && <Button text="Начать" cn={s.btn} onClick={start} />}
             </div>
         </div>
     );

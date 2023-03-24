@@ -1,15 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 // import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Icon, Button, UserInfo, Modal } from 'components';
 import { joinGameRoom } from 'state/gameOperation';
-// import { setGameId } from 'state/gameReducer';
+// import { setState } from 'state/gameReducer';
+
 import s from './GameRoom.module.css';
 
 const GameRoom = ({ room, user }) => {
     // console.log('room: ', room);
     const [isExpanded, setIsExpanded] = useState();
-    const [gameId, setGameId] = useState(null);
+    // const [roomId, setGameId] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [error, setError] = useState(false);
     const [password, setPassword] = useState('');
@@ -17,18 +18,16 @@ const GameRoom = ({ room, user }) => {
     const navigate = useNavigate();
     // const dispatch = useDispatch();
 
-    useEffect(() => {
-        console.log('go222?');
-        console.log('gameId: ', gameId);
-        if (gameId) navigate(`/game/${gameId}`);
-    }, [gameId, navigate]);
+    // useEffect(() => {
+    //     if (gameId) navigate(`/game/${gameId}`);
+    // }, [gameId, navigate]);
 
     const toggleExpand = () => {
         setIsExpanded(state => !state);
     };
 
-    const response = gameId => {
-        if (gameId) setGameId(gameId);
+    const joinGame = roomId => {
+        if (roomId) navigate(`/game/${roomId}`);
         else {
             setPassword('');
             setShowModal(false);
@@ -36,38 +35,23 @@ const GameRoom = ({ room, user }) => {
         }
     };
 
-    const joinGame = gameId => {
-        console.log('join GAME click', gameId);
-        joinGameRoom(gameId, password, response);
+    const joinRoom = () => {
+        console.log('join GAME click', room._id);
+        joinGameRoom(room._id, password, joinGame, true);
     };
 
-    const tryJoinGame = gameId => {
+    const tryJoinRoom = () => {
         console.log('room.private: ', room.private);
         if (room.private) setShowModal(true);
-        else joinGameRoom(gameId, password, response);
+        else joinGameRoom(room._id, password, joinGame, false);
     };
 
     const getPossibleActions = () => {
         if (room.players.find(player => player.name === user))
-            return (
-                <Button
-                    text="Войти"
-                    onClick={() => {
-                        console.log('enter GAME click', room._id);
-                        setGameId(room._id);
-                        console.log('go?');
-                        // navigate('/gameLobby');
-                    }}
-                />
-            );
+            return <Button text="Войти" onClick={joinRoom} />;
         if (room.players.length === room.numberPlayers)
             return <p>Комната заполнена</p>;
-        return (
-            <Button
-                text="Присоедениться"
-                onClick={() => tryJoinGame(room._id)}
-            />
-        );
+        return <Button text="Присоедениться" onClick={tryJoinRoom} />;
     };
 
     const ok = () => {
@@ -109,10 +93,7 @@ const GameRoom = ({ room, user }) => {
                             onChange={e => setPassword(e.target.value)}
                             value={password}
                         />
-                        <Button
-                            text="Присоедениться"
-                            onClick={() => joinGame(room._id)}
-                        />
+                        <Button text="Присоедениться" onClick={joinRoom} />
                         <Button text="Отмена" onClick={ok} />
                     </div>
                 </Modal>

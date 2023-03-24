@@ -5,7 +5,7 @@ import s from './UserMenu.module.css';
 // import { setPlayers } from 'state/gameReducer';
 
 const UserMenu = () => {
-    const gameRooms = useSelector(state => state.app.gameRooms);
+    const rooms = useSelector(state => state.app.rooms);
     const name = useSelector(state => state.user.name);
     const navigate = useNavigate();
     // const dispatch = useDispatch();
@@ -17,9 +17,9 @@ const UserMenu = () => {
 
     return (
         <div className={s.container}>
-            {gameRooms.length > 0 ? (
+            {rooms.length > 0 ? (
                 <ul className={s.gameRoomsBox}>
-                    {gameRooms.map(room => (
+                    {rooms.map(room => (
                         <GameRoom key={room._id} room={room} user={name} />
                     ))}
                 </ul>

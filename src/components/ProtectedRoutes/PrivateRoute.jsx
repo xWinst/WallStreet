@@ -10,6 +10,7 @@ const PrivateRoute = () => {
     // const { pathname } = useLocation();
 
     useEffect(() => {
+        console.log('CONNECT FROM PRIVAT');
         connectServer();
     }, []);
 
