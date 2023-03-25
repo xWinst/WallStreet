@@ -2,14 +2,14 @@ import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button, Card } from 'components';
 import { setFuturePrice, updatePlayer } from 'state/gameReducer';
-import { getColors, companyColors, activateCard, getShares } from 'db';
+import { getColors, companyColors, activateCard } from 'db';
 import s from './ActiveCard.module.css';
 
 const ActiveCard = ({ card, cancel }) => {
     const { isBoostCard, color: mainColor } = card;
     const { colorUp, colorDown } = getColors(card);
 
-    const { price, futurePrice, players } = useSelector(state => state.game);
+    const { price, futurePrice, player } = useSelector(state => state.game);
 
     const [secondColor, setSecondColor] = useState(
         isBoostCard ? colorDown[0] : colorUp[0]
@@ -21,8 +21,7 @@ const ActiveCard = ({ card, cancel }) => {
     const [compensation, setCompensation] = useState([0, 0, 0, 0]);
 
     const colors = companyColors;
-    const player = players[0];
-    const shares = getShares(player);
+    const shares = player.shares;
 
     const dispatch = useDispatch();
 
@@ -57,12 +56,6 @@ const ActiveCard = ({ card, cancel }) => {
         // console.log('finalPrice: ', finalPrice);
         dispatch(setFuturePrice(finalPrice));
     };
-
-    // if (!isReady) {
-    //     setIsReady(true);
-    //     showCard(secondColor, thirdColor);
-    //     return;
-    // }
 
     const chooseColor = color => {
         if (color === mainColor) return;

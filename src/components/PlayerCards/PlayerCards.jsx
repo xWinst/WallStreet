@@ -9,31 +9,29 @@ import s from './PlayerCards.module.css';
 // const bothDecks = new CardDecks();
 
 const PlayerCards = () => {
-    const [error, setError] = useState(false);
+    const [error, setError] = useState(null);
     const [selectedCard, setSelectedCard] = useState();
-    const player = useSelector(state => state.game.players[0]);
-    const gameState = useSelector(state => state.game.gameState);
+    const { player, stage } = useSelector(state => state.game);
 
     // const dispatch = useDispatch();
 
-    const activeCard = idx => {
-        setSelectedCard(idx);
+    const activeCard = cardId => {
+        setSelectedCard(cardId);
     };
 
-    const chooseCard = e => {
-        if (gameState === 'after') {
-            setError(true);
+    const chooseCard = cardId => {
+        if (!player.isTurn) return;
+        if (stage === 'after') {
+            setError('Сначала нужно закончить ход');
             return;
         }
-        const id = Number.parseInt(e.currentTarget.dataset.id);
-        e.currentTarget.className = s.chosenCard;
-        setTimeout(() => activeCard(id), 300);
+        activeCard(cardId);
     };
 
     const closeModal = () => {
         // alert('CLOSE!');
         setSelectedCard(null);
-        setError(false);
+        setError(null);
     };
 
     return (
@@ -42,7 +40,7 @@ const PlayerCards = () => {
                 {player.bigDeck
                     .filter(card => card !== selectedCard)
                     .map(id => (
-                        <li key={id} onClick={chooseCard} data-id={id}>
+                        <li key={id} onClick={() => chooseCard(id)}>
                             <Card cardId={id} />
                         </li>
                     ))}
@@ -51,7 +49,7 @@ const PlayerCards = () => {
                 {player.smallDeck
                     .filter(card => card !== selectedCard)
                     .map(id => (
-                        <li key={id} onClick={chooseCard} data-id={id}>
+                        <li key={id} onClick={() => chooseCard(id)}>
                             <Card cardId={id} />
                         </li>
                     ))}
@@ -60,7 +58,7 @@ const PlayerCards = () => {
             {error && (
                 <Modal onClose={closeModal}>
                     <div className="box">
-                        <p>Сначала нужно закончить ход</p>
+                        <p>{error}</p>
                         <Button text="ok" onClick={closeModal} />
                     </div>
                 </Modal>

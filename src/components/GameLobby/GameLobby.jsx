@@ -1,25 +1,24 @@
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { PlayersList, Icon, Button } from 'components';
 import { exitGameRoom, startGame } from 'state/gameOperation';
-// import { updateRoom } from 'state/appReducer';
 import s from '../CreateGame/CreateGame.module.css';
 
 const GameLobby = () => {
-    // const { id: gameId } = useSelector(state => state.game);
+    const id = useSelector(state => state.game.id);
     const user = useSelector(state => state.user.name);
     const rooms = useSelector(state => state.app.rooms);
     const { gameId } = useParams();
 
-    // console.log('bingo!!');
-    // console.log('gameId: ', gameId);
     const room = rooms.find(room => room._id === gameId);
-    // console.log('room: ', room);
-
     const navigate = useNavigate();
 
+    useEffect(() => {
+        if (id) navigate('/game');
+    }, [id, navigate]);
+
     if (!room) return <Navigate to="/main/newGame" />;
-    // joinRoom(gameId, updateRoom);
 
     const { owner, numberBigCards, numberSmallCards } = room;
     const isOwner = user === owner;

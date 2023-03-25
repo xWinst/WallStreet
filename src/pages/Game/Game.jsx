@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 import {
     // CurrentCard,
     PlayerCards,
@@ -13,73 +13,30 @@ import {
     // AiTurn,
 } from 'components';
 
-// import {
-//     // setCurrentCard,
-//     // setCurrentPrice,
-//     // setFuturePrice,
-//     // setStage,
-//     // nextTurn,  //Нужон!!!
-//     // updatePlayer,
-//     // reset,
-//     // setState,
-// } from 'state/gameReducer';
-
 import s from './Game.module.css';
 
 const Game = () => {
-    const { players, currentPlayerIdx, turn } = useSelector(
+    const { players, currentPlayer, player, turn, id } = useSelector(
         state => state.game
     );
-    const user = useSelector(state => state.user.name);
-    const isPlayerMove = players[currentPlayerIdx].name === user;
-
-    // const sliceGame = {
-    //     turn,
-    // };
 
     const [aiMove, setAiMove] = useState(false);
-
-    // const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    // const cancel = () => {
-    //     dispatch(setCurrentCard(null));
-    //     dispatch(setFuturePrice([...price]));
-    // };
+    if (!id) return <Navigate to="/main/newGame" />;
+
+    // const dispatch = useDispatch();
 
     const ok = () => {
-        // setError(false);
         setAiMove(false);
     };
-
-    // const closeCard = () => {
-    //     dispatch(
-    //         setState({
-    //             price: futurePrice,
-    //             currentCard: null,
-    //             stage: 'after',
-    //         })
-    //     );
-    // };
-
-    // const endTurn = e => {
-    //     if (stage === 'before') {
-    //         setError(true);
-    //         return;
-    //     }
-    //     // player.shareMerger();
-    //     setAiMove(true);
-    //     // dispatch(nextTurn(game.nextTurn()));
-    // };
 
     const exit = () => {
         navigate('/');
     };
 
-    // console.log('RENDER GAME!!');
-
     return (
-        <div className="container">
+        <div className="game">
             <Icon icon="exit" onClick={exit} cn={s.icon} w={27} h={22} />
             <div className={s.info}>
                 <Tablo />
@@ -88,24 +45,17 @@ const Game = () => {
                         Ход № {turn}&nbsp;
                         <br />
                         <br /> Ходит:&nbsp;
-                        <span className={s.player}>
-                            {players[currentPlayerIdx].name}
-                        </span>
-                        {/* <br /> */}
-                        {/* {stage === 'before' ? '1-й ' : '3-й '}этап */}
+                        <span className={s.player}>{currentPlayer}</span>
                     </p>
                     <ul className={s.box}>
-                        {/* Инфо игроков: */}
-                        {players.map((player, id) => (
-                            <li key={player.name}>
-                                <PlayerInfo playerId={id} />
-                            </li>
+                        {players.map(player => (
+                            <PlayerInfo player={player} key={player.name} />
                         ))}
                     </ul>
                 </div>
             </div>
             <div>
-                {isPlayerMove && <PlayerActions />}
+                {player.isTurn && <PlayerActions />}
                 <PlayerCards />
             </div>
 

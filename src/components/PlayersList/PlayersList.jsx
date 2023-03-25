@@ -7,16 +7,10 @@ import s from './PlayersList.module.css';
 import { setFirstPlayer } from 'state/gameOperation';
 
 const PlayersList = ({ room }) => {
-    // const currentPlayer = useSelector(state => state.game.currentPlayer);
     const user = useSelector(state => state.user.name);
-    // const rooms = useSelector(state => state.app.rooms);
 
     const dispatch = useDispatch();
-
-    // joinRoom(gameId);
-
     const { players, owner, maxPlayers, currentPlayer } = room;
-
     const isOwner = user === owner;
 
     const changeFirstPlayer = value => {
@@ -35,21 +29,6 @@ const PlayersList = ({ room }) => {
             ])
         );
     };
-
-    // const removePlayer = i => {
-    //     dispatch(setPlayers(players.filter((_, idx) => idx !== i)));
-    // };
-
-    // const cancel = () => {
-    //     setEditId(null);
-    // };
-
-    // const submit = name => {
-    //     dispatch(updatePlayer({ index: editId, name }));
-    //     dispatch(setName(name));
-    //     // setEditId(null);
-    // };
-    // console.log('players: ', players);
 
     return (
         <>
@@ -86,12 +65,10 @@ const PlayersList = ({ room }) => {
                     <Select
                         list={players.map(({ name }) => name)}
                         onSelect={changeFirstPlayer}
-                        // value={players[currentPlayerIdx].name}
                         value={currentPlayer}
                         name="playerTurn"
                     />
                 ) : (
-                    // <p>{players[currentPlayerIdx].name}</p>
                     <p>{currentPlayer}</p>
                 )}
             </div>

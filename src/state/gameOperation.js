@@ -46,6 +46,12 @@ export const connectServer = () => {
         console.log('a: updateRoom ', room);
         store.dispatch(updateRoom(room));
     });
+
+    socket.on('updateGame', game => {
+        console.log('a: updateGame: ', game);
+        game = getProcessedData(game);
+        store.dispatch(setState(game));
+    });
 };
 
 export const loadGameRooms = () => {
@@ -81,32 +87,36 @@ export const setFirstPlayer = player => {
     socket.emit('setFirstPlayer', player);
 };
 
-// export const joinRoom = (gameId, updateRoom) => {
-//     console.log('joinRoom', gameId);
-//     socket.emit('joinRoom', gameId, updateRoom);
-//     const { currentPlayer } = getRoom(gameId);
-//     store.dispatch(setCurrentPlayer(currentPlayer));
-
-//     socket.on('setFirstPlayer', player => {
-//         console.log('a: setFirstPlayer: ', player);
-
-//         store.dispatch(setCurrentPlayer(player));
-//     });
-
-//     socket.on('updateGame', game => {
-//         console.log('a: updateGame: ', ++count);
-//         console.log('a: updateGame: ', game);
-
-//         store.dispatch(setState(game));
-//     });
-// };
-
-// const getRoom = gameId => {
-//     const rooms = store.getState().app.rooms;
-//     return rooms.find(room => room._id === gameId);
-// };
-
 export const startGame = gameId => {
     console.log('startGame', gameId);
     socket.emit('startGame', gameId);
 };
+
+function getProcessedData(game) {
+    const players = game.players.map(
+        ({ name, avatar, money, shares, bigDeck, smallDeck }) => ({
+            name,
+            avatar,
+            money,
+            shares,
+            numberBigCards: bigDeck.length,
+            numberSmallCards: smallDeck.length,
+        })
+    );
+
+    const { name } = store.getState().user;
+    const player = game.players.find(player => player.name === name);
+    const { price, currentPlayer, turn, _id: id } = game;
+    player.isTurn = currentPlayer === name;
+
+    const result = {
+        price,
+        players,
+        player,
+        currentPlayer,
+        turn,
+        id,
+    };
+
+    return result;
+}

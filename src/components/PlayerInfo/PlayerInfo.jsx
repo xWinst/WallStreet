@@ -1,23 +1,23 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Icon } from 'components';
-import { getShares, companyColors, companyNames } from 'db';
+import { companyColors, companyNames } from 'db';
 import s from './PlayerInfo.module.css';
 
-const PlayerInfo = ({ playerId }) => {
+const PlayerInfo = ({ player }) => {
+    console.log('player: ', player);
     // console.log('playerId: ', playerId);
-    const { price, players } = useSelector(state => state.game);
-    const player = players[playerId];
+    const price = useSelector(state => state.game.price);
     const [isExpanded, setIsExpanded] = useState();
 
-    const shares = getShares(player);
+    const shares = player.shares;
 
     const toggleExpand = () => {
         setIsExpanded(state => !state);
     };
 
     return (
-        <div className={s.info}>
+        <li className={s.info}>
             <div className={s.btn} onClick={toggleExpand}>
                 <p className={s.player}>{player.name}</p>
                 <Icon icon={isExpanded ? 'collaps' : 'expand'} w={20} />
@@ -54,15 +54,15 @@ const PlayerInfo = ({ playerId }) => {
                     </ul>
                     <div className={s.flexBox}>
                         <p>
-                            Больших: <span>{player.bigDeck.length}</span>
+                            Больших: <span>{player.numberBigCards}</span>
                         </p>
                         <p>
-                            Малых: <span>{player.smallDeck.length}</span>
+                            Малых: <span>{player.numberSmallCards}</span>
                         </p>
                     </div>
                 </>
             )}
-        </div>
+        </li>
     );
 };
 

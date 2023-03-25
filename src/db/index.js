@@ -27,7 +27,7 @@ const getCard = (color, isBoostCard, type, id) => {
     return { color, isBoostCard, type, id };
 };
 
-export const getCardById = (id, colors) => {
+export const getCardById = id => {
     const color = id < 100 ? Math.floor(id / 8) : Math.floor((id % 100) / 5);
     const isBoostCard = id < 100 ? !!(id % 2) : !!(id % 5);
     const type =

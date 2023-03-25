@@ -4,8 +4,11 @@ const initialState = {
     price: [100, 100, 100, 100],
     futurePrice: [0, 0, 0, 0],
     players: [],
+    player: null,
     currentPlayer: null,
     turn: 1,
+    frezenShares: [0, 0, 0, 0],
+    freeShares: [1, 1, 1, 1],
     stage: 'before',
     id: null,
 };

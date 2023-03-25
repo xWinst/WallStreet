@@ -5,7 +5,6 @@ import { updatePlayer } from 'state/gameReducer';
 import {
     companyNames,
     companyColors,
-    getShares,
     sellShares,
     buyShares,
     shareMerger,
@@ -14,7 +13,7 @@ import {
 import s from './PlayerActions.module.css';
 
 const PlayerActions = () => {
-    const { price, turn, stage, players } = useSelector(state => state.game);
+    const { price, turn, stage, player } = useSelector(state => state.game);
     const [error, setError] = useState(false);
     const [showBuy, setShowBuy] = useState(false);
     const [showSell, setShowSell] = useState(false);
@@ -23,8 +22,7 @@ const PlayerActions = () => {
     const colors = companyColors;
 
     const dispatch = useDispatch();
-    const player = players[0];
-    const shares = getShares(player);
+    const shares = player.shares;
 
     const openSell = () => {
         if (turn === 10) {
@@ -130,10 +128,6 @@ const PlayerActions = () => {
         }
 
         dispatch(updatePlayer(shareMerger(player)));
-
-        // player.shareMerger();
-        // setAiMove(true);
-        // dispatch(nextTurn(game.nextTurn()));
     };
 
     return (
