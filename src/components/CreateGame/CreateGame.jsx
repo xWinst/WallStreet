@@ -13,6 +13,7 @@ const CreateGame = () => {
     const [numberBigCards, setNumberBigCards] = useState(4);
     const [numberSmallCards, setNumberSmallCards] = useState(6);
     const [password, setPassword] = useState('');
+    const [name, setName] = useState('');
     // const [gameId, setGameId] = useState(false);
 
     const navigate = useNavigate();
@@ -29,6 +30,7 @@ const CreateGame = () => {
     const create = () => {
         createGameRoom(
             {
+                name,
                 maxPlayers,
                 numberBigCards,
                 numberSmallCards,
@@ -40,7 +42,7 @@ const CreateGame = () => {
 
     return (
         <div className={s.container}>
-            <div className={s.goBack} onClick={() => navigate('/main/newGame')}>
+            <div className={s.goBack} onClick={() => navigate('/main/games')}>
                 <Icon icon="arrow-left" w={20} />
                 <p>На главную</p>
             </div>
@@ -96,6 +98,17 @@ const CreateGame = () => {
                 </div>
 
                 <div className={s.prop}>
+                    <p>Имя игры:</p>
+                    <div className={s.box}>
+                        <input
+                            className={s.password}
+                            onChange={e => setName(e.target.value)}
+                            value={name}
+                        />
+                    </div>
+                </div>
+
+                <div className={s.prop}>
                     <p>Установить пароль:</p>
                     <div className={s.box}>
                         <input
@@ -106,7 +119,7 @@ const CreateGame = () => {
                     </div>
                 </div>
 
-                <Button text="создать" cn={s.btn} onClick={create} />
+                <Button text="создать" cn={s.btn} click={create} />
                 <p style={{ fontSize: '12px' }}>
                     P.S. На данный момент количество компаний вне зависимости от
                     выбора будет равно 4

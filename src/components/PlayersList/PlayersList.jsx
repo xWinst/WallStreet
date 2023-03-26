@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { UserInfo, Select } from 'components';
-import { setPlayers } from 'state/gameReducer';
+// import { setPlayers } from 'state/gameReducer';
 import { getName } from 'db';
 import { ai } from 'images';
 import s from './PlayersList.module.css';
@@ -19,15 +19,15 @@ const PlayersList = ({ room }) => {
 
     const addPlayer = () => {
         if (players.length >= 4) return;
-        dispatch(
-            setPlayers([
-                ...players,
-                {
-                    name: getName(players),
-                    avatar: ai,
-                },
-            ])
-        );
+        // dispatch(
+        //     setPlayers([
+        //         ...players,
+        //         {
+        //             name: getName(players),
+        //             avatar: ai,
+        //         },
+        //     ])
+        // );
     };
 
     return (

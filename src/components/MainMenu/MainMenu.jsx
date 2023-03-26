@@ -18,11 +18,11 @@ const MainMenu = () => {
                 <UserInfo />
             </div>
             <div className={s.nav}>
-                <NavLink className={getActive} to="newGame">
-                    Новая игра
+                <NavLink className={getActive} to="games">
+                    Играть
                 </NavLink>
-                <NavLink className={getActive} to="loadGame">
-                    Продолжить
+                <NavLink className={getActive} to="options">
+                    Опции
                 </NavLink>
             </div>
             <Outlet />

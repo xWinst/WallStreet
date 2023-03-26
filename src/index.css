@@ -116,6 +116,19 @@ input[type='number'] {
     background-image: var(--bg-gradient);
 }
 
+.icon {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+}
+
+.info {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
 /* .title {
     font-size: 60px;
     font-weight: 700;

@@ -249,8 +249,8 @@ const CurrentCard = ({ cancel, closeCard }) => {
                     )}
                 </div>
                 <div className={s.btns}>
-                    <Button text="Принять" onClick={activateCard} />
-                    <Button text="Отменить" onClick={cancel} />
+                    <Button text="Принять" click={activateCard} />
+                    <Button text="Отменить" click={cancel} />
                 </div>
             </div>
         </div>

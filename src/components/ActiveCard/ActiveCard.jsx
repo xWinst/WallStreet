@@ -247,8 +247,8 @@ const ActiveCard = ({ card, cancel }) => {
                     )}
                 </div>
                 <div className={s.btns}>
-                    <Button text="Принять" onClick={applyCard} />
-                    <Button text="Отменить" onClick={returnCard} />
+                    <Button text="Принять" click={applyCard} />
+                    <Button text="Отменить" click={returnCard} />
                 </div>
             </div>
         </div>

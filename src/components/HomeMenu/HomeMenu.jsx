@@ -10,16 +10,12 @@ const HomeMenu = () => {
     return (
         <div className={s.container}>
             <p className={s.title}>Wall Street</p>
-            <Button cn={s.btn} text="Играть" onClick={() => play} />
-            <Button
-                cn={s.btn}
-                text="Войти"
-                onClick={() => navigate('/login')}
-            />
+            <Button cn={s.btn} text="Играть" click={() => play} />
+            <Button cn={s.btn} text="Войти" click={() => navigate('/login')} />
             <Button
                 cn={s.btn}
                 text="Создать аккаунт"
-                onClick={() => navigate('/register')}
+                click={() => navigate('/register')}
             />
             <Button cn={s.btn} text="Правила игры" />
         </div>

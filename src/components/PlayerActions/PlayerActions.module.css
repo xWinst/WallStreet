@@ -1,8 +1,15 @@
 .container {
     display: flex;
-    /* justify-content: center; */
+    justify-content: space-around;
     gap: 10px;
     margin-top: 12px;
+    flex-wrap: wrap;
+}
+
+.btnBox {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .list {

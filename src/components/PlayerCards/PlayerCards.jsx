@@ -59,7 +59,7 @@ const PlayerCards = () => {
                 <Modal onClose={closeModal}>
                     <div className="box">
                         <p>{error}</p>
-                        <Button text="ok" onClick={closeModal} />
+                        <Button text="ok" click={closeModal} />
                     </div>
                 </Modal>
             )}

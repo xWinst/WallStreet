@@ -5,7 +5,7 @@ import { companyColors, companyNames } from 'db';
 import s from './PlayerInfo.module.css';
 
 const PlayerInfo = ({ player }) => {
-    console.log('player: ', player);
+    // console.log('player: ', player);
     // console.log('playerId: ', playerId);
     const price = useSelector(state => state.game.price);
     const [isExpanded, setIsExpanded] = useState();

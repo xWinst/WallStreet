@@ -48,10 +48,10 @@ const GameRoom = ({ room, user }) => {
 
     const getPossibleActions = () => {
         if (room.players.find(player => player.name === user))
-            return <Button text="Войти" onClick={joinRoom} />;
-        if (room.players.length === room.numberPlayers)
+            return <Button text="Войти" click={joinRoom} />;
+        if (room.players.length === room.maxPlayers)
             return <p>Комната заполнена</p>;
-        return <Button text="Присоедениться" onClick={tryJoinRoom} />;
+        return <Button text="Присоедениться" click={tryJoinRoom} />;
     };
 
     const ok = () => {
@@ -64,7 +64,9 @@ const GameRoom = ({ room, user }) => {
             <div className={s.btn} onClick={toggleExpand}>
                 <div className={s.gameName}>
                     {room.private && <Icon icon="lock" w={24} />}
-                    <p>{room.owner} Game</p>
+                    <p>
+                        Game: <span>{room.name || room._id}</span>
+                    </p>
                 </div>
                 <Icon icon={isExpanded ? 'collaps' : 'expand'} w={20} />
             </div>
@@ -93,8 +95,8 @@ const GameRoom = ({ room, user }) => {
                             onChange={e => setPassword(e.target.value)}
                             value={password}
                         />
-                        <Button text="Присоедениться" onClick={joinRoom} />
-                        <Button text="Отмена" onClick={ok} />
+                        <Button text="Присоедениться" click={joinRoom} />
+                        <Button text="Отмена" click={ok} />
                     </div>
                 </Modal>
             )}
@@ -106,7 +108,7 @@ const GameRoom = ({ room, user }) => {
                             правильность введеного пароля если он требуется или
                             повторите попытку.
                         </p>
-                        <Button text="ok" onClick={ok} />
+                        <Button text="ok" click={ok} />
                     </div>
                 </Modal>
             )}

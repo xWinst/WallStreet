@@ -1,18 +1,19 @@
 .info {
-    padding: 6px 10px;
+    padding: 6px;
     font-size: 15px;
     background-color: var(--btn-color);
     border: 1px solid var(--third-color);
     border-radius: 8px;
     box-shadow: 0px 4px 10px var(--third2-color);
+    min-width: 173px;
 }
 
 .btn {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: space-between;
     gap: 10px;
-    width: 151px;
+    /* min-width: 151px; */
 }
 
 .money {

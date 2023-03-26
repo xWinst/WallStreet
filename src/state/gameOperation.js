@@ -1,7 +1,7 @@
 import io from 'socket.io-client';
 import { store } from 'state/store';
-import { setRooms, updateRoom } from './appReducer';
-import { setState, setGameId } from './gameReducer';
+import { setRooms, updateRoom, setGames } from './appReducer';
+import { setState } from './gameReducer';
 // import { setCurrentPlayer } from './appReducer';
 
 const { REACT_APP_WS_URL } = process.env;
@@ -21,6 +21,8 @@ export const connectServer = () => {
 
     socket.on('connect', () => {
         console.log('Connect! Socket.id = ', socket.id); ////////////////
+        const name = store.getState().user.name;
+        socket.emit('setUsername', name);
         loadGameRooms();
     });
 
@@ -47,7 +49,7 @@ export const connectServer = () => {
         store.dispatch(updateRoom(room));
     });
 
-    socket.on('updateGame', game => {
+    socket.on('setGame', game => {
         console.log('a: updateGame: ', game);
         game = getProcessedData(game);
         store.dispatch(setState(game));
@@ -59,6 +61,12 @@ export const loadGameRooms = () => {
         console.log('updateGameRooms');
         store.dispatch(setRooms(rooms));
     });
+
+    socket.on('updateActiveGames', games => {
+        console.log('updateActiveGames');
+        games = games.map(game => getProcessedData(game));
+        store.dispatch(setGames(games));
+    });
 };
 
 export const exitGameRoom = (gameId, isOwner) => {
@@ -67,12 +75,13 @@ export const exitGameRoom = (gameId, isOwner) => {
     // const gameId = store.getState().game.id;
     socket.emit('exitGameRoom', { gameId, isOwner, name });
 
-    store.dispatch(setGameId(null));
+    // store.dispatch(setGameId(null));
 };
 
-export const createGameRoom = (settings, toLobby) => {
+export const createGameRoom = (params, toLobby) => {
     const { name, avatar } = store.getState().user;
-    socket.emit('createGame', { ...settings, name, avatar }, toLobby);
+    const player = { name, avatar };
+    socket.emit('createGame', { ...params, player }, toLobby);
 };
 
 export const joinGameRoom = (gameId, password, joinRoom, isIncluded) => {
@@ -80,6 +89,13 @@ export const joinGameRoom = (gameId, password, joinRoom, isIncluded) => {
     const { name, avatar } = store.getState().user;
     const player = { name, avatar };
     socket.emit('joinRoom', { gameId, password, player, isIncluded }, joinRoom);
+};
+
+export const loadActiveGame = gameId => {
+    const games = store.getState().app.games;
+    const game = games.find(({ id }) => id === gameId);
+    store.dispatch(setState(game));
+    // socket.emit('loadActiveGame', gameId);
 };
 
 export const setFirstPlayer = player => {
@@ -105,9 +121,11 @@ function getProcessedData(game) {
     );
 
     const { name } = store.getState().user;
-    const player = game.players.find(player => player.name === name);
-    const { price, currentPlayer, turn, _id: id } = game;
+    const player = { ...game.players.find(player => player.name === name) };
+    const { price, currentPlayer, turn, lastTurn, _id: id } = game;
     player.isTurn = currentPlayer === name;
+    player.frezenShares = [0, 0, 0, 0];
+    player.freeShares = player.shares;
 
     const result = {
         price,
@@ -115,6 +133,7 @@ function getProcessedData(game) {
         player,
         currentPlayer,
         turn,
+        lastTurn,
         id,
     };
 

@@ -21,7 +21,7 @@ const PageNotFound = () => {
                     Ой! Сторінка, яку ви шукаєте, не існує.
                 </p>
 
-                <Button onClick={handleBtnClick} text="На домашню" />
+                <Button click={handleBtnClick} text="На домашню" />
             </div>
         </div>
     );

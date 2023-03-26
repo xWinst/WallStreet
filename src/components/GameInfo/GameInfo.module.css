@@ -1,0 +1,11 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.player {
+    color: var(--accent-color);
+}

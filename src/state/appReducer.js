@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
     rooms: [],
+    games: [],
 };
 
 const appSlice = createSlice({
@@ -20,9 +21,14 @@ const appSlice = createSlice({
             const index = state.rooms.findIndex(({ _id }) => _id === room._id);
             state.rooms[index] = room;
         },
+
+        setGames: (state, action) => {
+            console.log('action setGames: ', action.payload);
+            state.games = action.payload;
+        },
     },
 });
 
-export const { setRooms, updateRoom } = appSlice.actions;
+export const { setRooms, updateRoom, setGames } = appSlice.actions;
 
 export default appSlice.reducer;

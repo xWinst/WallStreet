@@ -6,12 +6,13 @@ import {
     Loader,
     RestrictedRoute,
     PrivateRoute,
-    UserMenu,
+    GameList,
     GameLobby,
+    UserMenu,
 } from 'components';
 import { refresh } from 'state/userOperations';
 
-const Game = lazy(() => import('pages/Game/Game'));
+const Game = lazy(() => import('pages/Game'));
 
 const App = () => {
     const isLoading = useSelector(state => state.user.isLoading);
@@ -34,8 +35,8 @@ const App = () => {
                 </Route>
                 <Route element={<PrivateRoute />}>
                     <Route path="main" element={<Main />}>
-                        <Route path="newGame" element={<UserMenu />} />
-                        <Route path="loadGame" element={<UserMenu />} />
+                        <Route path="games" element={<GameList />} />
+                        <Route path="options" element={<UserMenu />} />
                     </Route>
                     <Route path="game" element={<Game />} />
                     <Route path="createGame" element={<GameRoom />} />
