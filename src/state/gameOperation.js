@@ -125,15 +125,19 @@ function getProcessedData(game) {
     const { price, currentPlayer, turn, lastTurn, _id: id } = game;
     player.isTurn = currentPlayer === name;
     player.frezenShares = [0, 0, 0, 0];
-    player.freeShares = player.shares;
+    // player.freeShares = player.shares;
+    player.numberBigCards = player.bigDeck.length;
+    player.numberSmallCards = player.smallDeck.length;
 
     const result = {
         price,
+        futurePrice: price,
         players,
         player,
         currentPlayer,
         turn,
         lastTurn,
+        stage: 'before',
         id,
     };
 

@@ -1,4 +1,4 @@
-import { getCardById, companyColors } from 'db';
+import { companyColors } from 'db';
 import s from './Card.module.css';
 
 const colors = companyColors;
@@ -9,9 +9,7 @@ const getDownVolume = volume => {
     return 90 - number;
 };
 
-const Card = ({ cardId }) => {
-    // const card = bothDecks.smallDeck[cardId] || bothDecks.bigDeck[cardId % 100];
-    const card = getCardById(cardId);
+const Card = ({ card }) => {
     // console.log('bigDeck: ', bothDecks);
     const colorUp = card.isBoostCard ? colors[card.color] : 'white';
     const colorDown = card.isBoostCard ? 'white' : colors[card.color];

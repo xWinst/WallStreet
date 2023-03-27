@@ -27,7 +27,7 @@ const gameSlice = createSlice({
         // },
         setCurrentPrice: (state, action) => {
             console.log('action: setCurrentPrice', action);
-            state.currentPrice = action.payload;
+            state.price = action.payload;
         },
         setFuturePrice: (state, action) => {
             console.log('action: setFuturePrice', action);
@@ -45,6 +45,13 @@ const gameSlice = createSlice({
         updatePlayer: (state, action) => {
             console.log('updatePlayer: ', action);
             state.player = { ...state.player, ...action.payload };
+            // const playerIdx = state.players.findIndex(
+            //     ({ name }) => (name = state.player.name)
+            // );
+            // state.players[playerIdx] = {
+            //     ...state.players[playerIdx],
+            //     ...action.payload,
+            // };
         },
 
         // nextPlayer: (state, action) => {

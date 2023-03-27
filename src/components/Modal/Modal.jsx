@@ -5,11 +5,11 @@ import s from './Modal.module.css';
 const modalRoot = document.querySelector('#modal-root');
 
 const Modal = ({ onClose, st = {}, children }) => {
-    const [target, options] = useDrop();
+    const options = useDrop();
 
     return createPortal(
         <div className={s.overlay}>
-            <div className={s.modal} ref={target} style={st} {...options}>
+            <div className={s.modal} style={st} {...options}>
                 {children}
             </div>
         </div>,

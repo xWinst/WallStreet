@@ -26,7 +26,7 @@ export const useDrop = () => {
     };
 
     const addListener = e => {
-        console.log('ADD');
+        if (e.target.nodeName === 'INPUT') return;
         x.current = e.clientX;
         y.current = e.clientY;
         document.addEventListener('mousemove', onDrag);
@@ -34,7 +34,6 @@ export const useDrop = () => {
     };
 
     const removeListener = e => {
-        console.log('REMOVE');
         document.removeEventListener('mousemove', onDrag);
         target.current.removeEventListener('touchmove', onTouchDrag);
     };
@@ -43,7 +42,8 @@ export const useDrop = () => {
         onPointerDown: addListener,
         onMouseUp: removeListener,
         onTouchEnd: removeListener,
+        ref: target,
     };
 
-    return [target, options];
+    return options;
 };

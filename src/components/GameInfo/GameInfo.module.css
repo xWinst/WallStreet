@@ -3,7 +3,9 @@
     flex-direction: column;
     /* align-items: center; */
     gap: 10px;
-    margin: 10px 0;
+    margin: 3px 0;
+    max-height: 524px;
+    overflow-y: scroll;
 }
 
 .player {

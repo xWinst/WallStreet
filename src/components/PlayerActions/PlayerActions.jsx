@@ -5,9 +5,10 @@ import { updatePlayer } from 'state/gameReducer';
 import {
     companyNames,
     companyColors,
-    sellShares,
-    buyShares,
+    // sellShares,
+    // buyShares,
     shareMerger,
+    updateShares,
 } from 'db';
 import { loadActiveGame } from 'state/gameOperation';
 import s from './PlayerActions.module.css';
@@ -20,8 +21,9 @@ const PlayerActions = () => {
     const [showBuy, setShowBuy] = useState(false);
     const [showSell, setShowSell] = useState(false);
     const [notice, setNotice] = useState(false);
-    const [sales, setSales] = useState([0, 0, 0, 0]);
-    const [purchases, setPurchases] = useState([0, 0, 0, 0]);
+    // const [sales, setSales] = useState([0, 0, 0, 0]);
+    // const [purchases, setPurchases] = useState([0, 0, 0, 0]);
+    const [changes, setChanges] = useState([0, 0, 0, 0]);
     const colors = companyColors;
 
     const dispatch = useDispatch();
@@ -30,90 +32,171 @@ const PlayerActions = () => {
     const func = useRef();
 
     const submit = () => {
-        func.current();
+        switch (func.current) {
+            case 'buysell':
+                changeShares();
+                break;
+            case 'endTurn':
+                endTurn();
+                break;
+            case 'loadGame':
+                loadGame();
+                break;
+            default:
+                return;
+        }
     };
 
-    const sell = () => {
-        console.log('sales: ', sales);
-        console.log('price: ', price);
+    // const getFreeShares = idx => {
+    //     const prevPlayer = players.find(({ name }) => (name = player.name));
+    //     const prevShares = prevPlayer.shares;
+    //     return Math.min(prevShares[idx], shares[idx]);
+    // };
 
-        dispatch(updatePlayer(sellShares(player, sales, price)));
-        setShowSell(false);
-        setSales([0, 0, 0, 0]);
-    };
+    // const sell = () => {
+    //     // dispatch(updatePlayer(sellShares(player, sales, price)));
+    //     dispatch(updatePlayer(updateShares(player, changes, price)));
+    //     setShowSell(false);
+    //     // setSales([0, 0, 0, 0]);
+    //     setChanges([0, 0, 0, 0]);
+    // };
 
-    const buy = () => {
-        dispatch(updatePlayer(buyShares(player, purchases, price)));
+    // const buy = () => {
+    //     // dispatch(updatePlayer(buyShares(player, purchases, price, stage)));
+    //     dispatch(updatePlayer(updateShares(player, changes, price)));
+    //     setShowBuy(false);
+    //     // setPurchases([0, 0, 0, 0]);
+    //     setChanges([0, 0, 0, 0]);
+    // };
+
+    const changeShares = () => {
+        dispatch(updatePlayer(updateShares(player, changes, price)));
         setShowBuy(false);
-        setPurchases([0, 0, 0, 0]);
+        setShowSell(false);
+        setChanges([0, 0, 0, 0]);
     };
 
-    const openSell = () => {
-        func.current = sell;
+    const openModal = doSell => {
+        func.current = 'buysell';
         if (turn === lastTurn) {
             setError('Операции с банком на последнем ходу запрещены!');
             return;
         }
-        setShowSell(true);
-        setShowBuy(false);
+        setShowSell(doSell);
+        setShowBuy(!doSell);
     };
 
-    const openBuy = () => {
-        func.current = buy;
-        if (turn === lastTurn) {
-            setError('Операции с банком на последнем ходу запрещены!');
-            return;
-        }
-        setShowSell(false);
-        setShowBuy(true);
-    };
+    // const openSell = () => {
+    //     func.current = 'buysell';
+    //     if (turn === lastTurn) {
+    //         setError('Операции с банком на последнем ходу запрещены!');
+    //         return;
+    //     }
+    //     setShowSell(true);
+    //     setShowBuy(false);
+    // };
+
+    // const openBuy = () => {
+    //     func.current = 'buysell';
+    //     if (turn === lastTurn) {
+    //         setError('Операции с банком на последнем ходу запрещены!');
+    //         return;
+    //     }
+    //     setShowSell(false);
+    //     setShowBuy(true);
+    // };
 
     const cancel = () => {
         setShowSell(false);
         setShowBuy(false);
-        setSales([0, 0, 0, 0]);
-        setPurchases([0, 0, 0, 0]);
+        // setSales([0, 0, 0, 0]);
+        // setPurchases([0, 0, 0, 0]);
+        setChanges([0, 0, 0, 0]);
+    };
+
+    // const onChangeSell = e => {
+    //     const { name, value } = e.target;
+    //     updateSales(name, value);
+    // };
+
+    const updateChanges = (name, value) => {
+        setChanges(prev => {
+            const result = [...prev];
+            result[name] = value;
+            return result;
+        });
     };
 
     const onChangeSell = e => {
         const { name, value } = e.target;
-        updateSales(name, value);
+        updateChanges(name, -Number(value));
     };
 
-    const updateSales = (name, value) => {
-        setSales(prev => {
-            const result = [...prev];
-            result[name] = Number(value);
-            console.log('result: ', result);
-            return result;
-        });
+    const onChangeBuy = e => {
+        const { name, value } = e.target;
+        updateChanges(name, Number(value));
     };
 
-    const updatePurchases = (name, value) => {
-        setPurchases(prev => {
-            const result = [...prev];
-            result[name] = Number(value);
-            return result;
-        });
-    };
+    // const updateSales = (name, value) => {
+    //     setSales(prev => {
+    //         const result = [...prev];
+    //         result[name] = Number(value);
+    //         console.log('result: ', result);
+    //         return result;
+    //     });
+    // };
 
+    // const updatePurchases = (name, value) => {
+    //     setPurchases(prev => {
+    //         const result = [...prev];
+    //         result[name] = Number(value);
+    //         return result;
+    //     });
+    // };
+
+    // const changeSales = (name, value) => {
+    //     let result = sales[name] + value;
+    //     if (result < 0) result = 0;
+    //     if (result > getSalesMax(name)) result = getSalesMax(name);
+    //     updateSales(name, result);
+    // };
+
+    ///////////// Объеденить!!!
     const changeSales = (name, value) => {
-        let result = sales[name] + value;
+        let result = -changes[name] + value;
         if (result < 0) result = 0;
         if (result > getSalesMax(name)) result = getSalesMax(name);
-        updateSales(name, result);
+        updateChanges(name, -result);
     };
 
     const changePurchases = (name, value) => {
         const max = Math.floor(getReserve(name) / price[name]);
-        let result = purchases[name] + value;
+        let result = changes[name] + value;
         if (result < 0) result = 0;
         if (result > max) result = max;
-        updatePurchases(name, result);
+        updateChanges(name, result);
     };
 
+    // const changePurchases = (name, value) => {
+    //     const max = Math.floor(getReserve(name) / price[name]);
+    //     let result = purchases[name] + value;
+    //     if (result < 0) result = 0;
+    //     if (result > max) result = max;
+    //     updatePurchases(name, result);
+    // };
+
+    // const getReserve = idx => {
+    //     const reservedPurchases = purchases
+    //         .map((count, i) => count * price[i])
+    //         .filter((_, i) => i !== Number(idx));
+    //     return (
+    //         player.money -
+    //         reservedPurchases.reduce((total, count, idx) => total + count, 0)
+    //     );
+    // };
+
     const getReserve = idx => {
-        const reservedPurchases = purchases
+        const reservedPurchases = changes
             .map((count, i) => count * price[i])
             .filter((_, i) => i !== Number(idx));
         return (
@@ -122,10 +205,10 @@ const PlayerActions = () => {
         );
     };
 
-    const onChangeBuy = e => {
-        const { name, value } = e.target;
-        updatePurchases(name, value);
-    };
+    // const onChangeBuy = e => {
+    //     const { name, value } = e.target;
+    //     updatePurchases(name, value);
+    // };
 
     const ok = () => {
         setError(null);
@@ -134,11 +217,12 @@ const PlayerActions = () => {
 
     const getSalesMax = idx => {
         if (stage === 'before') return shares[idx];
-        else return player.freeShares[idx];
+        else return shares[idx] - player.frezenShares[idx];
     };
 
     const endTurn = e => {
         dispatch(updatePlayer(shareMerger(player)));
+        setNotice(null);
     };
 
     const finish = () => {
@@ -147,28 +231,29 @@ const PlayerActions = () => {
             return;
         }
 
-        func.current = endTurn;
+        func.current = 'endTurn';
         setNotice('Вы уверены что хотите завершить ход?');
     };
 
     const loadGame = () => {
         loadActiveGame(id);
+        setNotice(null);
     };
 
     const reset = () => {
-        func.current = loadGame;
+        func.current = 'loadGame';
         setNotice('Вы уверены что хотите сбросить ваши действия на этом ходу?');
     };
 
     return (
         <div className={s.container}>
-            <div className={s.btnBox}>
-                <Button text="Продать" click={openSell} st={{ width: 90 }} />
-                <Button text="Купить" click={openBuy} st={{ width: 90 }} />
+            <div className={s.btnBox} style={{ width: 90 }}>
+                <Button text="Продать" click={() => openModal(true)} />
+                <Button text="Купить" click={() => openModal(false)} />
             </div>
-            <div className={s.btnBox}>
-                <Button text="Конец хода" click={finish} st={{ width: 120 }} />
-                <Button text="Откатить ход" click={reset} st={{ width: 120 }} />
+            <div className={s.btnBox} style={{ width: 120 }}>
+                <Button text="Конец хода" click={finish} />
+                <Button text="Откатить ход" click={reset} />
             </div>
             {showBuy && (
                 <Modal onClose={cancel}>
@@ -190,7 +275,7 @@ const PlayerActions = () => {
                                 <Button
                                     text="&lt;&lt;"
                                     click={() => {
-                                        updatePurchases(idx, 0);
+                                        updateChanges(idx, 0);
                                     }}
                                     st={{ padding: 5, borderWidth: 1 }}
                                     // cn={s.btn}
@@ -211,7 +296,7 @@ const PlayerActions = () => {
                                     max={`${Math.floor(
                                         getReserve(idx) / price[idx]
                                     )}`}
-                                    value={purchases[idx]}
+                                    value={changes[idx]}
                                     onChange={onChangeBuy}
                                 />
 
@@ -228,7 +313,7 @@ const PlayerActions = () => {
                                         getReserve(idx) / price[idx]
                                     )}`}
                                     click={() => {
-                                        updatePurchases(
+                                        updateChanges(
                                             idx,
                                             Math.floor(
                                                 getReserve(idx) / price[idx]
@@ -239,10 +324,8 @@ const PlayerActions = () => {
                                     // cn={s.btnMax}
                                 />
                                 <p className={s.purchases}>
-                                    {purchases[idx] > 0 && (
-                                        <span>
-                                            Покупаем {purchases[idx]} шт.
-                                        </span>
+                                    {changes[idx] > 0 && (
+                                        <span>Покупаем {changes[idx]} шт.</span>
                                     )}
                                 </p>
                             </li>
@@ -276,7 +359,7 @@ const PlayerActions = () => {
                                         />
                                         <Button
                                             text="0"
-                                            click={() => updateSales(idx, 0)}
+                                            click={() => updateChanges(idx, 0)}
                                             cn={s.btn}
                                         />
                                         <Button
@@ -291,7 +374,7 @@ const PlayerActions = () => {
                                             name={idx}
                                             min="0"
                                             max={getSalesMax(idx)}
-                                            value={sales[idx]}
+                                            value={-changes[idx]}
                                             onChange={onChangeSell}
                                         />
                                         <Button
@@ -302,18 +385,18 @@ const PlayerActions = () => {
                                         <Button
                                             text={`Max=${getSalesMax(idx)}`}
                                             click={() => {
-                                                updateSales(
+                                                updateChanges(
                                                     idx,
-                                                    getSalesMax(idx)
+                                                    -getSalesMax(idx)
                                                 );
                                             }}
                                             cn={s.btnMax}
                                         />
-                                        {sales[idx] > 0 && (
+                                        {changes[idx] < 0 && (
                                             <p className={s.money}>
-                                                {sales[idx]} шт. х {price[idx]}$
-                                                =&nbsp;
-                                                {sales[idx] * price[idx]}
+                                                {-changes[idx]} шт. х{' '}
+                                                {price[idx]}$ =&nbsp;
+                                                {-changes[idx] * price[idx]}
                                             </p>
                                         )}
                                     </li>
@@ -323,9 +406,9 @@ const PlayerActions = () => {
                     <div className={s.flexBox}>
                         <p className={s.total}>
                             <span>Всего: </span>
-                            {sales.reduce(
+                            {changes.reduce(
                                 (total, count, idx) =>
-                                    total + count * price[idx],
+                                    total + -count * price[idx],
                                 0
                             )}
                         </p>

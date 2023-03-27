@@ -15,13 +15,13 @@ export const getName = list => {
     return aiNames[index];
 };
 
-export const getShares = player => {
-    const shares = [];
-    for (let i = 0; i < player.frezenShares.length; i++) {
-        shares[i] = player.frezenShares[i] + player.freeShares[i];
-    }
-    return shares;
-};
+// const getShares = (frezenShares, freeShares) => {
+//     const shares = [];
+//     for (let i = 0; i < frezenShares.length; i++) {
+//         shares[i] = frezenShares[i] + freeShares[i];
+//     }
+//     return shares;
+// };
 
 const getCard = (color, isBoostCard, type, id) => {
     return { color, isBoostCard, type, id };
@@ -107,36 +107,75 @@ export const createGame = ({
 };
 
 export const sellShares = (player, sales, price) => {
+    // let money = player.money;
+    // const freeShares = [...player.freeShares];
+    // const frezenShares = [...player.frezenShares];
+
+    // for (let i = 0; i < sales.length; i++) {
+    //     if (sales[i]) {
+    //         freeShares[i] -= sales[i];
+    //         money += sales[i] * price[i];
+    //         if (freeShares[i] < 0) {
+    //             frezenShares[i] += player.freeShares[i];
+    //             freeShares[i] = 0;
+    //         }
+    //     }
+    // }
+
+    // const shares = getShares(frezenShares, freeShares);
+
     let money = player.money;
-    const freeShares = [...player.freeShares];
-    const frezenShares = [...player.frezenShares];
+    const shares = [...player.shares];
 
     for (let i = 0; i < sales.length; i++) {
         if (sales[i]) {
-            freeShares[i] -= sales[i];
+            shares[i] -= sales[i];
             money += sales[i] * price[i];
-            if (freeShares[i] < 0) {
-                frezenShares[i] += player.freeShares[i];
-                freeShares[i] = 0;
-            }
         }
     }
 
-    return { money, freeShares, frezenShares };
+    return { money, shares };
 };
 
 export const buyShares = (player, purchases, price) => {
+    // let money = player.money;
+    // const frezenShares = [...player.frezenShares];
+    // const freeShares = [...player.freeShares];
+
+    // for (let i = 0; i < purchases.length; i++) {
+    //     if (purchases[i]) {
+    //         money -= purchases[i] * price[i];
+    //         if (stage === 'before') frezenShares[i] += purchases[i];
+    //         else freeShares[i] += purchases[i];
+    //     }
+    // }
+    // const shares = getShares(frezenShares, freeShares);
+
     let money = player.money;
-    const frezenShares = [...player.frezenShares];
+    const shares = [...player.shares];
 
     for (let i = 0; i < purchases.length; i++) {
         if (purchases[i]) {
+            shares[i] += purchases[i];
             money -= purchases[i] * price[i];
-            frezenShares[i] += purchases[i];
         }
     }
 
-    return { money, frezenShares };
+    return { money, shares };
+};
+
+export const updateShares = (player, changes, price) => {
+    let money = player.money;
+    const shares = [...player.shares];
+
+    for (let i = 0; i < changes.length; i++) {
+        if (changes[i]) {
+            shares[i] += changes[i];
+            money -= changes[i] * price[i];
+        }
+    }
+
+    return { money, shares };
 };
 
 export const shareMerger = player => {
@@ -147,7 +186,6 @@ export const shareMerger = player => {
         freeShares[i] += player.frezenShares[i];
         frezenShares[i] = 0;
     }
-
     return { freeShares, frezenShares };
 };
 

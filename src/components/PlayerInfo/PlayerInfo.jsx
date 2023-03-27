@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Icon } from 'components';
+import { UserInfo, Icon } from 'components';
 import { companyColors, companyNames } from 'db';
 import s from './PlayerInfo.module.css';
 
 const PlayerInfo = ({ player }) => {
     // console.log('player: ', player);
     // console.log('playerId: ', playerId);
+
     const price = useSelector(state => state.game.price);
     const [isExpanded, setIsExpanded] = useState();
 
@@ -19,7 +20,8 @@ const PlayerInfo = ({ player }) => {
     return (
         <li className={s.info}>
             <div className={s.btn} onClick={toggleExpand}>
-                <p className={s.player}>{player.name}</p>
+                <UserInfo userName={player.name} userAvatar={player.avatar} />
+                {/* <p className={s.player}>{player.name}</p> */}
                 <Icon icon={isExpanded ? 'collaps' : 'expand'} w={20} />
             </div>
             {isExpanded && (

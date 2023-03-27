@@ -15,17 +15,18 @@ const PlayerCards = () => {
 
     // const dispatch = useDispatch();
 
-    const activeCard = cardId => {
-        setSelectedCard(cardId);
-    };
+    // const activeCard = cardId => {
+    //     setSelectedCard(cardId);
+    // };
 
     const chooseCard = cardId => {
+        console.log('cardId: ', cardId);
         if (!player.isTurn) return;
         if (stage === 'after') {
-            setError('Сначала нужно закончить ход');
+            setError('Вы уже показывали карту на этом ходу');
             return;
         }
-        activeCard(cardId);
+        setSelectedCard(cardId);
     };
 
     const closeModal = () => {
@@ -41,7 +42,7 @@ const PlayerCards = () => {
                     .filter(card => card !== selectedCard)
                     .map(id => (
                         <li key={id} onClick={() => chooseCard(id)}>
-                            <Card cardId={id} />
+                            <Card card={getCardById(id)} />
                         </li>
                     ))}
             </ul>
@@ -50,7 +51,7 @@ const PlayerCards = () => {
                     .filter(card => card !== selectedCard)
                     .map(id => (
                         <li key={id} onClick={() => chooseCard(id)}>
-                            <Card cardId={id} />
+                            <Card card={getCardById(id)} />
                         </li>
                     ))}
             </ul>

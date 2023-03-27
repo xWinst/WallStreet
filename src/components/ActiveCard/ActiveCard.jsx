@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button, Card } from 'components';
-import { setFuturePrice, updatePlayer } from 'state/gameReducer';
+import { setFuturePrice, updatePlayer, setState } from 'state/gameReducer';
 import { getColors, companyColors, activateCard } from 'db';
 import s from './ActiveCard.module.css';
 
@@ -9,7 +9,9 @@ const ActiveCard = ({ card, cancel }) => {
     const { isBoostCard, color: mainColor } = card;
     const { colorUp, colorDown } = getColors(card);
 
-    const { price, futurePrice, player } = useSelector(state => state.game);
+    const { price, futurePrice, player, players } = useSelector(
+        state => state.game
+    );
 
     const [secondColor, setSecondColor] = useState(
         isBoostCard ? colorDown[0] : colorUp[0]
@@ -77,14 +79,35 @@ const ActiveCard = ({ card, cancel }) => {
             total += (bonus[i] + compensation[i]) * shares[i];
         }
         // player.money += total;
-        const { index, money } = player;
+        const { money } = player;
+        const smallDeck = [...player.smallDeck];
+        const bigDeck = [...player.bigDeck];
+        const deck = card.id < 100 ? smallDeck : bigDeck;
+        const numberCards =
+            card.id < 100 ? 'numberSmallCards' : 'numberBigCards';
+        // console.log('deck: ', deck);
+        // const index = deck.indexOf(card.id);
+        // console.log('index: ', index);
+        deck.splice(deck.indexOf(card.id), 1);
 
-        dispatch(updatePlayer({ index, money: money + total }));
-        // closeCard();
-        // const resultTurn = {
-        //     card,
+        const prevPlayer = players.find(({ name }) => (name = player.name));
+        const prevShares = prevPlayer.shares;
+        const frezenShares = shares.map((number, i) => {
+            let result = number - prevShares[i];
+            if (result < 0) result = 0;
+            return result;
+        });
 
-        // }
+        dispatch(
+            updatePlayer({
+                [deck]: deck,
+                [numberCards]: deck.length,
+                money: money + total,
+                frezenShares,
+            })
+        );
+        dispatch(setState({ price: futurePrice, stage: 'after' }));
+        cancel();
     };
 
     const getLastColor = () => {
@@ -100,7 +123,7 @@ const ActiveCard = ({ card, cancel }) => {
 
     return (
         <div className={s.container}>
-            <Card cardId={card.id} />
+            <Card card={card} />
             <div className={s.info}>
                 <div className={s.thumb}>
                     <span>Повышаем:</span>
