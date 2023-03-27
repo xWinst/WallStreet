@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button, Card } from 'components';
 import { setFuturePrice, updatePlayer, setState } from 'state/gameReducer';
-import { getColors, companyColors, activateCard } from 'db';
+import { setStageBefore, setCard, setBonuses } from 'state/turnReducer';
+import { getColors, companyColors, activateCard, getActions } from 'db';
 import s from './ActiveCard.module.css';
 
 const ActiveCard = ({ card, cancel }) => {
@@ -33,7 +34,6 @@ const ActiveCard = ({ card, cancel }) => {
     }, []);
 
     const showCard = (secondColor, thirdColor) => {
-        // console.log('bingo!!!!??');
         const activePrice = activateCard(card, price, secondColor, thirdColor);
         const finalPrice = [];
         const bonus = [0, 0, 0, 0];
@@ -55,7 +55,6 @@ const ActiveCard = ({ card, cancel }) => {
         setBonus(bonus);
         setFine(fine);
         setCompensation(compensation);
-        // console.log('finalPrice: ', finalPrice);
         dispatch(setFuturePrice(finalPrice));
     };
 
@@ -78,16 +77,13 @@ const ActiveCard = ({ card, cancel }) => {
         for (let i = 0; i < bonus.length; i++) {
             total += (bonus[i] + compensation[i]) * shares[i];
         }
-        // player.money += total;
+
         const { money } = player;
-        const smallDeck = [...player.smallDeck];
-        const bigDeck = [...player.bigDeck];
-        const deck = card.id < 100 ? smallDeck : bigDeck;
+        const deckType = card.id < 100 ? 'smallDeck' : 'bigDeck';
         const numberCards =
             card.id < 100 ? 'numberSmallCards' : 'numberBigCards';
-        // console.log('deck: ', deck);
-        // const index = deck.indexOf(card.id);
-        // console.log('index: ', index);
+        const deck = [...player[deckType]];
+
         deck.splice(deck.indexOf(card.id), 1);
 
         const prevPlayer = players.find(({ name }) => (name = player.name));
@@ -98,9 +94,19 @@ const ActiveCard = ({ card, cancel }) => {
             return result;
         });
 
+        dispatch(setStageBefore(getActions(prevShares, shares)));
+
+        dispatch(
+            setCard({
+                id: card.id,
+                colorUp: colorUp[0],
+                colorDown: [secondColor, thirdColor],
+            })
+        );
+        dispatch(setBonuses({ bonus, fine, compensation }));
         dispatch(
             updatePlayer({
-                [deck]: deck,
+                [deckType]: deck,
                 [numberCards]: deck.length,
                 money: money + total,
                 frezenShares,

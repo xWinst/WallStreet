@@ -12,6 +12,7 @@ import {
 import storage from 'redux-persist/lib/storage';
 import game from './gameReducer';
 import user from './userReducer';
+import turn from './turnReducer';
 import app from './appReducer';
 
 const persistConfig = {
@@ -24,6 +25,7 @@ const rootReducer = combineReducers({
     // game: persistReducer({ key: 'game', storage }, game),
     app,
     game,
+    turn,
     user: persistReducer(persistConfig, user),
 });
 

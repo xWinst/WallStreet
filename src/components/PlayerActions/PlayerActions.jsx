@@ -2,27 +2,20 @@ import { useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button, Icon, Modal } from 'components';
 import { updatePlayer } from 'state/gameReducer';
-import {
-    companyNames,
-    companyColors,
-    // sellShares,
-    // buyShares,
-    shareMerger,
-    updateShares,
-} from 'db';
+import { companyNames, companyColors, updateShares, getActions } from 'db';
 import { loadActiveGame } from 'state/gameOperation';
 import s from './PlayerActions.module.css';
+import { setStageAfter } from 'state/turnReducer';
 
 const PlayerActions = () => {
     const { price, turn, lastTurn, stage, player, id } = useSelector(
         state => state.game
     );
+    const prevShares = useSelector(state => state.turn.stageBefore.shares);
     const [error, setError] = useState(null);
     const [showBuy, setShowBuy] = useState(false);
     const [showSell, setShowSell] = useState(false);
     const [notice, setNotice] = useState(false);
-    // const [sales, setSales] = useState([0, 0, 0, 0]);
-    // const [purchases, setPurchases] = useState([0, 0, 0, 0]);
     const [changes, setChanges] = useState([0, 0, 0, 0]);
     const colors = companyColors;
 
@@ -47,28 +40,6 @@ const PlayerActions = () => {
         }
     };
 
-    // const getFreeShares = idx => {
-    //     const prevPlayer = players.find(({ name }) => (name = player.name));
-    //     const prevShares = prevPlayer.shares;
-    //     return Math.min(prevShares[idx], shares[idx]);
-    // };
-
-    // const sell = () => {
-    //     // dispatch(updatePlayer(sellShares(player, sales, price)));
-    //     dispatch(updatePlayer(updateShares(player, changes, price)));
-    //     setShowSell(false);
-    //     // setSales([0, 0, 0, 0]);
-    //     setChanges([0, 0, 0, 0]);
-    // };
-
-    // const buy = () => {
-    //     // dispatch(updatePlayer(buyShares(player, purchases, price, stage)));
-    //     dispatch(updatePlayer(updateShares(player, changes, price)));
-    //     setShowBuy(false);
-    //     // setPurchases([0, 0, 0, 0]);
-    //     setChanges([0, 0, 0, 0]);
-    // };
-
     const changeShares = () => {
         dispatch(updatePlayer(updateShares(player, changes, price)));
         setShowBuy(false);
@@ -86,38 +57,11 @@ const PlayerActions = () => {
         setShowBuy(!doSell);
     };
 
-    // const openSell = () => {
-    //     func.current = 'buysell';
-    //     if (turn === lastTurn) {
-    //         setError('Операции с банком на последнем ходу запрещены!');
-    //         return;
-    //     }
-    //     setShowSell(true);
-    //     setShowBuy(false);
-    // };
-
-    // const openBuy = () => {
-    //     func.current = 'buysell';
-    //     if (turn === lastTurn) {
-    //         setError('Операции с банком на последнем ходу запрещены!');
-    //         return;
-    //     }
-    //     setShowSell(false);
-    //     setShowBuy(true);
-    // };
-
     const cancel = () => {
         setShowSell(false);
         setShowBuy(false);
-        // setSales([0, 0, 0, 0]);
-        // setPurchases([0, 0, 0, 0]);
         setChanges([0, 0, 0, 0]);
     };
-
-    // const onChangeSell = e => {
-    //     const { name, value } = e.target;
-    //     updateSales(name, value);
-    // };
 
     const updateChanges = (name, value) => {
         setChanges(prev => {
@@ -137,63 +81,29 @@ const PlayerActions = () => {
         updateChanges(name, Number(value));
     };
 
-    // const updateSales = (name, value) => {
-    //     setSales(prev => {
-    //         const result = [...prev];
-    //         result[name] = Number(value);
-    //         console.log('result: ', result);
-    //         return result;
-    //     });
-    // };
-
-    // const updatePurchases = (name, value) => {
-    //     setPurchases(prev => {
-    //         const result = [...prev];
-    //         result[name] = Number(value);
-    //         return result;
-    //     });
-    // };
-
+    ///////////// Объеденить!!!
     // const changeSales = (name, value) => {
-    //     let result = sales[name] + value;
+    //     let result = -changes[name] + value;
     //     if (result < 0) result = 0;
     //     if (result > getSalesMax(name)) result = getSalesMax(name);
-    //     updateSales(name, result);
+    //     updateChanges(name, -result);
     // };
-
-    ///////////// Объеденить!!!
-    const changeSales = (name, value) => {
-        let result = -changes[name] + value;
-        if (result < 0) result = 0;
-        if (result > getSalesMax(name)) result = getSalesMax(name);
-        updateChanges(name, -result);
-    };
-
-    const changePurchases = (name, value) => {
-        const max = Math.floor(getReserve(name) / price[name]);
-        let result = changes[name] + value;
-        if (result < 0) result = 0;
-        if (result > max) result = max;
-        updateChanges(name, result);
-    };
 
     // const changePurchases = (name, value) => {
     //     const max = Math.floor(getReserve(name) / price[name]);
-    //     let result = purchases[name] + value;
+    //     let result = changes[name] + value;
     //     if (result < 0) result = 0;
     //     if (result > max) result = max;
-    //     updatePurchases(name, result);
+    //     updateChanges(name, result);
     // };
 
-    // const getReserve = idx => {
-    //     const reservedPurchases = purchases
-    //         .map((count, i) => count * price[i])
-    //         .filter((_, i) => i !== Number(idx));
-    //     return (
-    //         player.money -
-    //         reservedPurchases.reduce((total, count, idx) => total + count, 0)
-    //     );
-    // };
+    const minChanges = (idx, value, k) => {
+        const max = k > 0 ? maxBuy(idx) : maxSell(idx);
+        let result = k * changes[idx] + value;
+        if (result < 0) result = 0;
+        if (result > max) result = max;
+        updateChanges(idx, k * result);
+    };
 
     const getReserve = idx => {
         const reservedPurchases = changes
@@ -205,23 +115,21 @@ const PlayerActions = () => {
         );
     };
 
-    // const onChangeBuy = e => {
-    //     const { name, value } = e.target;
-    //     updatePurchases(name, value);
-    // };
-
     const ok = () => {
         setError(null);
         setNotice(null);
     };
 
-    const getSalesMax = idx => {
+    const maxSell = idx => {
         if (stage === 'before') return shares[idx];
         else return shares[idx] - player.frezenShares[idx];
     };
 
+    const maxBuy = idx => Math.floor(getReserve(idx) / price[idx]);
+
     const endTurn = e => {
-        dispatch(updatePlayer(shareMerger(player)));
+        // dispatch(updatePlayer(shareMerger(player)));
+        dispatch(setStageAfter(getActions(prevShares, shares)));
         setNotice(null);
     };
 
@@ -274,54 +182,35 @@ const PlayerActions = () => {
                                 />
                                 <Button
                                     text="&lt;&lt;"
-                                    click={() => {
-                                        updateChanges(idx, 0);
-                                    }}
+                                    click={() => updateChanges(idx, 0)}
                                     st={{ padding: 5, borderWidth: 1 }}
-                                    // cn={s.btn}
                                 />
                                 <Button
                                     text="&ndash;"
-                                    click={() => {
-                                        changePurchases(idx, -1);
-                                    }}
+                                    click={() => minChanges(idx, -1, 1)}
                                     st={{ padding: 5, borderWidth: 1 }}
-                                    // cn={s.btn}
                                 />
                                 <input
                                     className={s.count}
                                     type="range"
                                     name={idx}
                                     min="0"
-                                    max={`${Math.floor(
-                                        getReserve(idx) / price[idx]
-                                    )}`}
+                                    max={maxBuy(idx)}
                                     value={changes[idx]}
                                     onChange={onChangeBuy}
                                 />
 
                                 <Button
                                     text="+"
-                                    click={() => {
-                                        changePurchases(idx, 1);
-                                    }}
+                                    click={() => minChanges(idx, 1, 1)}
                                     st={{ padding: '5px 6px', borderWidth: 1 }}
-                                    // cn={s.btn}
                                 />
                                 <Button
-                                    text={`Max = ${Math.floor(
-                                        getReserve(idx) / price[idx]
-                                    )}`}
-                                    click={() => {
-                                        updateChanges(
-                                            idx,
-                                            Math.floor(
-                                                getReserve(idx) / price[idx]
-                                            )
-                                        );
-                                    }}
+                                    text={`Max = ${maxBuy(idx)}`}
+                                    click={() =>
+                                        updateChanges(idx, maxBuy(idx))
+                                    }
                                     st={{ padding: 5, borderWidth: 1 }}
-                                    // cn={s.btnMax}
                                 />
                                 <p className={s.purchases}>
                                     {changes[idx] > 0 && (
@@ -364,7 +253,9 @@ const PlayerActions = () => {
                                         />
                                         <Button
                                             text="-"
-                                            click={() => changeSales(idx, -1)}
+                                            click={() =>
+                                                minChanges(idx, -1, -1)
+                                            }
                                             cn={s.btn}
                                         />
 
@@ -373,23 +264,23 @@ const PlayerActions = () => {
                                             type="range"
                                             name={idx}
                                             min="0"
-                                            max={getSalesMax(idx)}
+                                            max={maxSell(idx)}
                                             value={-changes[idx]}
                                             onChange={onChangeSell}
                                         />
                                         <Button
                                             text="+"
-                                            click={() => changeSales(idx, 1)}
+                                            click={() => minChanges(idx, 1, -1)}
                                             cn={s.btn}
                                         />
                                         <Button
-                                            text={`Max=${getSalesMax(idx)}`}
-                                            click={() => {
+                                            text={`Max=${maxSell(idx)}`}
+                                            click={() =>
                                                 updateChanges(
                                                     idx,
-                                                    -getSalesMax(idx)
-                                                );
-                                            }}
+                                                    -maxSell(idx)
+                                                )
+                                            }
                                             cn={s.btnMax}
                                         />
                                         {changes[idx] < 0 && (
