@@ -1,15 +1,15 @@
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { UserInfo, Select } from 'components';
 // import { setPlayers } from 'state/gameReducer';
-import { getName } from 'db';
-import { ai } from 'images';
+// import { getName } from 'db';
+// import { ai } from 'images';
 import s from './PlayersList.module.css';
 import { setFirstPlayer } from 'state/gameOperation';
 
 const PlayersList = ({ room }) => {
     const user = useSelector(state => state.user.name);
 
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
     const { players, owner, maxPlayers, currentPlayer } = room;
     const isOwner = user === owner;
 

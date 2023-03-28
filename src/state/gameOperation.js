@@ -2,7 +2,7 @@ import io from 'socket.io-client';
 import { store } from 'state/store';
 import { setRooms, updateRoom, setGames } from './appReducer';
 import { setState } from './gameReducer';
-import { reset } from './turnReducer';
+import { reset, setNewTurn } from './turnReducer';
 // import { setCurrentPlayer } from './appReducer';
 
 const { REACT_APP_WS_URL } = process.env;
@@ -52,6 +52,9 @@ export const connectServer = () => {
 
     socket.on('setGame', game => {
         console.log('a: updateGame: ', game);
+        if (game.turns.length > 0) {
+            store.dispatch(setNewTurn(game.turns[game.turns.length - 1]));
+        }
         game = getProcessedData(game);
         store.dispatch(setState(game));
     });
@@ -105,6 +108,12 @@ export const setFirstPlayer = player => {
     socket.emit('setFirstPlayer', player);
 };
 
+export const nextTurn = gameId => {
+    console.log('a: nextTurn');
+    const turn = store.getState().turn;
+    socket.emit('nextTurn', { gameId, turn });
+};
+
 export const startGame = gameId => {
     console.log('startGame', gameId);
     socket.emit('startGame', gameId);
@@ -124,23 +133,24 @@ function getProcessedData(game) {
 
     const { name } = store.getState().user;
     const player = { ...game.players.find(player => player.name === name) };
-    const { price, currentPlayer, turn, lastTurn, _id: id } = game;
+    const { price, currentPlayer, turns, currentTurn, lastTurn, _id } = game;
     player.isTurn = currentPlayer === name;
     player.frezenShares = [0, 0, 0, 0];
-    // player.freeShares = player.shares;
     player.numberBigCards = player.bigDeck.length;
     player.numberSmallCards = player.smallDeck.length;
 
     const result = {
+        name: game.name,
         price,
         futurePrice: price,
         players,
         player,
         currentPlayer,
-        turn,
+        turn: currentTurn,
         lastTurn,
+        turns,
         stage: 'before',
-        id,
+        id: _id,
     };
 
     return result;

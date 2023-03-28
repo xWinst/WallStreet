@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { UserInfo, Icon } from 'components';
-import { companyColors, companyNames } from 'db';
+import { UserInfo, Icon, SharesList } from 'components';
+// import { companyColors, companyNames } from 'db';
 import s from './PlayerInfo.module.css';
 
 const PlayerInfo = ({ player }) => {
@@ -21,7 +21,6 @@ const PlayerInfo = ({ player }) => {
         <li className={s.info}>
             <div className={s.btn} onClick={toggleExpand}>
                 <UserInfo userName={player.name} userAvatar={player.avatar} />
-                {/* <p className={s.player}>{player.name}</p> */}
                 <Icon icon={isExpanded ? 'collaps' : 'expand'} w={20} />
             </div>
             {isExpanded && (
@@ -30,30 +29,7 @@ const PlayerInfo = ({ player }) => {
                         <Icon icon="money" w={30} />
                         <p>{player.money}</p>
                     </div>
-                    <ul className={s.sharesList}>
-                        <li className={s.shares}>
-                            <p className={s.name}>Акции</p>
-                            <p className={s.count}>Кол-во</p>
-                            <p
-                                className={s.cost}
-                                style={{ textAlign: 'center' }}
-                            >
-                                Общая стоимость
-                            </p>
-                        </li>
-                        {shares.map((count, idx) => (
-                            <li key={idx} className={s.shares}>
-                                <p
-                                    className={s.name}
-                                    style={{ color: companyColors[idx] }}
-                                >
-                                    {companyNames[idx]}
-                                </p>
-                                <p className={s.count}>{count}</p>
-                                <p className={s.cost}>{price[idx] * count}</p>
-                            </li>
-                        ))}
-                    </ul>
+                    <SharesList text={null} list={shares} price={price} />
                     <div className={s.flexBox}>
                         <p>
                             Больших: <span>{player.numberBigCards}</span>

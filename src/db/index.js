@@ -13,7 +13,7 @@ export const getName = list => {
     return aiNames[index];
 };
 
-export const getActions = (prevShares, shares) => {
+export const getActions = (prevShares, shares, price) => {
     const sales = [0, 0, 0, 0];
     const purchases = [0, 0, 0, 0];
     for (let i = 0; i < shares.length; i++) {
@@ -22,7 +22,7 @@ export const getActions = (prevShares, shares) => {
         else sales[i] = -result;
     }
 
-    return { sales, purchases, shares };
+    return { sales, purchases, shares, price };
 };
 
 export const getCardById = id => {

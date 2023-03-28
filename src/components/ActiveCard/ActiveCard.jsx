@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button, Card } from 'components';
 import { setFuturePrice, updatePlayer, setState } from 'state/gameReducer';
-import { setStageBefore, setCard, setBonuses } from 'state/turnReducer';
+import { setStageBefore } from 'state/turnReducer';
 import { getColors, companyColors, activateCard, getActions } from 'db';
 import s from './ActiveCard.module.css';
 
@@ -10,7 +10,7 @@ const ActiveCard = ({ card, cancel }) => {
     const { isBoostCard, color: mainColor } = card;
     const { colorUp, colorDown } = getColors(card);
 
-    const { price, futurePrice, player, players } = useSelector(
+    const { price, futurePrice, player, players, turn } = useSelector(
         state => state.game
     );
 
@@ -28,35 +28,38 @@ const ActiveCard = ({ card, cancel }) => {
 
     const dispatch = useDispatch();
 
+    const showCard = useCallback(
+        (сolor2 = secondColor, color3 = thirdColor) => {
+            const activePrice = activateCard(card, price, сolor2, color3);
+            const finalPrice = [];
+            const bonus = [0, 0, 0, 0];
+            const fine = [0, 0, 0, 0];
+            const compensation = [0, 0, 0, 0];
+            for (let i = 0; i < activePrice.length; i++) {
+                if (activePrice[i] < 10) {
+                    finalPrice[i] = 10;
+                    fine[i] = finalPrice[i] - activePrice[i];
+                } else if (activePrice[i] > 250) {
+                    finalPrice[i] = 250;
+                    bonus[i] = activePrice[i] - finalPrice[i];
+                } else finalPrice[i] = Math.floor(activePrice[i] / 10) * 10;
+
+                if (shares[i] && price[i] > finalPrice[i])
+                    compensation[i] = price[i] - finalPrice[i];
+            }
+
+            setBonus(bonus);
+            setFine(fine);
+            setCompensation(compensation);
+            dispatch(setFuturePrice(finalPrice));
+        },
+        []
+        // [card, price, secondColor, thirdColor, shares, dispatch]
+    );
+
     useEffect(() => {
-        // console.log('Зачем???');
-        showCard(secondColor, thirdColor);
-    }, []);
-
-    const showCard = (secondColor, thirdColor) => {
-        const activePrice = activateCard(card, price, secondColor, thirdColor);
-        const finalPrice = [];
-        const bonus = [0, 0, 0, 0];
-        const fine = [0, 0, 0, 0];
-        const compensation = [0, 0, 0, 0];
-        for (let i = 0; i < activePrice.length; i++) {
-            if (activePrice[i] < 10) {
-                finalPrice[i] = 10;
-                fine[i] = finalPrice[i] - activePrice[i];
-            } else if (activePrice[i] > 250) {
-                finalPrice[i] = 250;
-                bonus[i] = activePrice[i] - finalPrice[i];
-            } else finalPrice[i] = Math.floor(activePrice[i] / 10) * 10;
-
-            if (shares[i] && price[i] > finalPrice[i])
-                compensation[i] = price[i] - finalPrice[i];
-        }
-
-        setBonus(bonus);
-        setFine(fine);
-        setCompensation(compensation);
-        dispatch(setFuturePrice(finalPrice));
-    };
+        showCard();
+    }, [showCard]);
 
     const chooseColor = color => {
         if (color === mainColor) return;
@@ -94,16 +97,24 @@ const ActiveCard = ({ card, cancel }) => {
             return result;
         });
 
-        dispatch(setStageBefore(getActions(prevShares, shares)));
+        const usedCard = {
+            id: card.id,
+            colorUp: colorUp[0],
+            colorDown: [secondColor, thirdColor],
+        };
 
         dispatch(
-            setCard({
-                id: card.id,
-                colorUp: colorUp[0],
-                colorDown: [secondColor, thirdColor],
+            setStageBefore({
+                stageBefore: getActions(prevShares, shares, price),
+                card: usedCard,
+                bonus,
+                fine,
+                compensation,
+                player: player.name,
+                currentTurn: turn,
             })
         );
-        dispatch(setBonuses({ bonus, fine, compensation }));
+
         dispatch(
             updatePlayer({
                 [deckType]: deck,

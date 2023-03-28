@@ -2,10 +2,10 @@ import { useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button, Icon, Modal } from 'components';
 import { updatePlayer } from 'state/gameReducer';
-import { companyNames, companyColors, updateShares, getActions } from 'db';
-import { loadActiveGame } from 'state/gameOperation';
-import s from './PlayerActions.module.css';
+import { loadActiveGame, nextTurn } from 'state/gameOperation';
 import { setStageAfter } from 'state/turnReducer';
+import { companyNames, companyColors, updateShares, getActions } from 'db';
+import s from './PlayerActions.module.css';
 
 const PlayerActions = () => {
     const { price, turn, lastTurn, stage, player, id } = useSelector(
@@ -81,22 +81,6 @@ const PlayerActions = () => {
         updateChanges(name, Number(value));
     };
 
-    ///////////// Объеденить!!!
-    // const changeSales = (name, value) => {
-    //     let result = -changes[name] + value;
-    //     if (result < 0) result = 0;
-    //     if (result > getSalesMax(name)) result = getSalesMax(name);
-    //     updateChanges(name, -result);
-    // };
-
-    // const changePurchases = (name, value) => {
-    //     const max = Math.floor(getReserve(name) / price[name]);
-    //     let result = changes[name] + value;
-    //     if (result < 0) result = 0;
-    //     if (result > max) result = max;
-    //     updateChanges(name, result);
-    // };
-
     const minChanges = (idx, value, k) => {
         const max = k > 0 ? maxBuy(idx) : maxSell(idx);
         let result = k * changes[idx] + value;
@@ -129,8 +113,9 @@ const PlayerActions = () => {
 
     const endTurn = e => {
         // dispatch(updatePlayer(shareMerger(player)));
-        dispatch(setStageAfter(getActions(prevShares, shares)));
+        dispatch(setStageAfter(getActions(prevShares, shares, price)));
         setNotice(null);
+        nextTurn(id);
     };
 
     const finish = () => {
@@ -183,12 +168,12 @@ const PlayerActions = () => {
                                 <Button
                                     text="&lt;&lt;"
                                     click={() => updateChanges(idx, 0)}
-                                    st={{ padding: 5, borderWidth: 1 }}
+                                    st={{ padding: 5 }}
                                 />
                                 <Button
                                     text="&ndash;"
                                     click={() => minChanges(idx, -1, 1)}
-                                    st={{ padding: 5, borderWidth: 1 }}
+                                    st={{ padding: 5 }}
                                 />
                                 <input
                                     className={s.count}
@@ -203,14 +188,14 @@ const PlayerActions = () => {
                                 <Button
                                     text="+"
                                     click={() => minChanges(idx, 1, 1)}
-                                    st={{ padding: '5px 6px', borderWidth: 1 }}
+                                    st={{ padding: '5px 6px' }}
                                 />
                                 <Button
                                     text={`Max = ${maxBuy(idx)}`}
                                     click={() =>
                                         updateChanges(idx, maxBuy(idx))
                                     }
-                                    st={{ padding: 5, borderWidth: 1 }}
+                                    st={{ padding: 5 }}
                                 />
                                 <p className={s.purchases}>
                                     {changes[idx] > 0 && (
@@ -249,14 +234,12 @@ const PlayerActions = () => {
                                         <Button
                                             text="0"
                                             click={() => updateChanges(idx, 0)}
-                                            cn={s.btn}
                                         />
                                         <Button
                                             text="-"
                                             click={() =>
                                                 minChanges(idx, -1, -1)
                                             }
-                                            cn={s.btn}
                                         />
 
                                         <input
@@ -271,7 +254,6 @@ const PlayerActions = () => {
                                         <Button
                                             text="+"
                                             click={() => minChanges(idx, 1, -1)}
-                                            cn={s.btn}
                                         />
                                         <Button
                                             text={`Max=${maxSell(idx)}`}
@@ -281,7 +263,6 @@ const PlayerActions = () => {
                                                     -maxSell(idx)
                                                 )
                                             }
-                                            cn={s.btnMax}
                                         />
                                         {changes[idx] < 0 && (
                                             <p className={s.money}>

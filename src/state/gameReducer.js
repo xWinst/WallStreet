@@ -8,6 +8,7 @@ const initialState = {
     currentPlayer: null,
     turn: 1,
     lastTurn: null,
+    turns: [],
     stage: 'before',
     id: null,
 };

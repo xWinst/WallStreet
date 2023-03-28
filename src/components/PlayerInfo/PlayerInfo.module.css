@@ -23,8 +23,8 @@
     gap: 10px;
 }
 
-.sharesList {
-    margin: 8px 0;
+/* .sharesList {
+    margin: 3px 0;
     font-size: 9px;
     border: 1px solid var(--main-color);
 }
@@ -62,7 +62,7 @@
 .cost {
     width: 66px;
     text-align: end;
-}
+} */
 
 .capital {
     margin-top: 15px;

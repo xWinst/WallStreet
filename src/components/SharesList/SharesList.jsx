@@ -1,27 +1,25 @@
-import { game } from 'model';
+import { companyColors, companyNames } from 'db';
 import s from './SharesList.module.css';
 
 const SharesList = ({ text, list, price }) => {
     return (
         <ul className={s.sharesList}>
-            {text}
-            {list.map(
-                (count, idx) =>
-                    count > 0 && (
-                        <li className={s.flexBox} key={count + idx}>
-                            <p
-                                className={s.name}
-                                style={{ color: game.companyColors[idx] }}
-                            >
-                                {game.companyNames[idx]}
-                            </p>
-                            <p className={s.count}>
-                                {count} шт.&nbsp;&nbsp; х&nbsp;
-                            </p>
-                            <p className={s.cost}>{price[idx]}</p>
-                        </li>
-                    )
-            )}
+            <li className={s.shares}>
+                <p className={s.name}>Акции</p>
+                <p className={s.count}>Кол-во</p>
+                <p className={s.cost} style={{ textAlign: 'center' }}>
+                    Общая стоимость
+                </p>
+            </li>
+            {list.map((count, idx) => (
+                <li key={idx} className={s.shares}>
+                    <p className={s.name} style={{ color: companyColors[idx] }}>
+                        {companyNames[idx]}
+                    </p>
+                    <p className={s.count}>{count}</p>
+                    <p className={s.cost}>{price[idx] * count}</p>
+                </li>
+            ))}
         </ul>
     );
 };

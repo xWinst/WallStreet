@@ -129,6 +129,14 @@ input[type='number'] {
     gap: 10px;
 }
 
+.btn {
+    width: 173px;
+    padding: 9px;
+    margin-top: 10px;
+    line-height: 1;
+    /* border-width: 1px; */
+}
+
 /* .title {
     font-size: 60px;
     font-weight: 700;
