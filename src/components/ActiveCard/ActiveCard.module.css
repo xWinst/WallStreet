@@ -1,0 +1,66 @@
+.container {
+    display: flex;
+}
+
+.info {
+    margin-left: 10px;
+    color: #cccccc;
+}
+
+.thumb {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 10px;
+    font-size: 11px;
+}
+
+.box {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.colorList {
+    display: flex;
+    gap: 8px;
+}
+
+.color {
+    position: relative;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+}
+
+.color::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: #cccccc80;
+}
+
+.active {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 4px double orange;
+}
+
+.bonus {
+    font-size: 8px;
+}
+
+.btns {
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+}

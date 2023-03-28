@@ -53,6 +53,14 @@ class Player {
         };
     }
 
+    getTotal = price => {
+        let result = this.money;
+        for (let i = 0; i < this.frezenShares.length; i++) {
+            result += (this.frezenShares[i] + this.freeShares[i]) * price[i];
+        }
+        return result;
+    };
+
     loadState = player => {
         this.name = player.name;
         this.money = player.money;

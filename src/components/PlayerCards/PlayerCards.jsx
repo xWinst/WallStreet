@@ -1,63 +1,76 @@
 import { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { Card, Modal, Button } from 'components';
-import { setCurrentCard } from 'state/gameReducer';
+import { useSelector } from 'react-redux';
+import { Card, Modal, Button, ActiveCard } from 'components';
+// import { setCurrentCard } from 'state/gameReducer';
 // import { CardDecks } from 'model';
+import { getCardById } from 'db';
 import s from './PlayerCards.module.css';
 
 // const bothDecks = new CardDecks();
 
 const PlayerCards = () => {
-    const [error, setError] = useState(false);
-    const currentCard = useSelector(state => state.game.currentCard);
-    const player = useSelector(state => state.game.players[0]);
-    const gameState = useSelector(state => state.game.gameState);
+    const [error, setError] = useState(null);
+    const [selectedCard, setSelectedCard] = useState();
+    const { player, stage } = useSelector(state => state.game);
 
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
 
-    const activeCard = idx => {
-        dispatch(setCurrentCard(idx));
-    };
+    // const activeCard = cardId => {
+    //     setSelectedCard(cardId);
+    // };
 
-    const chooseCard = e => {
-        if (gameState === 'after') {
-            setError(true);
+    const chooseCard = cardId => {
+        console.log('cardId: ', cardId);
+        if (!player.isTurn) return;
+        if (stage === 'after') {
+            setError('Вы уже показывали карту на этом ходу');
             return;
         }
-        const id = Number.parseInt(e.currentTarget.dataset.id);
-        e.currentTarget.className = s.chosenCard;
-        setTimeout(() => activeCard(id), 300);
+        setSelectedCard(cardId);
     };
 
-    const ok = () => setError(false);
+    const closeModal = () => {
+        // alert('CLOSE!');
+        setSelectedCard(null);
+        setError(null);
+    };
 
     return (
         <div className={s.decks}>
             <ul className={s.bigDeck}>
                 {player.bigDeck
-                    .filter(card => card !== currentCard)
+                    .filter(card => card !== selectedCard)
                     .map(id => (
-                        <li key={id} onClick={chooseCard} data-id={id}>
-                            <Card cardId={id} />
+                        <li key={id} onClick={() => chooseCard(id)}>
+                            <Card card={getCardById(id)} />
                         </li>
                     ))}
             </ul>
             <ul className={s.smallDeck}>
                 {player.smallDeck
-                    .filter(card => card !== currentCard)
+                    .filter(card => card !== selectedCard)
                     .map(id => (
-                        <li key={id} onClick={chooseCard} data-id={id}>
-                            <Card cardId={id} />
+                        <li key={id} onClick={() => chooseCard(id)}>
+                            <Card card={getCardById(id)} />
                         </li>
                     ))}
             </ul>
 
             {error && (
-                <Modal onClose={ok}>
+                <Modal onClose={closeModal}>
                     <div className="box">
-                        <p>Сначала нужно закончить ход</p>
-                        <Button text="ok" onClick={ok} />
+                        <p>{error}</p>
+                        <Button text="ok" click={closeModal} />
                     </div>
+                </Modal>
+            )}
+
+            {selectedCard && (
+                <Modal onClose={closeModal}>
+                    <ActiveCard
+                        card={getCardById(selectedCard)}
+                        cancel={closeModal}
+                    />
                 </Modal>
             )}
         </div>

@@ -13,6 +13,7 @@ const CurrentCard = ({ cancel, closeCard }) => {
     const [secondColor, setSecondColor] = useState();
     const [thirdColor, setThirdColor] = useState();
 
+    //useReducer!!!!!!
     const [bonus, setBonus] = useState([0, 0, 0, 0]);
     const [fine, setFine] = useState([0, 0, 0, 0]);
     const [compensation, setCompensation] = useState([0, 0, 0, 0]);
@@ -25,25 +26,23 @@ const CurrentCard = ({ cancel, closeCard }) => {
     const dispatch = useDispatch();
 
     const card = bothDecks.smallDeck[cardId] || bothDecks.bigDeck[cardId % 100];
-    // cardId > 99
-    //     ? bothDecks.bigDeck[cardId % 100]
-    //     : bothDecks.smallDeck[cardId];
 
     const { isBoostCard, color: mainColor } = card;
     const { colorUp, colorDown } = card.getColors();
 
     useEffect(() => {
-        setThirdColor(colorDown[1]);
-        if (isBoostCard) {
-            setSecondColor(colorDown[0]);
-            showCard(colorDown[0], colorDown[1]);
-        } else {
-            setSecondColor(colorUp[0]);
-            showCard(colorUp[0], colorDown[1]);
-        }
-    }, [cardId]);
+        // setThirdColor(colorDown[1]);
+        // if (isBoostCard) {
+        //     setSecondColor(colorDown[0]);
+        //     showCard(colorDown[0], colorDown[1]);
+        // } else {
+        //     setSecondColor(colorUp[0]);
+        //     showCard(colorUp[0], colorDown[1]);
+        // }
+    }, []);
 
     const showCard = (secondColor, thirdColor) => {
+        console.log('bingo!!!!??');
         const activePrice = card.activate(price, secondColor, thirdColor);
         const finalPrice = [];
         const bonus = [0, 0, 0, 0];
@@ -65,6 +64,7 @@ const CurrentCard = ({ cancel, closeCard }) => {
         setBonus(bonus);
         setFine(fine);
         setCompensation(compensation);
+        console.log('finalPrice: ', finalPrice);
         dispatch(setFuturePrice(finalPrice));
     };
 
@@ -249,8 +249,8 @@ const CurrentCard = ({ cancel, closeCard }) => {
                     )}
                 </div>
                 <div className={s.btns}>
-                    <Button text="Принять" onClick={activateCard} />
-                    <Button text="Отменить" onClick={cancel} />
+                    <Button text="Принять" click={activateCard} />
+                    <Button text="Отменить" click={cancel} />
                 </div>
             </div>
         </div>

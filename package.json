@@ -6,12 +6,17 @@
     "dependencies": {
         "@mobx-devtools/tools": "^0.0.4",
         "@reduxjs/toolkit": "^1.9.1",
+        "axios": "^1.3.2",
         "modern-normalize": "^1.1.0",
+        "notiflix": "^3.2.6",
         "react": "^18.1.0",
         "react-dom": "^18.1.0",
+        "react-hook-form": "^7.43.1",
         "react-redux": "^8.0.5",
         "react-router-dom": "^6.7.0",
         "react-scripts": "5.0.1",
+        "redux-persist": "^6.0.0",
+        "socket.io-client": "^4.6.0",
         "web-vitals": "^2.1.3"
     },
     "scripts": {

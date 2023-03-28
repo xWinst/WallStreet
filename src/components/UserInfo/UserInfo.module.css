@@ -1,0 +1,19 @@
+.player {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+    /* padding: 3px 10px; */
+}
+
+.avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px ridge #00cfff;
+    overflow: hidden;
+}
+
+.name {
+    color: var(--accent-color);
+}

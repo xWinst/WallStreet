@@ -4,6 +4,9 @@
     left: 0;
     width: 100vw;
     height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     padding: 10px;
     z-index: 100;
     /* pointer-events: none; */
@@ -11,27 +14,31 @@
 
 .modal {
     position: absolute;
-    left: 10px;
     top: 50px;
-    width: calc(100% - 20px);
+    /* width: calc(100% - 20px); */
+    max-width: 400px;
+    min-width: 340px;
 
-    padding: 1.8rem;
+    padding: 16px;
 
     background-color: #1a2a1a;
+    background-image: var(--bg-gradient2);
     border-radius: 20px;
-    box-shadow: 10px 10px 30px rgba(82, 85, 95, 0.4);
+    box-shadow: 0 0 10px var(--third2-color);
 
-    animation: appear 0.4s linear forwards;
+    animation: appear 0.4s linear both;
     /* animation: scaling 0.3s linear forwards; */
 }
 
 @keyframes appear {
     0% {
-        transform: translateY(0);
+        /* transform: translateY(0); */
+        /* transform: translateX(-20%); */
+        /* transform: translateX(-40%); */
+        /* transform: translateX(-50%); */
         transform: scale(0.2);
     }
     100% {
-        transform: translateY(-200px);
         transform: scale(1);
     }
 }

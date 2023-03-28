@@ -1,0 +1,42 @@
+.container {
+    /* display: flex; */
+    padding: 16px;
+    border: 1px solid var(--third-color);
+    border-top: none;
+}
+
+.gameRoomsBox {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.message {
+    text-align: center;
+}
+
+.title {
+    margin: 10px 0;
+    padding: 6px 0;
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+    text-align: center;
+    color: var(--third-color);
+    background-image: radial-gradient(
+        circle at center,
+        #15956a8a 30%,
+        #4470614a 75%
+    );
+}
+
+.btn {
+    margin: 20px auto;
+    padding: 8px 16px;
+    font-size: 14px;
+}
+
+@media screen and (min-width: 768px) {
+    .container {
+        gap: 16px;
+    }
+}

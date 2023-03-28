@@ -1,6 +1,9 @@
 .tablo {
     display: flex;
     gap: 3px;
+    padding: 3px;
+    background-color: var(--btn-color);
+    border: 1px solid var(--third-color);
 }
 
 .info {
@@ -16,8 +19,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 3.5rem;
-    height: 1.8rem;
+    width: 35px;
+    height: 18px;
     font-weight: 700;
     /* border: 1px solid black; */
 }
@@ -25,8 +28,8 @@
 .cell::after {
     content: '';
     position: absolute;
-    width: 3.5rem;
-    height: 1.8rem;
+    width: 35px;
+    height: 18px;
     background-color: var(--clouding);
     z-index: 100;
 }
@@ -35,16 +38,16 @@
 .future::before {
     content: '';
     position: absolute;
-    width: calc(3.5rem + 4px);
-    height: calc(1.8rem + 4px);
+    width: 39px;
+    height: 22px;
     background-color: var(--accent-color);
 }
 
 .activeCell::after {
     content: '';
     position: absolute;
-    width: calc(3.5rem + 2px);
-    height: calc(1.8rem + 2px);
+    width: 37px;
+    height: 20px;
     background-image: linear-gradient(
             90deg,
             var(--additional-color) 50%,
@@ -66,31 +69,33 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 3.1rem;
-    height: 1.4rem;
-    font-size: 1.1rem;
+    width: 31px;
+    height: 14px;
+    font-size: 12px;
     z-index: 10;
 }
 
 @media screen and (min-width: 768px) {
     .tablo {
         position: relative;
+        background-color: transparent;
+        border: none;
     }
 
     .cell,
     .activeCell,
     .future {
         position: absolute;
-        width: 1.6rem;
-        height: 1.6rem;
+        width: 20px;
+        height: 20px;
 
         border-radius: 50%;
         background-color: #ffffff;
     }
 
     .cell::after {
-        width: 1.6rem;
-        height: 1.6rem;
+        width: 20px;
+        height: 20px;
         border-radius: 50%;
         background-color: var(--clouding);
     }
@@ -104,8 +109,8 @@
     .activeCell::before {
         content: '';
         position: absolute;
-        width: 1.6rem;
-        height: 1.6rem;
+        width: 20px;
+        height: 20px;
         background-color: transparent;
         background-image: url('../../images/target2.svg');
         background-size: cover;
@@ -120,9 +125,9 @@
     }
 
     .price {
-        width: 1.2rem;
-        height: 1.2rem;
-        font-size: 0.5rem;
+        width: 16px;
+        height: 16px;
+        font-size: 6px;
         border: 1px solid #888800;
         border-radius: 50%;
     }

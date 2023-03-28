@@ -1,0 +1,95 @@
+.container {
+    min-width: 100vw;
+    min-height: 100vh;
+    padding: 16px 10px;
+    background-image: var(--bg-gradient);
+}
+
+.title {
+    margin: 30px 0;
+    padding: 6px 0;
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+    text-align: center;
+    color: var(--third-color);
+    background-image: radial-gradient(
+        circle at center,
+        #15956a8a 30%,
+        #4470614a 75%
+    );
+}
+
+.goBack {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.settings {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.prop {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.prop:nth-last-child(4) {
+    margin-top: 40px;
+}
+
+.params {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 6px;
+}
+
+.box {
+    display: flex;
+}
+
+.password {
+    font-size: 14px;
+    padding: 8px 0px;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid var(--third-color);
+    color: var(--main-color);
+}
+
+.value {
+    width: 30px;
+    font-size: 16px;
+    padding: 2px 4px;
+    text-align: center;
+    background-color: var(--btn-color);
+    border: 1px solid var(--third-color);
+    border-radius: 4px;
+}
+
+.btn {
+    margin: 60px auto;
+    padding: 8px 12px;
+    font-size: 14px;
+    background-color: var(--btn-color);
+}
+
+@media screen and (min-width: 768px) {
+    .container {
+        padding: 10px 16px;
+    }
+
+    .btn {
+        margin-top: 10px;
+    }
+
+    /* .title {
+        margin-top: 0;
+    }  */
+}

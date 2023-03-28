@@ -1,102 +1,96 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Button, Modal } from 'components';
+import { Button, Icon, Modal } from 'components';
 import { updatePlayer } from 'state/gameReducer';
-import { game } from 'model';
+import { loadActiveGame, nextTurn } from 'state/gameOperation';
+import { setStageAfter } from 'state/turnReducer';
+import { companyNames, companyColors, updateShares, getActions } from 'db';
 import s from './PlayerActions.module.css';
 
 const PlayerActions = () => {
-    const companyNames = game.companyNames;
-    const colors = game.companyColors;
-
-    const price = useSelector(state => state.game.currentPrice);
-    const turn = useSelector(state => state.game.turn);
-    const gameState = useSelector(state => state.game.gameState);
+    const { price, turn, lastTurn, stage, player, id } = useSelector(
+        state => state.game
+    );
+    const prevShares = useSelector(state => state.turn.stageBefore.shares);
+    const [error, setError] = useState(null);
     const [showBuy, setShowBuy] = useState(false);
     const [showSell, setShowSell] = useState(false);
-    const [showModal, setShowModal] = useState(false);
-    const [sales, setSales] = useState([0, 0, 0, 0]);
-    const [purchases, setPurchases] = useState([0, 0, 0, 0]);
+    const [notice, setNotice] = useState(false);
+    const [changes, setChanges] = useState([0, 0, 0, 0]);
+    const colors = companyColors;
 
     const dispatch = useDispatch();
-    const player = game.players[0];
-    const { shares } = player;
+    const shares = player.shares;
 
-    const openSell = () => {
-        if (turn === 10) {
-            setShowModal(true);
-            return;
+    const func = useRef();
+
+    const submit = () => {
+        switch (func.current) {
+            case 'buysell':
+                changeShares();
+                break;
+            case 'endTurn':
+                endTurn();
+                break;
+            case 'loadGame':
+                loadGame();
+                break;
+            default:
+                return;
         }
-        setShowSell(true);
-        setShowBuy(false);
     };
 
-    const openBuy = () => {
-        if (turn === 10) {
-            setShowModal(true);
+    const changeShares = () => {
+        dispatch(updatePlayer(updateShares(player, changes, price)));
+        setShowBuy(false);
+        setShowSell(false);
+        setChanges([0, 0, 0, 0]);
+    };
+
+    const openModal = doSell => {
+        func.current = 'buysell';
+        if (turn === lastTurn) {
+            setError('Операции с банком на последнем ходу запрещены!');
             return;
         }
-        setShowSell(false);
-        setShowBuy(true);
+        setShowSell(doSell);
+        setShowBuy(!doSell);
     };
 
     const cancel = () => {
         setShowSell(false);
         setShowBuy(false);
-        setSales([0, 0, 0, 0]);
-        setPurchases([0, 0, 0, 0]);
+        setChanges([0, 0, 0, 0]);
     };
 
-    const submit = () => {
-        dispatch(updatePlayer(player.sellShares(sales, price)));
-        setShowSell(false);
-        setSales([0, 0, 0, 0]);
-    };
-
-    const submitBuy = () => {
-        dispatch(updatePlayer(player.buyShares(purchases, price)));
-        setShowBuy(false);
-        setPurchases([0, 0, 0, 0]);
+    const updateChanges = (name, value) => {
+        setChanges(prev => {
+            const result = [...prev];
+            result[name] = value;
+            return result;
+        });
     };
 
     const onChangeSell = e => {
         const { name, value } = e.target;
-        updateSales(name, value);
+        updateChanges(name, -Number(value));
     };
 
-    const updateSales = (name, value) => {
-        setSales(prev => {
-            const result = [...prev];
-            result[name] = Number(value);
-            return result;
-        });
+    const onChangeBuy = e => {
+        const { name, value } = e.target;
+        updateChanges(name, Number(value));
     };
 
-    const updatePurchases = (name, value) => {
-        setPurchases(prev => {
-            const result = [...prev];
-            result[name] = Number(value);
-            return result;
-        });
-    };
-
-    const changeSales = (name, value) => {
-        let result = sales[name] + value;
-        if (result < 0) result = 0;
-        if (result > getSalesMax(name)) result = getSalesMax(name);
-        updateSales(name, result);
-    };
-
-    const changePurchases = (name, value) => {
-        const max = Math.floor(getReserve(name) / price[name]);
-        let result = purchases[name] + value;
+    const minChanges = (idx, value, k) => {
+        const max = k > 0 ? maxBuy(idx) : maxSell(idx);
+        let result = k * changes[idx] + value;
         if (result < 0) result = 0;
         if (result > max) result = max;
-        updatePurchases(name, result);
+        updateChanges(idx, k * result);
     };
 
     const getReserve = idx => {
-        const reservedPurchases = purchases
+        const reservedPurchases = changes
             .map((count, i) => count * price[i])
             .filter((_, i) => i !== Number(idx));
         return (
@@ -105,98 +99,115 @@ const PlayerActions = () => {
         );
     };
 
-    const onChangeBuy = e => {
-        const { name, value } = e.target;
-        updatePurchases(name, value);
+    const ok = () => {
+        setError(null);
+        setNotice(null);
     };
 
-    const ok = () => setShowModal(false);
+    const maxSell = idx => {
+        if (stage === 'before') return shares[idx];
+        else return shares[idx] - player.frezenShares[idx];
+    };
 
-    const getSalesMax = idx => {
-        if (gameState === 'before') return shares[idx];
-        else return player.freeShares[idx];
+    const maxBuy = idx => Math.floor(getReserve(idx) / price[idx]);
+
+    const endTurn = e => {
+        // dispatch(updatePlayer(shareMerger(player)));
+        dispatch(setStageAfter(getActions(prevShares, shares, price)));
+        setNotice(null);
+        nextTurn(id);
+    };
+
+    const finish = () => {
+        if (stage === 'before') {
+            setError('Сначала нужно показать карточку');
+            return;
+        }
+
+        func.current = 'endTurn';
+        setNotice('Вы уверены что хотите завершить ход?');
+    };
+
+    const loadGame = () => {
+        loadActiveGame(id);
+        setNotice(null);
+    };
+
+    const reset = () => {
+        func.current = 'loadGame';
+        setNotice('Вы уверены что хотите сбросить ваши действия на этом ходу?');
     };
 
     return (
         <div className={s.container}>
-            <Button text="Продать" onClick={openSell} />
-            <Button text="Купить" onClick={openBuy} />
+            <div className={s.btnBox} style={{ width: 90 }}>
+                <Button text="Продать" click={() => openModal(true)} />
+                <Button text="Купить" click={() => openModal(false)} />
+            </div>
+            <div className={s.btnBox} style={{ width: 120 }}>
+                <Button text="Конец хода" click={finish} />
+                <Button text="Откатить ход" click={reset} />
+            </div>
             {showBuy && (
                 <Modal onClose={cancel}>
                     <ul className={s.list}>
                         <li className={s.title}>Покупка</li>
                         {companyNames.map((name, idx) => (
                             <li key={name} className={s.item}>
-                                <p
-                                    className={s.name}
-                                    style={{ color: colors[idx] }}
-                                >
-                                    {companyNames[idx]}
-                                </p>
-                                <Button
-                                    text="Min"
-                                    onClick={() => {
-                                        updatePurchases(idx, 0);
+                                <Icon
+                                    icon="share"
+                                    w={26}
+                                    s={{
+                                        '--share-color': colors[idx],
+                                        '--share-color2':
+                                            idx === 1 || idx === 2
+                                                ? colors[0]
+                                                : colors[2],
                                     }}
-                                    style={{ width: '3rem' }}
                                 />
                                 <Button
-                                    text="-"
-                                    onClick={() => {
-                                        changePurchases(idx, -1);
-                                    }}
-                                    style={{ width: '2.5rem' }}
+                                    text="&lt;&lt;"
+                                    click={() => updateChanges(idx, 0)}
+                                    st={{ padding: 5 }}
+                                />
+                                <Button
+                                    text="&ndash;"
+                                    click={() => minChanges(idx, -1, 1)}
+                                    st={{ padding: 5 }}
                                 />
                                 <input
                                     className={s.count}
-                                    name={idx}
                                     type="range"
+                                    name={idx}
                                     min="0"
-                                    max={`${Math.floor(
-                                        getReserve(idx) / price[idx]
-                                    )}`}
-                                    value={purchases[idx]}
+                                    max={maxBuy(idx)}
+                                    value={changes[idx]}
                                     onChange={onChangeBuy}
                                 />
+
                                 <Button
                                     text="+"
-                                    onClick={() => {
-                                        changePurchases(idx, 1);
-                                    }}
-                                    style={{ width: '2.5rem' }}
+                                    click={() => minChanges(idx, 1, 1)}
+                                    st={{ padding: '5px 6px' }}
                                 />
                                 <Button
-                                    text="Max"
-                                    onClick={() => {
-                                        updatePurchases(
-                                            idx,
-                                            Math.floor(
-                                                getReserve(idx) / price[idx]
-                                            )
-                                        );
-                                    }}
-                                    style={{ width: '3rem' }}
+                                    text={`Max = ${maxBuy(idx)}`}
+                                    click={() =>
+                                        updateChanges(idx, maxBuy(idx))
+                                    }
+                                    st={{ padding: 5 }}
                                 />
                                 <p className={s.purchases}>
-                                    {purchases[idx] > 0 && (
-                                        <span>
-                                            Покупаем {purchases[idx]} шт.
-                                        </span>
+                                    {changes[idx] > 0 && (
+                                        <span>Покупаем {changes[idx]} шт.</span>
                                     )}
-                                    <span>
-                                        (Max:
-                                        {Math.floor(
-                                            getReserve(idx) / price[idx]
-                                        )}
-                                        )
-                                    </span>
                                 </p>
                             </li>
                         ))}
                     </ul>
                     <div className={s.btns}>
-                        <Button text="Принять" onClick={submitBuy} />
-                        <Button text="Отменить" onClick={cancel} />
+                        <Button text="Принять" click={submit} />
+                        <Button text="Отменить" click={cancel} />
                     </div>
                 </Modal>
             )}
@@ -209,99 +220,99 @@ const PlayerActions = () => {
                             (count, idx) =>
                                 count > 0 && (
                                     <li key={idx} className={s.item}>
-                                        <p
-                                            className={s.name}
-                                            style={{ color: colors[idx] }}
-                                        >
-                                            {companyNames[idx]}
-                                            <span className={s.stock}>
-                                                ({getSalesMax(idx)} шт.)
-                                            </span>
-                                        </p>
-                                        <Button
-                                            text="Min"
-                                            onClick={() => {
-                                                updateSales(idx, 0);
+                                        <Icon
+                                            icon="share"
+                                            w={26}
+                                            s={{
+                                                '--share-color': colors[idx],
+                                                '--share-color2':
+                                                    idx === 1 || idx === 2
+                                                        ? colors[0]
+                                                        : colors[2],
                                             }}
-                                            style={{ width: '3rem' }}
+                                        />
+                                        <Button
+                                            text="0"
+                                            click={() => updateChanges(idx, 0)}
                                         />
                                         <Button
                                             text="-"
-                                            onClick={() => {
-                                                changeSales(idx, -1);
-                                            }}
-                                            style={{ width: '2.5rem' }}
+                                            click={() =>
+                                                minChanges(idx, -1, -1)
+                                            }
                                         />
 
                                         <input
                                             className={s.count}
-                                            name={idx}
                                             type="range"
+                                            name={idx}
                                             min="0"
-                                            max={getSalesMax(idx)}
-                                            value={sales[idx]}
+                                            max={maxSell(idx)}
+                                            value={-changes[idx]}
                                             onChange={onChangeSell}
                                         />
                                         <Button
                                             text="+"
-                                            onClick={() => {
-                                                changeSales(idx, 1);
-                                            }}
-                                            style={{ width: '2.5rem' }}
+                                            click={() => minChanges(idx, 1, -1)}
                                         />
                                         <Button
-                                            text="Max"
-                                            onClick={() => {
-                                                updateSales(
+                                            text={`Max=${maxSell(idx)}`}
+                                            click={() =>
+                                                updateChanges(
                                                     idx,
-                                                    getSalesMax(idx)
-                                                );
-                                            }}
-                                            style={{ width: '3rem' }}
+                                                    -maxSell(idx)
+                                                )
+                                            }
                                         />
-                                        {sales[idx] > 0 && (
+                                        {changes[idx] < 0 && (
                                             <p className={s.money}>
-                                                {sales[idx]} шт. х {price[idx]}$
-                                                =&nbsp;
-                                                {sales[idx] * price[idx]}
+                                                {-changes[idx]} шт. х{' '}
+                                                {price[idx]}$ =&nbsp;
+                                                {-changes[idx] * price[idx]}
                                             </p>
                                         )}
                                     </li>
                                 )
                         )}
                     </ul>
-                    <p className={s.total}>
-                        Всего:{' '}
-                        {sales.reduce(
-                            (total, count, idx) => total + count * price[idx],
-                            0
-                        )}{' '}
-                        бабла
-                    </p>
+                    <div className={s.flexBox}>
+                        <p className={s.total}>
+                            <span>Всего: </span>
+                            {changes.reduce(
+                                (total, count, idx) =>
+                                    total + -count * price[idx],
+                                0
+                            )}
+                        </p>
+                        <Icon icon="money" w={20} />
+                    </div>
                     <div className={s.btns}>
-                        <Button text="Принять" onClick={submit} />
-                        <Button text="Отменить" onClick={cancel} />
+                        <Button text="Принять" click={submit} />
+                        <Button text="Отменить" click={cancel} />
                     </div>
                 </Modal>
             )}
 
-            {showModal && (
-                <Modal onClose={ok}>
-                    <div className="box">
-                        <p>Операции с банком на последнем ходу запрещены!</p>
-                        <Button text="ok" onClick={ok} />
+            {error && (
+                <Modal onClose={ok} style={{ maxWidth: 400 }}>
+                    <div className={s.error}>
+                        <p>{error}</p>
+                        <Button text="ok" click={ok} />
                     </div>
                 </Modal>
             )}
 
-            {/* {showState && (
-                <Modal onClose={ok}>
-                    <div className="box">
-                        <p>{player.money}</p>
-                        <Button text="ok" onClick={ok} />
+            {notice && (
+                <Modal onClose={ok} style={{ maxWidth: 400 }}>
+                    <div className={s.error}>
+                        <p>{notice}</p>
+                        <div className={s.btns}>
+                            <Button text="Принять" click={submit} />
+                            <Button text="Отменить" click={ok} />
+                        </div>
                     </div>
                 </Modal>
-            )} */}
+            )}
         </div>
     );
 };

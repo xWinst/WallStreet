@@ -1,0 +1,20 @@
+.form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.input {
+    color: var(--main-color);
+    border: none;
+    border-bottom: 1px solid var(--third-color);
+    background-color: transparent;
+}
+
+.icon {
+    cursor: pointer;
+}
+
+.icon:active {
+    scale: 0.85;
+}
