@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button, Icon, Modal } from 'components';
-import { updatePlayer } from 'state/gameReducer';
+import { synchronization, updatePlayer } from 'state/gameReducer';
 import { loadActiveGame, nextTurn } from 'state/gameOperation';
 import { setStageAfter } from 'state/turnReducer';
 import { companyNames, companyColors, updateShares, getActions } from 'db';
@@ -113,7 +113,8 @@ const PlayerActions = () => {
 
     const endTurn = e => {
         // dispatch(updatePlayer(shareMerger(player)));
-        dispatch(setStageAfter(getActions(prevShares, shares, price)));
+        dispatch(setStageAfter({ ...getActions(prevShares, shares), price }));
+        dispatch(synchronization());
         setNotice(null);
         nextTurn(id);
     };
@@ -149,7 +150,7 @@ const PlayerActions = () => {
                 <Button text="Откатить ход" click={reset} />
             </div>
             {showBuy && (
-                <Modal onClose={cancel}>
+                <Modal onClose={cancel} st={{ minWidth: 340 }}>
                     <ul className={s.list}>
                         <li className={s.title}>Покупка</li>
                         {companyNames.map((name, idx) => (
@@ -213,7 +214,7 @@ const PlayerActions = () => {
             )}
 
             {showSell && (
-                <Modal onClose={cancel}>
+                <Modal onClose={cancel} st={{ minWidth: 340 }}>
                     <ul className={s.list}>
                         <li className={s.title}>Продажа</li>
                         {shares.map(
@@ -266,8 +267,8 @@ const PlayerActions = () => {
                                         />
                                         {changes[idx] < 0 && (
                                             <p className={s.money}>
-                                                {-changes[idx]} шт. х{' '}
-                                                {price[idx]}$ =&nbsp;
+                                                {-changes[idx]} х {price[idx]}{' '}
+                                                =&nbsp;
                                                 {-changes[idx] * price[idx]}
                                             </p>
                                         )}

@@ -6,8 +6,10 @@ const initialState = {
     stageBefore: {
         sales: [0, 0, 0, 0],
         purchases: [0, 0, 0, 0],
+        startShares: null,
         shares: null,
         price: [],
+        money: 0,
     },
     stageAfter: {
         sales: [0, 0, 0, 0],
@@ -23,7 +25,7 @@ const initialState = {
     bonuses: [0, 0, 0, 0],
     fines: [0, 0, 0, 0],
     compensations: [0, 0, 0, 0],
-    isNew: false,
+    showTurn: null,
 };
 
 const turnSlice = createSlice({
@@ -47,21 +49,20 @@ const turnSlice = createSlice({
             state.stageAfter = action.payload;
         },
 
-        setNewTurn: (state, action) => {
-            console.log('action setNewTurn: ', action.payload);
-            return { ...state, ...action.payload, isNew: true };
-        },
+        // setTurn: (state, action) => {
+        //     console.log('action setNewTurn: ', action.payload);
+        //     return { ...state, ...action.payload, isNew: true };
+        // },
 
-        setIsNew: (state, action) => {
+        setShowTurn: (state, action) => {
             console.log('action setIsNew: ', action.payload);
-            state.isNew = action.payload;
+            state.showTurn = action.payload;
         },
 
-        reset: () => initialState,
+        // reset: () => initialState,
     },
 });
 
-export const { setStageBefore, setStageAfter, setNewTurn, setIsNew, reset } =
-    turnSlice.actions;
+export const { setStageBefore, setStageAfter, setShowTurn } = turnSlice.actions;
 
 export default turnSlice.reducer;

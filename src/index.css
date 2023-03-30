@@ -129,6 +129,11 @@ input[type='number'] {
     gap: 10px;
 }
 
+.gameInfo {
+    max-height: 530px;
+    overflow-y: scroll;
+}
+
 .btn {
     width: 173px;
     padding: 9px;

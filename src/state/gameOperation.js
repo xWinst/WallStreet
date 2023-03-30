@@ -2,7 +2,7 @@ import io from 'socket.io-client';
 import { store } from 'state/store';
 import { setRooms, updateRoom, setGames } from './appReducer';
 import { setState } from './gameReducer';
-import { reset, setNewTurn } from './turnReducer';
+import { setShowTurn } from './turnReducer';
 // import { setCurrentPlayer } from './appReducer';
 
 const { REACT_APP_WS_URL } = process.env;
@@ -53,7 +53,7 @@ export const connectServer = () => {
     socket.on('setGame', game => {
         console.log('a: updateGame: ', game);
         if (game.turns.length > 0) {
-            store.dispatch(setNewTurn(game.turns[game.turns.length - 1]));
+            store.dispatch(setShowTurn(game.turns.length - 1));
         }
         game = getProcessedData(game);
         store.dispatch(setState(game));
@@ -99,7 +99,7 @@ export const loadActiveGame = gameId => {
     const games = store.getState().app.games;
     const game = games.find(({ id }) => id === gameId);
     store.dispatch(setState(game));
-    store.dispatch(reset());
+    // store.dispatch(reset());
     // socket.emit('loadActiveGame', gameId);
 };
 
@@ -111,6 +111,7 @@ export const setFirstPlayer = player => {
 export const nextTurn = gameId => {
     console.log('a: nextTurn');
     const turn = store.getState().turn;
+
     socket.emit('nextTurn', { gameId, turn });
 };
 

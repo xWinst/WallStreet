@@ -1,7 +1,7 @@
 .sharesList {
     margin: 3px 0;
     font-size: 9px;
-    border: 1px solid var(--main-color);
+    border: 1px solid var(--third2-color);
 }
 
 .shares {
@@ -10,7 +10,7 @@
 }
 
 .shares:not(:last-child) {
-    border-bottom: 1px solid var(--main-color);
+    border-bottom: 1px solid var(--third2-color);
 }
 
 .name,
@@ -26,8 +26,8 @@
 
 .count {
     width: 40px;
-    border-left: 1px solid var(--main-color);
-    border-right: 1px solid var(--main-color);
+    border-left: 1px solid var(--third2-color);
+    border-right: 1px solid var(--third2-color);
     text-align: center;
 }
 

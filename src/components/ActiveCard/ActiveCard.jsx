@@ -1,9 +1,15 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button, Card } from 'components';
 import { setFuturePrice, updatePlayer, setState } from 'state/gameReducer';
 import { setStageBefore } from 'state/turnReducer';
-import { getColors, companyColors, activateCard, getActions } from 'db';
+import {
+    getColors,
+    companyColors,
+    activateCard,
+    getActions,
+    applyBonuses,
+} from 'db';
 import s from './ActiveCard.module.css';
 
 const ActiveCard = ({ card, cancel }) => {
@@ -13,12 +19,12 @@ const ActiveCard = ({ card, cancel }) => {
     const { price, futurePrice, player, players, turn } = useSelector(
         state => state.game
     );
-
+    const [isFirst, setIsFirst] = useState(true);
     const [secondColor, setSecondColor] = useState(
         isBoostCard ? colorDown[0] : colorUp[0]
     );
     const [thirdColor, setThirdColor] = useState(colorDown[1]);
-
+    const [finalPrice, setFinalPrice] = useState([]);
     const [bonus, setBonus] = useState([0, 0, 0, 0]);
     const [fine, setFine] = useState([0, 0, 0, 0]);
     const [compensation, setCompensation] = useState([0, 0, 0, 0]);
@@ -28,38 +34,35 @@ const ActiveCard = ({ card, cancel }) => {
 
     const dispatch = useDispatch();
 
-    const showCard = useCallback(
-        (сolor2 = secondColor, color3 = thirdColor) => {
-            const activePrice = activateCard(card, price, сolor2, color3);
-            const finalPrice = [];
-            const bonus = [0, 0, 0, 0];
-            const fine = [0, 0, 0, 0];
-            const compensation = [0, 0, 0, 0];
-            for (let i = 0; i < activePrice.length; i++) {
-                if (activePrice[i] < 10) {
-                    finalPrice[i] = 10;
-                    fine[i] = finalPrice[i] - activePrice[i];
-                } else if (activePrice[i] > 250) {
-                    finalPrice[i] = 250;
-                    bonus[i] = activePrice[i] - finalPrice[i];
-                } else finalPrice[i] = Math.floor(activePrice[i] / 10) * 10;
-
-                if (shares[i] && price[i] > finalPrice[i])
-                    compensation[i] = price[i] - finalPrice[i];
-            }
-
-            setBonus(bonus);
-            setFine(fine);
-            setCompensation(compensation);
-            dispatch(setFuturePrice(finalPrice));
-        },
-        []
-        // [card, price, secondColor, thirdColor, shares, dispatch]
-    );
-
     useEffect(() => {
-        showCard();
-    }, [showCard]);
+        console.log('finalPrice: ', finalPrice);
+        dispatch(setFuturePrice(finalPrice));
+    }, [finalPrice, dispatch]);
+
+    const showCard = (secondColor, thirdColor) => {
+        const activePrice = activateCard(card, price, secondColor, thirdColor);
+        const finalPrice = [];
+        const bonus = [0, 0, 0, 0];
+        const fine = [0, 0, 0, 0];
+        const compensation = [0, 0, 0, 0];
+        for (let i = 0; i < activePrice.length; i++) {
+            if (activePrice[i] < 10) {
+                finalPrice[i] = 10;
+                fine[i] = finalPrice[i] - activePrice[i];
+            } else if (activePrice[i] > 250) {
+                finalPrice[i] = 250;
+                bonus[i] = activePrice[i] - finalPrice[i];
+            } else finalPrice[i] = Math.floor(activePrice[i] / 10) * 10;
+
+            if (shares[i] && price[i] > finalPrice[i])
+                compensation[i] = price[i] - finalPrice[i];
+        }
+
+        setFinalPrice(finalPrice);
+        setBonus(bonus);
+        setFine(fine);
+        setCompensation(compensation);
+    };
 
     const chooseColor = color => {
         if (color === mainColor) return;
@@ -89,7 +92,9 @@ const ActiveCard = ({ card, cancel }) => {
 
         deck.splice(deck.indexOf(card.id), 1);
 
-        const prevPlayer = players.find(({ name }) => (name = player.name));
+        const prevPlayer = players.find(({ name }) => name === player.name);
+        // console.log('player.name: ', player.name);
+        // console.log('prevPlayer: ', prevPlayer);
         const prevShares = prevPlayer.shares;
         const frezenShares = shares.map((number, i) => {
             let result = number - prevShares[i];
@@ -97,21 +102,49 @@ const ActiveCard = ({ card, cancel }) => {
             return result;
         });
 
+        const updatedPlayers = applyBonuses(
+            player.name,
+            players,
+            bonus,
+            fine,
+            compensation
+        );
+
+        const chosenColors = {
+            colorUp: isBoostCard ? mainColor : secondColor,
+            colorDown: isBoostCard
+                ? card.type === '100'
+                    ? [
+                          colorDown.filter(
+                              color =>
+                                  color !== secondColor && color !== thirdColor
+                          )[0],
+                          thirdColor,
+                          secondColor,
+                      ]
+                    : [secondColor]
+                : mainColor,
+        };
+
         const usedCard = {
             id: card.id,
-            colorUp: colorUp[0],
-            colorDown: [secondColor, thirdColor],
+            ...chosenColors,
         };
 
         dispatch(
             setStageBefore({
-                stageBefore: getActions(prevShares, shares, price),
+                stageBefore: {
+                    ...getActions(prevShares, shares),
+                    money,
+                    price,
+                    startShares: prevShares,
+                },
                 card: usedCard,
                 bonus,
                 fine,
                 compensation,
                 player: player.name,
-                currentTurn: turn,
+                turn,
             })
         );
 
@@ -123,7 +156,13 @@ const ActiveCard = ({ card, cancel }) => {
                 frezenShares,
             })
         );
-        dispatch(setState({ price: futurePrice, stage: 'after' }));
+        dispatch(
+            setState({
+                price: futurePrice,
+                players: updatedPlayers,
+                stage: 'after',
+            })
+        );
         cancel();
     };
 
@@ -137,6 +176,11 @@ const ActiveCard = ({ card, cancel }) => {
         dispatch(setFuturePrice(price));
         cancel();
     };
+
+    if (isFirst) {
+        showCard(secondColor, thirdColor);
+        setIsFirst(false);
+    }
 
     return (
         <div className={s.container}>

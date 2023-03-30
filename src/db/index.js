@@ -13,7 +13,9 @@ export const getName = list => {
     return aiNames[index];
 };
 
-export const getActions = (prevShares, shares, price) => {
+export const getActions = (prevShares, shares) => {
+    console.log('prevShares: ', prevShares);
+    console.log('shares: ', shares);
     const sales = [0, 0, 0, 0];
     const purchases = [0, 0, 0, 0];
     for (let i = 0; i < shares.length; i++) {
@@ -22,7 +24,7 @@ export const getActions = (prevShares, shares, price) => {
         else sales[i] = -result;
     }
 
-    return { sales, purchases, shares, price };
+    return { sales, purchases, shares };
 };
 
 export const getCardById = id => {
@@ -88,4 +90,42 @@ export const activateCard = (card, price, secondColor, thirdColor) => {
         activePrice[secondColor] += isBoostCard ? value - 90 : value;
     }
     return activePrice;
+};
+
+export const applyBonuses = (name, players, bonuses, fines, compensations) => {
+    const updatedPlayers = [];
+    players.forEach(gamePlayer => {
+        const player = { ...gamePlayer };
+        let bonus = 0;
+        let fine = 0;
+        let compensation = 0;
+
+        player.shares.forEach((count, i) => {
+            bonus += count * bonuses[i];
+            fine += count * fines[i];
+            compensation += count * compensations[i];
+        });
+
+        // console.log(player.name, ' Money: ', player.money);
+        // console.log('compensation: ', compensation);
+        player.money += bonus;
+        if (player.name === name) player.money += compensation;
+        else player.money -= fine;
+        // console.log(player.name, ' money AFTER: ', player.money);
+
+        if (player.money < 0) {
+            player.money += fine;
+            const sortedFines = [...fines].sort((a, b) => b - a);
+            for (fine of sortedFines) {
+                if (!fine) continue;
+                const index = fines.indexOf(fine);
+                player.shares[index] = Math.floor(player.money / fine);
+                player.money -= player.shares[index] * fine;
+                if (!player.money) break;
+            }
+        }
+
+        updatedPlayers.push(player);
+    });
+    return updatedPlayers;
 };

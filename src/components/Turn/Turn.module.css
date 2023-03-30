@@ -1,0 +1,49 @@
+.container {
+    max-height: 300px;
+    max-width: 180px;
+    margin-bottom: 20px;
+    font-size: 12px;
+    overflow-y: scroll;
+}
+
+.topic {
+    font-size: 14px;
+    margin: 8px 0;
+    text-align: center;
+}
+
+.money {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.title {
+    margin: 5px 0;
+    padding: 4px 0;
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+    text-align: center;
+    color: var(--third-color);
+    background-image: radial-gradient(
+        circle at center,
+        #15956a8a 30%,
+        #4470614a 75%
+    );
+}
+
+/* .container p {
+
+} */
+
+.number {
+    color: var(--accent-color);
+}
+
+.bonus {
+    font-size: 10px;
+}
+
+/* .flexBox {
+    display: flex;
+} */

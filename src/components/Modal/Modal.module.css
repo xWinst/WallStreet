@@ -16,10 +16,10 @@
     position: absolute;
     top: 50px;
     /* width: calc(100% - 20px); */
-    max-width: 400px;
-    min-width: 340px;
+    max-width: calc(100% - 20px);
+    /* min-width: 200px; */
 
-    padding: 16px;
+    padding: 10px;
 
     background-color: #1a2a1a;
     background-image: var(--bg-gradient2);

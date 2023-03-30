@@ -19,12 +19,8 @@ const gameSlice = createSlice({
 
     reducers: {
         // setPlayers: (state, action) => {
-        //     console.log('action addPlaer: ', action.payload);
+        //     console.log('action setPlayers: ', action.payload);
         //     state.players = action.payload;
-        // },
-        // setCurrentPlayer: (state, action) => {
-        //     console.log('action: setCurrentPlayerIdx', action);
-        //     state.currentPlayer = action.payload;
         // },
         setCurrentPrice: (state, action) => {
             console.log('action: setCurrentPrice', action);
@@ -38,34 +34,29 @@ const gameSlice = createSlice({
             // console.log('action: setGameState', action);
             state.stage = action.payload;
         },
-        // nextTurn: (state, action) => {
-        //     state.turn++;
-        //     state.stage = 'before';
-        // },
 
         updatePlayer: (state, action) => {
             console.log('updatePlayer: ', action);
             state.player = { ...state.player, ...action.payload };
-            // const playerIdx = state.players.findIndex(
-            //     ({ name }) => (name = state.player.name)
-            // );
-            // state.players[playerIdx] = {
-            //     ...state.players[playerIdx],
-            //     ...action.payload,
-            // };
         },
-
-        // nextPlayer: (state, action) => {
-        //     state.currentPlayerIdx = action.payload;
-        // },
 
         setState: (state, action) => {
             return { ...state, ...action.payload };
         },
 
-        // setGameId: (state, action) => {
-        //     state.id = action.payload;
-        // },
+        synchronization: state => {
+            const index = state.players.findIndex(
+                ({ name }) => name === state.currentPlayer
+            );
+            state.players[index] = {
+                ...state.players[index],
+                money: state.player.money,
+                shares: state.player.shares,
+                bigDeck: state.player.bigDeck,
+                smallDeck: state.player.smallDeck,
+            };
+        },
+
         reset: () => initialState,
     },
 });
@@ -74,13 +65,10 @@ export const {
     // setPlayers,
     setCurrentPrice,
     setFuturePrice,
-    // setStage,
-    // nextTurn,
     updatePlayer,
     reset,
     setState,
-    // setGameId,
-    // setCurrentPlayer,
+    synchronization,
 } = gameSlice.actions;
 
 export default gameSlice.reducer;

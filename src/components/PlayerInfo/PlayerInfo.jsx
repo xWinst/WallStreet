@@ -29,7 +29,7 @@ const PlayerInfo = ({ player }) => {
                         <Icon icon="money" w={30} />
                         <p>{player.money}</p>
                     </div>
-                    <SharesList text={null} list={shares} price={price} />
+                    <SharesList list={shares} price={price} full />
                     <div className={s.flexBox}>
                         <p>
                             Больших: <span>{player.numberBigCards}</span>
