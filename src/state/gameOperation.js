@@ -111,8 +111,13 @@ export const setFirstPlayer = player => {
 export const nextTurn = gameId => {
     console.log('a: nextTurn');
     const turn = store.getState().turn;
-
-    socket.emit('nextTurn', { gameId, turn });
+    const updatedPlayers = [];
+    const players = store.getState().game.players;
+    players.forEach(({ money, shares, smallDeck, bigDeck }) => {
+        updatedPlayers.push({ money, shares, smallDeck, bigDeck });
+    });
+    console.log('updatedPlayers: ', updatedPlayers);
+    socket.emit('nextTurn', { gameId, updatedPlayers, turn });
 };
 
 export const startGame = gameId => {

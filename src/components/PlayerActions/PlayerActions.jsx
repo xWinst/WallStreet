@@ -198,14 +198,22 @@ const PlayerActions = () => {
                                     }
                                     st={{ padding: 5 }}
                                 />
-                                <p className={s.purchases}>
-                                    {changes[idx] > 0 && (
-                                        <span>Покупаем {changes[idx]} шт.</span>
-                                    )}
-                                </p>
+
+                                {changes[idx] > 0 && (
+                                    <p className={s.purchases}>
+                                        {changes[idx]} х {price[idx]} =&nbsp;
+                                        {changes[idx] * price[idx]}
+                                    </p>
+                                )}
                             </li>
                         ))}
                     </ul>
+                    <div className={s.flexBox}>
+                        <p className={s.total}>
+                            <span>Осталось: </span> {getReserve(-1)}
+                        </p>
+                        <Icon icon="money" w={20} />
+                    </div>
                     <div className={s.btns}>
                         <Button text="Принять" click={submit} />
                         <Button text="Отменить" click={cancel} />

@@ -10,7 +10,7 @@ import s from './PlayerCards.module.css';
 
 const PlayerCards = () => {
     const [error, setError] = useState(null);
-    const [selectedCard, setSelectedCard] = useState();
+    const [selectedCard, setSelectedCard] = useState(null);
     const { player, stage } = useSelector(state => state.game);
 
     // const dispatch = useDispatch();
@@ -65,7 +65,7 @@ const PlayerCards = () => {
                 </Modal>
             )}
 
-            {selectedCard && (
+            {selectedCard !== null && (
                 <Modal onClose={closeModal}>
                     <ActiveCard
                         card={getCardById(selectedCard)}
