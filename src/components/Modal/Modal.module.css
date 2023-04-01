@@ -23,6 +23,7 @@
 
     background-color: #1a2a1a;
     background-image: var(--bg-gradient2);
+    /* background-image: url('../../images/7DZz.gif'); */
     border-radius: 20px;
     box-shadow: 0 0 10px var(--third2-color);
 

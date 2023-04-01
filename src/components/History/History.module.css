@@ -9,11 +9,59 @@
     min-width: 173px;
 }
 
+.title {
+    margin: 12px 0;
+    padding: 6px 0;
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+    text-align: center;
+    color: var(--third-color);
+    background-image: radial-gradient(
+        circle at center,
+        #15956a8a 30%,
+        #4470614a 75%
+    );
+}
+
+.dscr {
+    text-align: center;
+}
+
+.winner {
+    display: flex;
+    justify-content: center;
+    margin: 8px 0;
+    gap: 10px;
+}
+
+.players {
+    margin-top: 20px;
+}
+
+.players li {
+    margin-bottom: 8px;
+}
+
 .btn {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 10px;
+}
+
+.money {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+}
+
+.money img {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px ridge #00cfff;
+    overflow: hidden;
 }
 
 .item {
@@ -32,4 +80,25 @@
 
 .number {
     color: var(--accent-color);
+}
+
+.capital {
+    font-size: 16px;
+    color: var(--accent-color);
+}
+
+@keyframes winner {
+    /* 0% {
+        transform: scaleX(0.1);
+    }
+    50% {
+        transform: scaleX(1);
+    }
+    100% {
+        transform: scaleX(0.1);
+    } */
+
+    to {
+        transform: perspective(400px) rotateX(90deg);
+    }
 }

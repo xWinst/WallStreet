@@ -1,0 +1,92 @@
+<svg  viewBox="0 0 64 64" fill="#5b0f56" xmlns="http://www.w3.org/2000/svg">
+    <circle fill = "#ffa000"  cx="32" cy="32" r="4">
+        <animate attributeName="cx" to="60" repeatCount="indefinite"  dur="1s"/>
+        <animate attributeName="r" to="0" repeatCount="indefinite" dur="1s"/>
+        <animate attributeName="fill" to="#49e1af" repeatCount="indefinite" dur="1s"/>
+    </circle>
+    <line x1="32" y1="32" x2="32" y2="32" stroke="#ffa000" stroke-width="1" >
+        <animate attributeName="x1" to="40" repeatCount="indefinite"  dur="1s"/>
+        <animate attributeName="x2" to="50" repeatCount="indefinite" dur="1s"/>
+    </line>
+
+    <circle fill = "#ffa000"  cx="32" cy="32" r="4">
+        <animate attributeName="cx" to="51.8" repeatCount="indefinite" dur="1s"/>
+        <animate attributeName="cy" to="51.8" repeatCount="indefinite" dur="1s"/>
+        <animate attributeName="r" to="0" repeatCount="indefinite" dur="1s"/>
+        <animate attributeName="fill" to="#49e1af" repeatCount="indefinite" dur="1s"/>
+    </circle>
+    <line x1="32" y1="32" x2="32" y2="32" stroke="#ffa000" >
+        <animate attributeName="x1" to="37.7" repeatCount="indefinite"  dur="1s"/>
+        <animate attributeName="y1" to="37.7" repeatCount="indefinite"  dur="1s"/>
+        <animate attributeName="x2" to="44.7" repeatCount="indefinite" dur="1s"/>
+        <animate attributeName="y2" to="44.7" repeatCount="indefinite" dur="1s"/>
+    </line>
+
+    <circle fill = "#ffa000"  cx="32" cy="32" r="4">
+        <animate attributeName="cy" to="60" repeatCount="indefinite" dur="1s"/>
+        <animate attributeName="r" to="0" repeatCount="indefinite" dur="1s"/>
+        <animate attributeName="fill" to="#49e1af" repeatCount="indefinite" dur="1s"/>
+    </circle>
+     <line x1="32" y1="32" x2="32" y2="32" stroke="#ffa000" >
+        <animate attributeName="y1" to="40" repeatCount="indefinite"  dur="1s"/>
+        <animate attributeName="y2" to="50" repeatCount="indefinite" dur="1s"/>
+    </line>
+
+    <circle fill = "#ffa000"  cx="32" cy="32" r="4">
+        <animate attributeName="cx" to="12.2" repeatCount="indefinite" dur="1s"/>
+        <animate attributeName="cy" to="51.8" repeatCount="indefinite" dur="1s"/>
+        <animate attributeName="r" to="0" repeatCount="indefinite" dur="1s"/>
+        <animate attributeName="fill" to="#49e1af" repeatCount="indefinite" dur="1s"/>
+    </circle>
+    <line x1="32" y1="32" x2="32" y2="32" stroke="#ffa000" >
+        <animate attributeName="x1" to="26.3" repeatCount="indefinite"  dur="1s"/>
+        <animate attributeName="y1" to="37.7" repeatCount="indefinite"  dur="1s"/>
+        <animate attributeName="x2" to="19.3" repeatCount="indefinite" dur="1s"/>
+        <animate attributeName="y2" to="44.7" repeatCount="indefinite" dur="1s"/>
+    </line>
+
+    <circle fill = "#ffa000"  cx="32" cy="32" r="4">
+        <animate attributeName="cx" to="4" repeatCount="indefinite" dur="1s"/>
+        <animate attributeName="r" to="0" repeatCount="indefinite" dur="1s"/>
+        <animate attributeName="fill" to="#49e1af" repeatCount="indefinite" dur="1s"/>
+    </circle>
+    <line x1="32" y1="32" x2="32" y2="32" stroke="#ffa000" >
+        <animate attributeName="x1" to="24" repeatCount="indefinite"  dur="1s"/>
+        <animate attributeName="x2" to="14" repeatCount="indefinite" dur="1s"/>
+    </line>
+
+    <circle fill = "#ffa000"  cx="32" cy="32" r="4">
+        <animate attributeName="cx" to="12.2" repeatCount="indefinite" dur="1s"/>
+        <animate attributeName="cy" to="12.2" repeatCount="indefinite" dur="1s"/>
+        <animate attributeName="r" to="0" repeatCount="indefinite" dur="1s"/>
+        <animate attributeName="fill" to="#49e1af" repeatCount="indefinite" dur="1s"/>
+    </circle>
+    <line x1="32" y1="32" x2="32" y2="32" stroke="#ffa000" >
+        <animate attributeName="x1" to="26.3" repeatCount="indefinite"  dur="1s"/>
+        <animate attributeName="y1" to="26.3" repeatCount="indefinite"  dur="1s"/>
+        <animate attributeName="x2" to="19.3" repeatCount="indefinite" dur="1s"/>
+        <animate attributeName="y2" to="19.3" repeatCount="indefinite" dur="1s"/>
+    </line>
+
+    <circle fill = "#ffa000"  cx="32" cy="32" r="4">
+        <animate attributeName="cy" to="4" repeatCount="indefinite" dur="1s"/>
+        <animate attributeName="r" to="0" repeatCount="indefinite" dur="1s"/>
+        <animate attributeName="fill" to="#49e1af" repeatCount="indefinite" dur="1s"/>
+    </circle>
+    <line x1="32" y1="32" x2="32" y2="32" stroke="#ffa000" >
+        <animate attributeName="y1" to="24" repeatCount="indefinite"  dur="1s"/>
+        <animate attributeName="y2" to="14" repeatCount="indefinite" dur="1s"/>
+    </line>
+    <circle fill = "#ffa000"  cx="32" cy="32" r="4">
+        <animate attributeName="cx" to="51.8" repeatCount="indefinite" dur="1s"/>
+        <animate attributeName="cy" to="12.2" repeatCount="indefinite" dur="1s"/>
+        <animate attributeName="r" to="0" repeatCount="indefinite" dur="1s"/>
+        <animate attributeName="fill" to="#49e1af" repeatCount="indefinite" dur="1s"/>
+    </circle>
+    <line x1="32" y1="32" x2="32" y2="32" stroke="#ffa000" >
+        <animate attributeName="x1" to="37.7" repeatCount="indefinite"  dur="1s"/>
+        <animate attributeName="y1" to="26.3" repeatCount="indefinite"  dur="1s"/>
+        <animate attributeName="x2" to="44.7" repeatCount="indefinite" dur="1s"/>
+        <animate attributeName="y2" to="19.3" repeatCount="indefinite" dur="1s"/>
+    </line>
+</svg>

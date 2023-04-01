@@ -25,7 +25,6 @@ const initialState = {
     bonuses: [0, 0, 0, 0],
     fines: [0, 0, 0, 0],
     compensations: [0, 0, 0, 0],
-    showTurn: null,
 };
 
 const turnSlice = createSlice({
@@ -54,15 +53,15 @@ const turnSlice = createSlice({
         //     return { ...state, ...action.payload, isNew: true };
         // },
 
-        setShowTurn: (state, action) => {
-            console.log('action setIsNew: ', action.payload);
-            state.showTurn = action.payload;
-        },
+        // setShowTurn: (state, action) => {
+        //     console.log('action setIsNew: ', action.payload);
+        //     state.showTurn = action.payload;
+        // },
 
         // reset: () => initialState,
     },
 });
 
-export const { setStageBefore, setStageAfter, setShowTurn } = turnSlice.actions;
+export const { setStageBefore, setStageAfter } = turnSlice.actions;
 
 export default turnSlice.reducer;

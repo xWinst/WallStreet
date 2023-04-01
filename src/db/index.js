@@ -93,6 +93,7 @@ export const activateCard = (card, price, secondColor, thirdColor) => {
 };
 
 export const applyBonuses = (name, players, bonuses, fines, compensations) => {
+    console.log('fines: ', fines);
     const updatedPlayers = [];
     players.forEach(gamePlayer => {
         const player = { ...gamePlayer };
@@ -115,6 +116,7 @@ export const applyBonuses = (name, players, bonuses, fines, compensations) => {
 
         if (player.money < 0) {
             player.money += fine;
+            player.shares = [...gamePlayer.shares];
             const sortedFines = [...fines].sort((a, b) => b - a);
             for (fine of sortedFines) {
                 if (!fine) continue;

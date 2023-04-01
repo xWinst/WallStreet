@@ -12,9 +12,9 @@
     gap: 10px;
 }
 
-.list {
-    /* margin-left: 20px; */
-}
+/* .list { */
+/* margin-left: 20px; */
+/* } */
 
 .title {
     margin-bottom: 20px;
@@ -123,9 +123,9 @@
     font-size: 15px;
 }
 
-.purchases {
+/* .purchases {
     margin-left: 10px;
-}
+} */
 
 .flexBox {
     display: flex;

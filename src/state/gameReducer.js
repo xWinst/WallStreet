@@ -11,6 +11,8 @@ const initialState = {
     turns: [],
     stage: 'before',
     id: null,
+    showTurn: null,
+    results: null,
 };
 
 const gameSlice = createSlice({
@@ -44,6 +46,11 @@ const gameSlice = createSlice({
             return { ...state, ...action.payload };
         },
 
+        setShowTurn: (state, action) => {
+            console.log('action setIsNew: ', action.payload);
+            state.showTurn = action.payload;
+        },
+
         synchronization: state => {
             const index = state.players.findIndex(
                 ({ name }) => name === state.currentPlayer
@@ -57,18 +64,33 @@ const gameSlice = createSlice({
             };
         },
 
+        setResults: state => {
+            const players = state.players.map(
+                ({ avatar, name, shares, money }) => {
+                    const capital = shares.reduce(
+                        (total, count, i) => total + count * state.price[i],
+                        money
+                    );
+                    return { avatar, name, capital };
+                }
+            );
+            players.sort((a, b) => b.capital - a.capital);
+            state.results = players;
+        },
+
         reset: () => initialState,
     },
 });
 
 export const {
-    // setPlayers,
     setCurrentPrice,
     setFuturePrice,
     updatePlayer,
-    reset,
     setState,
+    setShowTurn,
     synchronization,
+    setResults,
+    reset,
 } = gameSlice.actions;
 
 export default gameSlice.reducer;

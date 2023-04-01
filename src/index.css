@@ -9,6 +9,7 @@
     --third2-color: #49e1af66;
     --btn-color: #0f1d1f;
     --accent-color: #ffa000;
+    --firework-color: #ffa000;
     /* --accent-color: #00cfff; */
     --bg-color: #343c3e;
     --bg-gradient: linear-gradient(30deg, #0e2013, #394f55);
@@ -60,8 +61,7 @@ a {
     color: inherit;
 }
 
-ul,
-ol {
+ul {
     padding: 0;
     margin: 0;
     list-style: none;

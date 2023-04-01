@@ -1,8 +1,8 @@
 import io from 'socket.io-client';
 import { store } from 'state/store';
 import { setRooms, updateRoom, setGames } from './appReducer';
-import { setState } from './gameReducer';
-import { setShowTurn } from './turnReducer';
+import { setState, setShowTurn } from './gameReducer';
+// import { setShowTurn } from './turnReducer';
 // import { setCurrentPlayer } from './appReducer';
 
 const { REACT_APP_WS_URL } = process.env;
@@ -54,7 +54,7 @@ export const connectServer = () => {
         console.log('a: updateGame: ', game);
         if (game.turns.length > 0) {
             store.dispatch(setShowTurn(game.turns.length - 1));
-        }
+        } else store.dispatch(setShowTurn(null));
         game = getProcessedData(game);
         store.dispatch(setState(game));
     });
