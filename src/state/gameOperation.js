@@ -73,6 +73,11 @@ export const loadGameRooms = () => {
     });
 };
 
+export const addAiPlayer = (gameId, player) => {
+    console.log('a:-> addAiPlayer');
+    socket.emit('addAiPlayer', { gameId, player });
+};
+
 export const exitGameRoom = (gameId, isOwner) => {
     console.log('exitGameRoom  id= ', socket.id);
     const name = store.getState().user.name;

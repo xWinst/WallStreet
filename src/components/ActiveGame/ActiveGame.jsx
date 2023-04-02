@@ -27,7 +27,7 @@ const ActiveGame = ({ game }) => {
             {isExpanded && (
                 <>
                     <GameInfo game={game} />
-                    <Button text="Продолжить" click={loadGame} />
+                    <Button text="Продолжить" click={loadGame} cn={s.center} />
                 </>
             )}
         </li>

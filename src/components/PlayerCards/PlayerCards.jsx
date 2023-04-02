@@ -58,7 +58,7 @@ const PlayerCards = () => {
 
             {error && (
                 <Modal onClose={closeModal}>
-                    <div className="box">
+                    <div className={s.box}>
                         <p>{error}</p>
                         <Button text="ok" click={closeModal} />
                     </div>

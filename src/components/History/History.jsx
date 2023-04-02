@@ -99,7 +99,7 @@ const History = () => {
             {showTurn !== null && (
                 <Modal onClose={ok}>
                     <Turn turn={turns[showTurn]} />
-                    <Button text="OK" click={ok} />
+                    <Button text="OK" click={ok} cn={s.center} />
                 </Modal>
             )}
 

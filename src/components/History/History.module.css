@@ -87,6 +87,11 @@
     color: var(--accent-color);
 }
 
+.center {
+    width: 80px;
+    margin: 20px auto 5px;
+}
+
 @keyframes winner {
     /* 0% {
         transform: scaleX(0.1);

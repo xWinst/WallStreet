@@ -7,6 +7,10 @@
     box-shadow: 0px 4px 10px var(--third2-color);
 }
 
+.item button {
+    margin: 20px auto 5px;
+}
+
 .btn {
     display: flex;
     align-items: center;
@@ -48,4 +52,9 @@
     border: none;
     border-bottom: 1px solid var(--third-color);
     color: var(--main-color);
+}
+
+.center {
+    width: 80px;
+    margin: 20px auto 5px;
 }

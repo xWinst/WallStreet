@@ -93,7 +93,6 @@ export const activateCard = (card, price, secondColor, thirdColor) => {
 };
 
 export const applyBonuses = (name, players, bonuses, fines, compensations) => {
-    console.log('fines: ', fines);
     const updatedPlayers = [];
     players.forEach(gamePlayer => {
         const player = { ...gamePlayer };

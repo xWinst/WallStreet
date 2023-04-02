@@ -108,7 +108,7 @@ const GameRoom = ({ room, user }) => {
                             правильность введеного пароля если он требуется или
                             повторите попытку.
                         </p>
-                        <Button text="ok" click={ok} />
+                        <Button text="ok" click={ok} cn={s.center} />
                     </div>
                 </Modal>
             )}

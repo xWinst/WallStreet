@@ -19,6 +19,18 @@
     animation: rotation 0.3s linear;
 }
 
+.box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 10px;
+}
+
+.box button {
+    width: 80px;
+}
+
 @media screen and (min-width: 768px) {
     .decks {
         /* position: absolute;

@@ -1,16 +1,16 @@
 import { useSelector } from 'react-redux';
 import { UserInfo, Select } from 'components';
 // import { setPlayers } from 'state/gameReducer';
-// import { getName } from 'db';
-// import { ai } from 'images';
+import { getName } from 'db';
+import { ai } from 'images';
 import s from './PlayersList.module.css';
-import { setFirstPlayer } from 'state/gameOperation';
+import { setFirstPlayer, addAiPlayer } from 'state/gameOperation';
 
 const PlayersList = ({ room }) => {
     const user = useSelector(state => state.user.name);
 
     // const dispatch = useDispatch();
-    const { players, owner, maxPlayers, currentPlayer } = room;
+    const { players, owner, maxPlayers, currentPlayer, _id } = room;
     const isOwner = user === owner;
 
     const changeFirstPlayer = value => {
@@ -18,16 +18,13 @@ const PlayersList = ({ room }) => {
     };
 
     const addPlayer = () => {
-        if (players.length >= 4) return;
-        // dispatch(
-        //     setPlayers([
-        //         ...players,
-        //         {
-        //             name: getName(players),
-        //             avatar: ai,
-        //         },
-        //     ])
-        // );
+        if (players.length >= maxPlayers) return;
+        const player = {
+            name: getName(players),
+            avatar: ai,
+            type: 'ai',
+        };
+        addAiPlayer(_id, player);
     };
 
     return (
