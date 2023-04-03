@@ -1,7 +1,15 @@
 import { useEffect, Suspense, lazy } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
-import { Home, Register, Login, Main, GameRoom, PageNotFound } from 'pages';
+import {
+    Home,
+    Register,
+    Login,
+    Main,
+    GameRoom,
+    Rules,
+    PageNotFound,
+} from 'pages';
 import {
     Loader,
     RestrictedRoute,
@@ -42,6 +50,7 @@ const App = () => {
                     <Route path="createGame" element={<GameRoom />} />
                     <Route path="game/:gameId" element={<GameLobby />} />
                 </Route>
+                <Route path="rules" element={<Rules />} />
                 <Route path="*" element={<PageNotFound />} />
             </Routes>
         </Suspense>

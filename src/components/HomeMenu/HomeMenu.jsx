@@ -1,5 +1,5 @@
-import { Button } from 'components';
 import { useNavigate } from 'react-router-dom';
+import { Button } from 'components';
 import s from './HomeMenu.module.css';
 
 const HomeMenu = () => {

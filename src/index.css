@@ -142,14 +142,44 @@ input[type='number'] {
     /* border-width: 1px; */
 }
 
-/* .title {
-    font-size: 60px;
-    font-weight: 700;
-    font-family: 'BookmanOldStyle', serif;
+.flexCenter {
+    display: flex;
+    /* justify-content: center; */
+}
+
+.title {
+    margin: 10px 0;
+    padding: 6px 0;
+    border-top: 1px solid;
+    border-bottom: 1px solid;
     text-align: center;
-    color: #0a310a;
-    text-shadow: #5eff00 0 0 2px;
-} */
+    text-transform: uppercase;
+    color: var(--third-color);
+    background-image: radial-gradient(
+        circle at center,
+        #15956a8a 30%,
+        #4470614a 75%
+    );
+}
+
+.hero {
+    font-size: 20px;
+}
+
+.text {
+    font-size: 14px;
+    text-indent: 30px;
+}
+
+.remark {
+    font-style: italic;
+    color: rgb(190, 190, 190);
+}
+
+.deck {
+    display: flex;
+    margin: 10px auto;
+}
 
 /* @media screen and (min-width: 768px) {
     .container {
