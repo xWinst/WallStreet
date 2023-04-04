@@ -1,9 +1,15 @@
-import { Card } from 'components';
+import { useNavigate } from 'react-router-dom';
+import { Icon, Card } from 'components';
 import { getCardById } from 'db';
 
 const Rules = () => {
+    const navigate = useNavigate();
     return (
         <div className="game">
+            <div className="goBack" onClick={() => navigate('/main/games')}>
+                <Icon icon="arrow-left" w={20} />
+                <p>На главную</p>
+            </div>
             <h1 className="title hero">Правила игры</h1>
             <p className="text">
                 Эта игра является online-реализацией настольной игры "Wall
@@ -525,6 +531,10 @@ const Rules = () => {
             </p>
             <br />
             <p style={{ textAlign: 'center' }}>УДАЧИ В ИГРЕ!</p>
+            <div className="goBack" onClick={() => navigate('/main/games')}>
+                <Icon icon="arrow-left" w={20} />
+                <p>На главную</p>
+            </div>
         </div>
     );
 };

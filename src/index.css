@@ -116,6 +116,14 @@ input[type='number'] {
     background-image: var(--bg-gradient);
 }
 
+.goBack {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
 .icon {
     position: absolute;
     top: 12px;

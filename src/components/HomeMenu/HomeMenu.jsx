@@ -17,7 +17,11 @@ const HomeMenu = () => {
                 text="Создать аккаунт"
                 click={() => navigate('/register')}
             />
-            <Button cn={s.btn} text="Правила игры" />
+            <Button
+                cn={s.btn}
+                text="Правила игры"
+                click={() => navigate('/rules')}
+            />
         </div>
     );
 };

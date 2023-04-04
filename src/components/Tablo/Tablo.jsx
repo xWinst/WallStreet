@@ -26,7 +26,7 @@ const Tablo = () => {
 
     const { width } = useInner();
     // const size = width / 2.5;
-    const size = width < 768 ? 360 / 2.5 : 768 / 2.5;
+    const size = width < 768 ? 360 / 2.5 : 768 / 2;
     const pricesArray = getPricesArray(width);
 
     const getStyle = (cost, index) => {
