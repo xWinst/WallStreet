@@ -51,7 +51,7 @@ const LoginForm = () => {
                             })}
                             title="Введите Ваш никнейм или email"
                             placeholder="Імя *"
-                            autoComplete='false'
+                            autoComplete="false"
                         />
                         <div className={s.error}>
                             {errors.name && (
@@ -98,7 +98,7 @@ const LoginForm = () => {
                     <p className={s.title}>Или войдите с помощью:</p>
                     <a
                         className={s.googleBtn}
-                        href={`${process.env.REACT_APP_BASE_URL2}/users/google`}
+                        href={`${process.env.REACT_APP_BASE_URL}/users/google`}
                     >
                         <Icon icon="google" w={22} />
                         <div>
@@ -113,7 +113,7 @@ const LoginForm = () => {
 
                     <a
                         className={s.facebookBtn}
-                        href={`${process.env.REACT_APP_BASE_URL2}/users/facebook`}
+                        href={`${process.env.REACT_APP_BASE_URL}/users/facebook`}
                     >
                         <Icon icon="facebook" w={30} />
                         facebook

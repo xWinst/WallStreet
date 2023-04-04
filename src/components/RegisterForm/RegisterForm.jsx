@@ -123,7 +123,7 @@ const RegisterForm = () => {
                     <p className={s.title}>Или войдите с помощью:</p>
                     <a
                         className={s.googleBtn}
-                        href={`${process.env.REACT_APP_BASE_URL2}/users/google`}
+                        href={`${process.env.REACT_APP_BASE_URL}/users/google`}
                     >
                         <Icon icon="google" w={22} />
                         <div>
@@ -138,7 +138,7 @@ const RegisterForm = () => {
 
                     <a
                         className={s.facebookBtn}
-                        href={`${process.env.REACT_APP_BASE_URL2}/users/facebook`}
+                        href={`${process.env.REACT_APP_BASE_URL}/users/facebook`}
                     >
                         <Icon icon="facebook" w={30} />
                         facebook
