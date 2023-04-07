@@ -46,7 +46,7 @@ const CreateGame = () => {
                 <Icon icon="arrow-left" w={20} />
                 <p>На главную</p>
             </div>
-            <h2 className={s.title}>Настроки</h2>
+            <h2 className={s.title}>Настройки</h2>
             <div className={s.settings}>
                 <div className={s.prop}>
                     <p>Максимум Игроков</p>
