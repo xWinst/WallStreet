@@ -95,6 +95,9 @@ const ActiveCard = ({ card, cancel }) => {
         const prevPlayer = players.find(({ name }) => name === player.name);
         // console.log('player.name: ', player.name);
         // console.log('prevPlayer: ', prevPlayer);
+
+        const startMoney = prevPlayer.money;
+
         const prevShares = prevPlayer.shares;
         const frezenShares = shares.map((number, i) => {
             let result = number - prevShares[i];
@@ -138,6 +141,7 @@ const ActiveCard = ({ card, cancel }) => {
                     money,
                     price,
                     startShares: prevShares,
+                    startMoney,
                 },
                 card: usedCard,
                 bonus,

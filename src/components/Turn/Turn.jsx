@@ -25,7 +25,7 @@ const Turn = ({ turn }) => {
             <p className={s.title}>На начало хода он имеет:</p>
             <div className={s.money}>
                 <Icon icon="money" w={16} />
-                <p>{stageBefore.money}</p>
+                <p>{stageBefore.startMoney}</p>
             </div>
             {/* <p>Наличных денег: {stageBefore.money}</p> */}
             <p>Акции:</p>

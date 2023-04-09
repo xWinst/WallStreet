@@ -10,6 +10,7 @@ const initialState = {
         shares: null,
         price: [],
         money: 0,
+        startMoney: 0,
     },
     stageAfter: {
         sales: [0, 0, 0, 0],
