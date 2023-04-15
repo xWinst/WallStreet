@@ -83,9 +83,16 @@ const Rules = () => {
             <p className="text">
                 Для примера возьмем карты для изменения цены "красных" акций.
             </p>
-            <div style={{ display: 'flex' }}>
+            <div>
                 <ul className="deck">
-                    {[9, 11, 13, 15, 8, 10, 12, 14].map(id => (
+                    {[9, 11, 13, 15].map(id => (
+                        <li key={id}>
+                            <Card card={getCardById(id)} />
+                        </li>
+                    ))}
+                </ul>
+                <ul className="deck">
+                    {[8, 10, 12, 14].map(id => (
                         <li key={id}>
                             <Card card={getCardById(id)} />
                         </li>

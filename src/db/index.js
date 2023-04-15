@@ -122,7 +122,7 @@ export const applyBonuses = (name, players, bonuses, fines, compensations) => {
                 const index = fines.indexOf(fine);
                 player.shares[index] = Math.floor(player.money / fine);
                 player.money -= player.shares[index] * fine;
-                if (!player.money) break;
+                // if (!player.money) break;
             }
         }
 
