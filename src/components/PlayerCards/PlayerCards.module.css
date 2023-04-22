@@ -31,11 +31,11 @@
     width: 80px;
 }
 
-@media screen and (min-width: 768px) {
+@media screen and (min-width: 1200px) {
     .decks {
         /* position: absolute;
         bottom: 10px; */
-        margin-left: calc(10% + 83px);
+        margin-left: calc(10% + 130px);
     }
 }
 
