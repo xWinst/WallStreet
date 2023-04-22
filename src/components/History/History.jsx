@@ -37,7 +37,7 @@ const History = () => {
     }, [showTurn, dispatch, turns]);
 
     useEffect(() => {
-        if (currentPlayer === null) {
+        if (currentPlayer === null && showTurn === null) {
             dispatch(setResults());
             setShowGameOver(true);
         }

@@ -25,8 +25,8 @@ const Tablo = () => {
     const futurePrice = useSelector(state => state.game.futurePrice);
 
     const { width } = useInner();
-    // const size = width / 2.5;
-    const size = width < 768 ? 360 / 2.5 : 768 / 2;
+    const size = width / 2.5;
+    // const size = width < 768 ? 360 / 2.5 : 768 / 2;
     const pricesArray = getPricesArray(width);
 
     const getStyle = (cost, index) => {
