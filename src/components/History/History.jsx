@@ -37,11 +37,9 @@ const History = () => {
     }, [showTurn, dispatch, turns]);
 
     useEffect(() => {
-        if (currentPlayer === null && showTurn === null) {
-            dispatch(setResults());
-            setShowGameOver(true);
-        }
-    }, [dispatch, currentPlayer, showTurn]);
+        if (currentPlayer === null) dispatch(setResults());
+        if (results !== null && showTurn === null) setShowGameOver(true);
+    }, [dispatch, currentPlayer, showTurn, results]);
 
     const toggleExpand = () => {
         setIsExpanded(state => !state);
