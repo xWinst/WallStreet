@@ -86,16 +86,16 @@
     .activeCell,
     .future {
         position: absolute;
-        width: 32px;
-        height: 32px;
+        width: 35px;
+        height: 35px;
 
         border-radius: 50%;
         background-color: #ffffff;
     }
 
     .cell::after {
-        width: 32px;
-        height: 32px;
+        width: 35px;
+        height: 35px;
         border-radius: 50%;
         background-color: var(--clouding);
     }
@@ -109,8 +109,8 @@
     .activeCell::before {
         content: '';
         position: absolute;
-        width: 32px;
-        height: 32px;
+        width: 35px;
+        height: 35px;
         background-color: transparent;
         background-image: url('../../images/target2.svg');
         background-size: cover;
@@ -125,9 +125,9 @@
     }
 
     .price {
-        width: 25px;
-        height: 25px;
-        font-size: 8px;
+        width: 28px;
+        height: 28px;
+        font-size: 10px;
         border: 1px solid #888800;
         border-radius: 50%;
     }

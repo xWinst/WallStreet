@@ -35,7 +35,7 @@
     .decks {
         /* position: absolute;
         bottom: 10px; */
-        margin-left: 170px;
+        margin-left: calc(10% + 83px);
     }
 }
 
