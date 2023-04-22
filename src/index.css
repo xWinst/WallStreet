@@ -189,8 +189,8 @@ input[type='number'] {
     margin: 10px auto;
 }
 
-/* @media screen and (min-width: 768px) {
-    .container {
-        padding: 10px 16px;
+@media screen and (min-width: 768px) {
+    .game {
+        padding: 20px 40px;
     }
-} */
+}
