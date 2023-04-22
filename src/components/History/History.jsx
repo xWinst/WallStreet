@@ -41,7 +41,7 @@ const History = () => {
             dispatch(setResults());
             setShowGameOver(true);
         }
-    }, [dispatch, currentPlayer]);
+    }, [dispatch, currentPlayer, showTurn]);
 
     const toggleExpand = () => {
         setIsExpanded(state => !state);
